@@ -5,18 +5,14 @@ setup(
     version='1.0.0',  # 你的包的版本号
     packages=find_packages(),  # 自动找到所有的子包
     install_requires=[
-        'colorthief==0.2.1',
-        'darkdetect==0.8.0',
-        'numpy==2.0.1',
-        'Pillow==10.4.0',
-        'PySide6==6.7.2',
-        'PySide6-Fluent-Widgets==1.6.0',
-        'PySide6_Addons==6.7.2',
-        'PySide6_Essentials==6.7.2',
-        'PySideSix-Frameless-Window==0.3.12',
-        'pywin32==306',
-        'scipy==1.14.0',
-        'shiboken6==6.7.2',
+        'darkdetect == 0.8.0',
+        'PySide6 == 6.7.2',
+        'PySide6 - Fluent - Widgets == 1.6.0',
+        'PySide6_Addons == 6.7.2',
+        'PySide6_Essentials == 6.7.2',
+        'PySideSix - Frameless - Window == 0.3.12',
+        'pywin32 == 306',
+        'shiboken6 == 6.7.2',
     ],
     author='meet',  # 你的名字
     url='https://github.com/zyj1078180197/meet-gui',  # 你的GitHub仓库URL
