@@ -27,6 +27,10 @@ class Config:
     appIcon = get_path_in_package(__file__, 'logo.png')
     appName = 'MEET-GUI'
     appVersion = 1.0
+    homePageShow = True,  # 首页是否展示
+    taskPageShow = True,  # 任务页面是否展示
+    triggerPageShow = True,  # 触发器页面是否展示
+    settingPageShow = True,  # 设置页面是否展示
 
     @classmethod
     def initData(cls, config):
@@ -38,6 +42,10 @@ class Config:
         cls.appName = config.get('appName')
         cls.appVersion = config.get('appVersion')
         cls.appIcon = config.get('appIcon')
+        cls.homePageShow = config.get('homePageShow')
+        cls.taskPageShow = config.get('taskPageShow')
+        cls.triggerPageShow = config.get('triggerPageShow')
+        cls.settingPageShow = config.get('settingPageShow')
         print("初始化配置完成：", cls.appName, cls.appVersion, cls.appIcon)
         pass
 

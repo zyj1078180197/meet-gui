@@ -29,16 +29,6 @@ class MainWindow(MSFluentWindow):
         # 获取标题栏中的标签栏，类型为TabBar
         self.tabBar = self.titleBar.tabBar  # type: TabBar
 
-        # 创建子界面
-        # 创建一个名为' homeInterface '的QStackedWidget作为主界面
-        self.homeInterface = WidgetBase('首页', self)
-        # 创建一个名为' appInterface '的Widget作为应用界面
-        self.appInterface = WidgetBase('应用', self)
-        # 创建一个名为' videoInterface '的Widget作为视频界面
-        self.videoInterface = WidgetBase('视频', self)
-        # 创建一个名为' libraryInterface '的Widget作为库界面
-        self.libraryInterface = WidgetBase('库', self)
-
         # 初始化导航组件
         self.initNavigation()
 
@@ -49,10 +39,28 @@ class MainWindow(MSFluentWindow):
         """
         初始化导航组件
         """
-        # 添加子界面
-        self.addSubInterface(self.homeInterface, FluentIcon.HOME, '首页', FluentIcon.HOME_FILL)
-        self.addSubInterface(self.appInterface, FluentIcon.APPLICATION, '应用')
-        self.addSubInterface(self.videoInterface, FluentIcon.VIDEO, '视频')
+        firstPage = None
+        if Config.homePageShow:
+            # 创建一个名为' homeInterface '的QStackedWidget作为主界面
+            homeInterface = WidgetBase('主页', self)
+            if firstPage is None:
+                firstPage = homeInterface
+            # 添加子界面
+            self.addSubInterface(homeInterface, FluentIcon.HOME, '主页', FluentIcon.HOME_FILL)
+        if Config.taskPageShow:
+            # 创建一个名为' taskInterface  '的Widget作为应用界面
+            taskInterface = WidgetBase('任务', self)
+            if firstPage is None:
+                firstPage = taskInterface
+            # 添加子界面
+            self.addSubInterface(taskInterface, FluentIcon.BOOK_SHELF, '任务')
+        if Config.triggerPageShow:
+            # 创建一个名为' triggerInterface '的Widget作为视频界面
+            triggerInterface = WidgetBase('触发', self)
+            if firstPage is None:
+                firstPage = triggerInterface
+            # 添加子界面
+            self.addSubInterface(triggerInterface, FluentIcon.SYNC, '触发')
 
         # 添加一个不可选中的导航项
         self.navigationInterface.addItem(
@@ -63,20 +71,25 @@ class MainWindow(MSFluentWindow):
             selectable=False,
             position=NavigationItemPosition.BOTTOM,
         )
-
-        # 位置在底部的导航项
-        self.addSubInterface(self.libraryInterface, FluentIcon.BOOK_SHELF,
-                             '库', FluentIcon.LIBRARY_FILL, NavigationItemPosition.BOTTOM)
-        # 设置当前导航项
-        self.navigationInterface.setCurrentItem(
-            self.homeInterface.objectName())
-        # 添加历史记录 第一个历史记录就是首页
-        browserHistory.visit(self.homeInterface)
-        # 发射信号
-        communicate.browserHistoryChange.emit()
-        # 添加首页标签
-        self.addTab(self.homeInterface.objectName(), self.homeInterface.objectName(),
-                    FluentIcon.HOME)
+        if Config.settingPageShow:
+            # 创建一个名为' settingInterface '的Widget作为库界面
+            settingInterface = WidgetBase('设置', self)
+            if firstPage is None:
+                firstPage = settingInterface
+            # 位置在底部的导航项
+            self.addSubInterface(settingInterface, FluentIcon.SETTING,
+                                 '设置', FluentIcon.SETTING, NavigationItemPosition.BOTTOM)
+        if firstPage is not None:
+            # 设置当前导航项
+            self.navigationInterface.setCurrentItem(
+                firstPage.objectName())
+            # 添加历史记录 第一个历史记录就是首页
+            browserHistory.visit(firstPage)
+            # 发射信号
+            communicate.browserHistoryChange.emit()
+            # 添加首页标签
+            self.addTab(firstPage.objectName(), firstPage.objectName(),
+                        FluentIcon.ADD)
         # 设置标签栏关闭按钮的点击事件
         self.tabBar.tabCloseRequested.connect(self.onTabRemoved)
         # 设置标签栏的当前标签页的切换事件
@@ -137,6 +150,9 @@ class MainWindow(MSFluentWindow):
         :param interface:
         :return:
         """
+        # 如果当前标签页和点击的标签页相同，则不执行任何操作
+        if self.tabBar.currentTab().routeKey() == interface.objectName():
+            return
         # 添加标签
         self.addTab(interface.objectName(), interface.objectName(), FluentIcon.ADD)
         # 切换标签
@@ -159,7 +175,7 @@ class MainWindow(MSFluentWindow):
         if self.tabBar.count() == 1:
             InfoBar.warning(
                 title='警告',
-                content="只剩最后一个标签页了不可以删除！",
+                content="只剩最后一个标签页了，不能再删了^_^！",
                 isClosable=True,
                 position=InfoBarPosition.TOP_RIGHT,
                 duration=2000,
