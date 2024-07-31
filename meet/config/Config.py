@@ -1,4 +1,5 @@
 # 默认配置
+import json
 import os
 
 from qfluentwidgets import qconfig, Theme, setTheme
@@ -31,6 +32,8 @@ class Config:
     taskPageShow = True,  # 任务页面是否展示
     triggerPageShow = True,  # 触发器页面是否展示
     settingPageShow = True,  # 设置页面是否展示
+    theme = 'Dark'
+    appConfigPath = None
 
     @classmethod
     def initData(cls, config):
@@ -46,8 +49,28 @@ class Config:
         cls.taskPageShow = config.get('taskPageShow')
         cls.triggerPageShow = config.get('triggerPageShow')
         cls.settingPageShow = config.get('settingPageShow')
+        cls.theme = config.get('theme')
+        cls.appConfigPath = config.get('appConfigPath')
         print("初始化配置完成：", cls.appName, cls.appVersion, cls.appIcon)
         pass
+
+    @classmethod
+    def toDict(cls):
+        """
+        将配置转换为字典
+        :return:
+        """
+        return {
+            'appName': cls.appName,
+            'appVersion': cls.appVersion,
+            'appIcon': cls.appIcon,
+            'homePageShow': cls.homePageShow,
+            'taskPageShow': cls.taskPageShow,
+            'triggerPageShow': cls.triggerPageShow,
+            'settingPageShow': cls.settingPageShow,
+            'theme': cls.theme,
+            'appConfigPath': cls.appConfigPath,
+        }
 
 
 def isDarkTheme():
@@ -64,5 +87,13 @@ def themeToggleHandle():
     """
     if isDarkTheme():
         setTheme(Theme.LIGHT)
+        Config.theme = 'Light'
+        if Config.appConfigPath is not None:
+            with open(Config.appConfigPath, 'w', encoding='utf-8') as json_file:
+                json.dump(Config.toDict(), json_file, ensure_ascii=False, indent=4)
     else:
         setTheme(Theme.DARK)
+        Config.theme = 'Dark'
+        if Config.appConfigPath is not None:
+            with open(Config.appConfigPath, 'w', encoding='utf-8') as json_file:
+                json.dump(Config.toDict(), json_file, ensure_ascii=False, indent=4)

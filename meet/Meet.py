@@ -1,6 +1,7 @@
 import sys
 
 from PySide6.QtWidgets import QApplication
+from qfluentwidgets import setTheme, Theme
 
 from meet.config.Config import Config
 from meet.gui.MainWindow import MainWindow
@@ -20,6 +21,12 @@ class Meet:
             Config.initData(config)
         # 创建APP
         self.app = QApplication(sys.argv)
+        if Config.theme == 'Dark':
+            setTheme(Theme.DARK)
+        if Config.theme == 'Light':
+            setTheme(Theme.LIGHT)
+        if Config.theme == 'Auto':
+            setTheme(Theme.AUTO)
         # 创建窗口
         self.window = MainWindow()
         # 展示窗口
