@@ -2,9 +2,9 @@ import sys
 from typing import Union
 
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QWidget, QMessageBox
+from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
-    NavigationItemPosition, FluentIconBase, NavigationBarPushButton, qrouter, InfoBar, InfoBarPosition
+    NavigationItemPosition, FluentIconBase, NavigationBarPushButton, qrouter, InfoBar, InfoBarPosition, MessageBox
 
 from meet.config.Config import Config, themeToggleHandle
 from meet.gui.plugin.BrowserHistory import browserHistory
@@ -40,13 +40,10 @@ class MainWindow(MSFluentWindow):
         """
         关闭窗口
         """
-        reply = QMessageBox.question(self, '消息',
-                                     "是否确认退出?",
-                                     QMessageBox.StandardButton.Yes |
-                                     QMessageBox.StandardButton.No,
-                                     QMessageBox.StandardButton.No)
-        # 判断返回结果处理相应事项
-        if reply == QMessageBox.StandardButton.Yes:
+        m = MessageBox("消息", "确认退出?", self)
+        m.yesButton.setText("确定")
+        m.cancelButton.setText("取消")
+        if m.exec():
             event.accept()
             TaskExecutor.shutdown(wait=False)
             TaskExecutor.closeAndExit()
