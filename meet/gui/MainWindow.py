@@ -2,7 +2,7 @@ import sys
 from typing import Union
 
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtWidgets import QApplication, QWidget, QMessageBox
 from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
     NavigationItemPosition, FluentIconBase, NavigationBarPushButton, qrouter, InfoBar, InfoBarPosition
 
@@ -11,6 +11,7 @@ from meet.gui.plugin.BrowserHistory import browserHistory
 from meet.gui.plugin.Communicate import communicate
 from meet.gui.widget.TitleBar import TitleBar
 from meet.gui.widget.WidgetBase import WidgetBase
+from meet.task.TaskExecutor import TaskExecutor
 
 
 class MainWindow(MSFluentWindow):
@@ -34,6 +35,23 @@ class MainWindow(MSFluentWindow):
 
         # 初始化窗口配置
         self.initWindow()
+
+    def closeEvent(self, event):
+        """
+        关闭窗口
+        """
+        reply = QMessageBox.question(self, '消息',
+                                     "是否确认退出?",
+                                     QMessageBox.StandardButton.Yes |
+                                     QMessageBox.StandardButton.No,
+                                     QMessageBox.StandardButton.No)
+        # 判断返回结果处理相应事项
+        if reply == QMessageBox.StandardButton.Yes:
+            event.accept()
+            TaskExecutor.shutdown(wait=False)
+            TaskExecutor.closeAndExit()
+        else:
+            event.ignore()
 
     def initNavigation(self):
         """

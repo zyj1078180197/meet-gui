@@ -5,6 +5,7 @@ from qfluentwidgets import setTheme, Theme
 
 from meet.config.Config import Config
 from meet.gui.MainWindow import MainWindow
+from meet.task.TaskExecutor import TaskExecutor
 
 
 class Meet:
@@ -14,6 +15,7 @@ class Meet:
         初始化APP,初始化APP配置
         :param config:
         """
+        self.taskExecutor = None
         self.window = None
         # 若是为None 则使用默认配置
         if config is not None:
@@ -21,6 +23,7 @@ class Meet:
             Config.initData(config)
         # 创建APP
         self.app = QApplication(sys.argv)
+        # 初始化设置主题
         if Config.theme == 'Dark':
             setTheme(Theme.DARK)
         if Config.theme == 'Light':
@@ -31,6 +34,7 @@ class Meet:
         self.window = MainWindow()
         # 展示窗口
         self.window.show()
+        self.doInit(config)
 
     def run(self):
         """
@@ -55,3 +59,10 @@ class Meet:
         :return:
         """
         self.window.addSubInterface(widget, text, icon)
+
+    def doInit(self, config=None):
+        # 初始化任务和触发器执行器
+        self.taskExecutor = TaskExecutor(taskList=config.get("taskList", []),
+                                         triggerList=config.get("triggerList", []),
+                                         maxWorkers=10
+                                         )

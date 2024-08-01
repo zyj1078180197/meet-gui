@@ -34,6 +34,7 @@ class Config:
     settingPageShow = True,  # 设置页面是否展示
     theme = 'Dark'
     appConfigPath = None
+    maxWorkers = 10
 
     @classmethod
     def initData(cls, config):
@@ -42,16 +43,16 @@ class Config:
         :param config: 接受配置对象
         :return:
         """
-        cls.appName = config.get('appName')
-        cls.appVersion = config.get('appVersion')
-        cls.appIcon = config.get('appIcon')
-        cls.homePageShow = config.get('homePageShow')
-        cls.taskPageShow = config.get('taskPageShow')
-        cls.triggerPageShow = config.get('triggerPageShow')
-        cls.settingPageShow = config.get('settingPageShow')
-        cls.theme = config.get('theme')
-        cls.appConfigPath = config.get('appConfigPath')
-        print("初始化配置完成：", cls.appName, cls.appVersion, cls.appIcon)
+        cls.appName = config.get('appName', cls.appName)
+        cls.appVersion = config.get('appVersion', cls.appVersion)
+        cls.appIcon = config.get('appIcon', cls.appIcon)
+        cls.homePageShow = config.get('homePageShow', cls.homePageShow)
+        cls.taskPageShow = config.get('taskPageShow', cls.taskPageShow)
+        cls.triggerPageShow = config.get('triggerPageShow', cls.triggerPageShow)
+        cls.settingPageShow = config.get('settingPageShow', cls.settingPageShow)
+        cls.theme = config.get('theme', cls.theme)
+        cls.appConfigPath = config.get('appConfigPath', cls.appConfigPath)
+        cls.maxWorkers = config.get('maxWorkers', cls.maxWorkers)
         pass
 
     @classmethod
@@ -70,6 +71,7 @@ class Config:
             'settingPageShow': cls.settingPageShow,
             'theme': cls.theme,
             'appConfigPath': cls.appConfigPath,
+            'maxWorkers': cls.maxWorkers
         }
 
 

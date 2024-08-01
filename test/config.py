@@ -1,6 +1,8 @@
 import json
 
 from meet.config.Config import get_path_in_package
+from test.page.TriggerDemo import triggerDemo
+from test.page.TaskDemo import taskDemo
 
 config = {
     "appName": "Meet-2333",  # 应用名
@@ -11,7 +13,10 @@ config = {
     "taskPageShow": True,  # 任务页面是否展示
     "triggerPageShow": True,  # 触发页面是否展示
     "settingPageShow": True,  # 设置页面是否展示
-    "theme": 'Dark',  # 主题
+    "theme": 'Dark',  # 主题(Light Dark Auto)
+    "taskList": [taskDemo],  # 任务列表
+    "triggerList": [triggerDemo],  # 触发器列表
+    "maxWorkers": 10  # 线程池最大线程数
 }
 
 try:
@@ -23,4 +28,4 @@ try:
         config = config | data
 except Exception:
     with open(config.get("appConfigPath"), 'w', encoding='utf-8') as file:
-        json.dump(config, file, ensure_ascii=False, indent=4)
+        json.dump({}, file, ensure_ascii=False, indent=4)
