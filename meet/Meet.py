@@ -62,7 +62,7 @@ class Meet:
 
     def doInit(self, config=None):
         # 初始化任务和触发器执行器
-        self.taskExecutor = TaskExecutor(taskList=config.get("taskList", []),
-                                         triggerList=config.get("triggerList", []),
+        self.taskExecutor = TaskExecutor(fixedTaskList=config.get("fixedTaskList", []),
+                                         triggerTaskList=config.get("triggerTaskList", []),
                                          maxWorkers=10
                                          )

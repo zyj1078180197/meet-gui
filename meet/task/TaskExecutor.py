@@ -12,33 +12,35 @@ class TaskExecutor:
     threadPool: ThreadPoolExecutor = None
     # 退出标志
     isExit = False
+    fixedTaskList = []
+    triggerTaskList = []
 
-    def __init__(self, taskList, triggerList, maxWorkers):
-        self.taskList = taskList
-        self.triggerList = triggerList
+    def __init__(self, fixedTaskList, triggerTaskList, maxWorkers):
+        TaskExecutor.fixedTaskList = fixedTaskList
+        TaskExecutor.triggerTaskList = triggerTaskList
         TaskExecutor.threadPool = ThreadPoolExecutor(max_workers=maxWorkers)
         # 测试
         self.execute()
 
     def execute(self):
-        for task in self.taskList:
-            TaskExecutor.submitTask(self.taskRun, task)
+        for fixedTask in TaskExecutor.fixedTaskList:
+            TaskExecutor.submitTask(self.fixedTaskRun, fixedTask)
 
-        for trigger in self.triggerList:
-            TaskExecutor.submitTask(self.triggerRun, trigger)
+        for triggerTask in TaskExecutor.triggerTaskList:
+            TaskExecutor.submitTask(self.triggerTaskRun, triggerTask)
 
     @classmethod
-    def taskRun(cls, task):
+    def fixedTaskRun(cls, task):
         """
         任务运行
         :param task:
         :return:
         """
-        while task.executeNumber > 0 and task.status == BaseTask.StatusEnum.Running:
+        while task.executeNumber > 0 and task.status == BaseTask.StatusEnum.RUNNING:
             # 程序退出或任务停止时结束线程
-            if cls.isExit or task.status == BaseTask.StatusEnum.Stopped:
+            if cls.isExit or task.status == BaseTask.StatusEnum.STOPPED:
                 break
-            if task.status == BaseTask.StatusEnum.Paused:
+            if task.status == BaseTask.StatusEnum.PAUSED:
                 sleep(task.interval)
                 continue
             task.run()
@@ -47,22 +49,22 @@ class TaskExecutor:
         # todo 停止后发射信号，按钮状态改变
 
     @classmethod
-    def triggerRun(cls, trigger):
+    def triggerTaskRun(cls, task):
         """
         触发器运行
         :param trigger:
         :return:
         """
-        while trigger.status == BaseTask.StatusEnum.Running:
+        while task.status == BaseTask.StatusEnum.RUNNING:
             # 程序退出或触发停止时结束线程
-            if cls.isExit or trigger.status == BaseTask.StatusEnum.Stopped:
+            if cls.isExit or task.status == BaseTask.StatusEnum.STOPPED:
                 break
             # 暂停处理
-            if trigger.status == BaseTask.StatusEnum.Paused or trigger.trigger() is False:
-                sleep(trigger.interval)
+            if task.status == BaseTask.StatusEnum.PAUSED or task.trigger() is False:
+                sleep(task.interval)
                 continue
-            trigger.run()
-            sleep(trigger.interval)
+            task.run()
+            sleep(task.interval)
         # todo 停止后发射信号，按钮状态改变
 
     @classmethod

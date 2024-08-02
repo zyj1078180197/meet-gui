@@ -9,8 +9,10 @@ from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
 from meet.config.Config import Config, themeToggleHandle
 from meet.gui.plugin.BrowserHistory import browserHistory
 from meet.gui.plugin.Communicate import communicate
+from meet.config.GlobalData import GlobalData
 from meet.gui.widget.TitleBar import TitleBar
 from meet.gui.widget.WidgetBase import WidgetBase
+from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
 from meet.task.TaskExecutor import TaskExecutor
 
 
@@ -64,7 +66,8 @@ class MainWindow(MSFluentWindow):
             self.addSubInterface(homeInterface, FluentIcon.HOME, '主页', FluentIcon.HOME_FILL)
         if Config.taskPageShow:
             # 创建一个名为' taskInterface  '的Widget作为应用界面
-            taskInterface = WidgetBase('任务', self)
+            taskInterface = FixedTaskTab()
+            GlobalData.fixedTaskTab = taskInterface
             if firstPage is None:
                 firstPage = taskInterface
             # 添加子界面

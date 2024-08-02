@@ -1,5 +1,9 @@
-from time import sleep
+import copy
+from datetime import datetime
 
+from meet.gui.plugin.Communicate import communicate
+from meet.config.GlobalData import GlobalData
+from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
 from meet.task.BaseTask import BaseTask
 
 
@@ -12,9 +16,15 @@ class TaskDemo(BaseTask):
 
     def run(self):
         print("TaskDemo running")
+        GlobalData.fixedTaskTab.taskTabChange.emit(self.copyTask())
 
     def trigger(self):
         return True
+
+    def copyTask(self):
+        task = copy.deepcopy(self)
+        task.taskName = "TaskDemo" + str(datetime.now().timestamp())
+        return TaskDemo()
 
 
 taskDemo = TaskDemo()

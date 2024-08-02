@@ -1,21 +1,10 @@
 # 默认配置
 import json
-import os
 
 from qfluentwidgets import qconfig, Theme, setTheme
 
-
-def get_path_in_package(base, file):
-    """
-    获取资源文件所在的路径
-    :param base:
-    :param file:
-    :return:
-    """
-    the_dir = os.path.dirname(os.path.realpath(base))
-
-    # Get the path of the file relative to the script
-    return os.path.join(the_dir, file)
+from meet.gui.plugin.Communicate import communicate
+from meet.util.Path import get_path_relative_to_exe
 
 
 class Config:
@@ -25,7 +14,7 @@ class Config:
     :param appVersion: 应用版本
     :param appIcon: 应用图标
     """
-    appIcon = get_path_in_package(__file__, 'logo.png')
+    appIcon = get_path_relative_to_exe("resource", "icon.ico")
     appName = 'MEET-GUI'
     appVersion = 1.0
     homePageShow = True,  # 首页是否展示
@@ -99,3 +88,5 @@ def themeToggleHandle():
         if Config.appConfigPath is not None:
             with open(Config.appConfigPath, 'w', encoding='utf-8') as json_file:
                 json.dump(Config.toDict(), json_file, ensure_ascii=False, indent=4)
+    # 发射主题切换信号
+    communicate.themeChange.emit()

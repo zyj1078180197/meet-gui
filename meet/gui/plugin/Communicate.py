@@ -1,5 +1,7 @@
 from PySide6.QtCore import QObject, Signal
 
+from meet.task.BaseTask import BaseTask
+
 
 class Communicate(QObject):
     """
@@ -7,6 +9,8 @@ class Communicate(QObject):
     """
     # 浏览历史记录改变
     browserHistoryChange = Signal()
+    themeChange = Signal()
+    fixedTaskChange = Signal(BaseTask)
 
 
 communicate = Communicate()
