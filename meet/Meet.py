@@ -32,6 +32,8 @@ class Meet:
         self.window = MainWindow()
         # 展示窗口
         self.window.show()
+        # 初始化相关信息
+        self.doInit(self.config)
 
     def run(self):
         """
@@ -57,14 +59,9 @@ class Meet:
         """
         self.window.addSubInterface(widget, text, icon)
 
-    def doInit(self, router=None):
+    def doInit(self, config=None):
         # 初始化任务和触发器执行器
-        self.taskExecutor = TaskExecutor(fixedTaskList=router.get("fixedTaskList", []),
-                                         triggerTaskList=router.get("triggerTaskList", []),
+        self.taskExecutor = TaskExecutor(fixedTaskList=config.get("fixedTaskList", []),
+                                         triggerTaskList=config.get("triggerTaskList", []),
                                          maxWorkers=10
                                          )
-
-    def setRouter(self, router):
-        GlobalData.router = router
-        self.doInit(router)
-        pass

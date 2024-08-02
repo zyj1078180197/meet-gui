@@ -2,6 +2,7 @@ from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 
 from meet.task.BaseTask import BaseTask
+from meet.util.Class import getClassByName
 
 
 class TaskExecutor:
@@ -24,10 +25,12 @@ class TaskExecutor:
 
     def execute(self):
         for fixedTask in TaskExecutor.fixedTaskList:
-            TaskExecutor.submitTask(self.fixedTaskRun, fixedTask)
+            task = getClassByName(fixedTask.get("moduleName"), fixedTask.get("className"))()
+            TaskExecutor.submitTask(self.fixedTaskRun, task)
 
         for triggerTask in TaskExecutor.triggerTaskList:
-            TaskExecutor.submitTask(self.triggerTaskRun, triggerTask)
+            task = getClassByName(triggerTask.get("moduleName"), triggerTask.get("className"))()
+            TaskExecutor.submitTask(self.triggerTaskRun, task)
 
     @classmethod
     def fixedTaskRun(cls, task):
