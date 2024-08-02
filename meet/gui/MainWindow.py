@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
     NavigationItemPosition, FluentIconBase, NavigationBarPushButton, qrouter, InfoBar, InfoBarPosition, MessageBox
 
-from meet.config.Config import Config, themeToggleHandle
+from meet.config.Config import Config
 from meet.gui.plugin.BrowserHistory import browserHistory
 from meet.gui.plugin.Communicate import communicate
 from meet.config.GlobalData import GlobalData
@@ -14,6 +14,8 @@ from meet.gui.widget.TitleBar import TitleBar
 from meet.gui.widget.WidgetBase import WidgetBase
 from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
 from meet.task.TaskExecutor import TaskExecutor
+from meet.util.Path import get_path_relative_to_exe
+from meet.util.Theme import themeToggleHandle
 
 
 class MainWindow(MSFluentWindow):
@@ -31,12 +33,12 @@ class MainWindow(MSFluentWindow):
 
         # 获取标题栏中的标签栏，类型为TabBar
         self.tabBar = self.titleBar.tabBar  # type: TabBar
-
+        config = Config.loadConfig(GlobalData.config)
         # 初始化导航组件
-        self.initNavigation()
+        self.initNavigation(config)
 
         # 初始化窗口配置
-        self.initWindow()
+        self.initWindow(config)
 
     def closeEvent(self, event):
         """
@@ -52,19 +54,19 @@ class MainWindow(MSFluentWindow):
         else:
             event.ignore()
 
-    def initNavigation(self):
+    def initNavigation(self, config):
         """
         初始化导航组件
         """
         firstPage = None
-        if Config.homePageShow:
+        if config.get('homePageShow', True):
             # 创建一个名为' homeInterface '的QStackedWidget作为主界面
             homeInterface = WidgetBase('主页', self)
             if firstPage is None:
                 firstPage = homeInterface
             # 添加子界面
             self.addSubInterface(homeInterface, FluentIcon.HOME, '主页', FluentIcon.HOME_FILL)
-        if Config.taskPageShow:
+        if config.get("taskPageShow", True):
             # 创建一个名为' taskInterface  '的Widget作为应用界面
             taskInterface = FixedTaskTab()
             GlobalData.fixedTaskTab = taskInterface
@@ -72,7 +74,7 @@ class MainWindow(MSFluentWindow):
                 firstPage = taskInterface
             # 添加子界面
             self.addSubInterface(taskInterface, FluentIcon.BOOK_SHELF, '任务')
-        if Config.triggerPageShow:
+        if config.get("triggerPageShow", True):
             # 创建一个名为' triggerInterface '的Widget作为视频界面
             triggerInterface = WidgetBase('触发', self)
             if firstPage is None:
@@ -85,11 +87,11 @@ class MainWindow(MSFluentWindow):
             routeKey='主题',
             icon=FluentIcon.CONSTRACT,
             text='主题',
-            onClick=lambda: themeToggleHandle(),
+            onClick=themeToggleHandle,
             selectable=False,
             position=NavigationItemPosition.BOTTOM,
         )
-        if Config.settingPageShow:
+        if config.get("settingPageShow", True):
             # 创建一个名为' settingInterface '的Widget作为库界面
             settingInterface = WidgetBase('设置', self)
             if firstPage is None:
@@ -113,7 +115,7 @@ class MainWindow(MSFluentWindow):
         # 设置标签栏的当前标签页的切换事件
         self.tabBar.currentChanged.connect(self.onTabChanged)
 
-    def initWindow(self):
+    def initWindow(self, config):
         """
         初始化窗口配置
         """
@@ -121,8 +123,9 @@ class MainWindow(MSFluentWindow):
         desktop = QApplication.screens()[0].availableGeometry()
         wi, he = desktop.width(), desktop.height()
         self.move(wi // 2 - self.width() // 2, he // 2 - self.height() // 2)
-        self.setWindowIcon(QIcon(Config.appIcon))
-        self.setWindowTitle(f"{Config.appName} V{Config.appVersion}")
+        appIcon = get_path_relative_to_exe(config.get("appIcon", "resource\\shoko.png"))
+        self.setWindowIcon(QIcon(appIcon))
+        self.setWindowTitle(f"{config.get('appName', 'meet-gui')} V{config.get('appVersion', 1.0)}")
 
     def addSubInterface(self, interface: QWidget, icon: Union[FluentIconBase, QIcon, str], text: str,
                         selectedIcon=None, position=NavigationItemPosition.TOP,

@@ -12,7 +12,7 @@ class TaskCard(ConfigCard):
 
 
 class TaskButtons(QWidget):
-    def __init__(self, task, OKIcon=None):
+    def __init__(self, task):
         super().__init__()
         self.task = task
         self.layout = QHBoxLayout(self)

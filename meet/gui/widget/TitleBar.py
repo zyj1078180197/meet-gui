@@ -3,9 +3,9 @@ from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QHBoxLayout
 from qfluentwidgets import MSFluentTitleBar, TransparentToolButton, FluentIcon, TabBar, TabCloseButtonDisplayMode
 
-from meet.config.Config import isDarkTheme
 from meet.gui.plugin.BrowserHistory import browserHistory
 from meet.gui.plugin.Communicate import communicate
+from meet.util.Theme import isDarkTheme
 
 
 class TitleBar(MSFluentTitleBar):

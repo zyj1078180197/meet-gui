@@ -52,7 +52,7 @@ class TaskExecutor:
     def triggerTaskRun(cls, task):
         """
         触发器运行
-        :param trigger:
+        :param task:
         :return:
         """
         while task.status == BaseTask.StatusEnum.RUNNING:

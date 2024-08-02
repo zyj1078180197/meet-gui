@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QApplication
 from qfluentwidgets import setTheme, Theme
 
 from meet.config.Config import Config
+from meet.config.GlobalData import GlobalData
 from meet.gui.MainWindow import MainWindow
 from meet.task.TaskExecutor import TaskExecutor
 
@@ -17,24 +18,20 @@ class Meet:
         """
         self.taskExecutor = None
         self.window = None
-        # 若是为None 则使用默认配置
-        if config is not None:
-            # 初始化app配置
-            Config.initData(config)
+        self.config = Config(config)
         # 创建APP
         self.app = QApplication(sys.argv)
         # 初始化设置主题
-        if Config.theme == 'Dark':
+        if self.config.get("theme") == 'Dark':
             setTheme(Theme.DARK)
-        if Config.theme == 'Light':
+        if self.config.get("theme") == 'Light':
             setTheme(Theme.LIGHT)
-        if Config.theme == 'Auto':
+        if self.config.get("theme") == 'Auto':
             setTheme(Theme.AUTO)
         # 创建窗口
         self.window = MainWindow()
         # 展示窗口
         self.window.show()
-        self.doInit(config)
 
     def run(self):
         """
@@ -60,9 +57,14 @@ class Meet:
         """
         self.window.addSubInterface(widget, text, icon)
 
-    def doInit(self, config=None):
+    def doInit(self, router=None):
         # 初始化任务和触发器执行器
-        self.taskExecutor = TaskExecutor(fixedTaskList=config.get("fixedTaskList", []),
-                                         triggerTaskList=config.get("triggerTaskList", []),
+        self.taskExecutor = TaskExecutor(fixedTaskList=router.get("fixedTaskList", []),
+                                         triggerTaskList=router.get("triggerTaskList", []),
                                          maxWorkers=10
                                          )
+
+    def setRouter(self, router):
+        GlobalData.router = router
+        self.doInit(router)
+        pass

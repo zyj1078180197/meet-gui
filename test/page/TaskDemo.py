@@ -1,9 +1,7 @@
 import copy
 from datetime import datetime
 
-from meet.gui.plugin.Communicate import communicate
 from meet.config.GlobalData import GlobalData
-from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
 from meet.task.BaseTask import BaseTask
 
 

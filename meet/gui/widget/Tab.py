@@ -2,8 +2,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from qfluentwidgets import ScrollArea
 
-from meet.config.Config import isDarkTheme
 from meet.gui.plugin.Communicate import communicate
+from meet.util.Theme import isDarkTheme
 
 
 class Tab(ScrollArea):

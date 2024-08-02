@@ -1,92 +1,57 @@
 # 默认配置
 import json
 
-from qfluentwidgets import qconfig, Theme, setTheme
-
-from meet.gui.plugin.Communicate import communicate
+from meet.config.GlobalData import GlobalData
 from meet.util.Path import get_path_relative_to_exe
 
 
-class Config:
+class Config(dict):
     """
     应用配置类
-    :param appName: 应用名称
-    :param appVersion: 应用版本
-    :param appIcon: 应用图标
     """
-    appIcon = get_path_relative_to_exe("resource", "icon.ico")
-    appName = 'MEET-GUI'
-    appVersion = 1.0
-    homePageShow = True,  # 首页是否展示
-    taskPageShow = True,  # 任务页面是否展示
-    triggerPageShow = True,  # 触发器页面是否展示
-    settingPageShow = True,  # 设置页面是否展示
-    theme = 'Dark'
-    appConfigPath = None
-    maxWorkers = 10
 
-    @classmethod
-    def initData(cls, config):
+    def __init__(self, config=None):
+        if config is None:
+            config = {
+                "appName": "Meet-2333",  # 应用名
+                "appVersion": 1.0,  # 应用版本
+                "appIcon": "resource\\shoko.png",  # 应用图标
+                "appConfigPath": "config\\config.json",
+                "homePageShow": True,  # 首页是否展示
+                "taskPageShow": True,  # 任务页面是否展示
+                "triggerPageShow": True,  # 触发页面是否展示
+                "settingPageShow": True,  # 设置页面是否展示
+                "theme": 'Dark',  # 主题(Light Dark Auto)
+                "maxWorkers": 10  # 线程池最大线程数
+            }
+        config = Config.loadConfig(config)
+        super().__init__(config)
+        Config.saveConfig(config)
+
+    @staticmethod
+    def loadConfig(config):
         """
-        初始化配置
-        :param config: 接受配置对象
-        :return:
+        加载配置
         """
-        cls.appName = config.get('appName', cls.appName)
-        cls.appVersion = config.get('appVersion', cls.appVersion)
-        cls.appIcon = config.get('appIcon', cls.appIcon)
-        cls.homePageShow = config.get('homePageShow', cls.homePageShow)
-        cls.taskPageShow = config.get('taskPageShow', cls.taskPageShow)
-        cls.triggerPageShow = config.get('triggerPageShow', cls.triggerPageShow)
-        cls.settingPageShow = config.get('settingPageShow', cls.settingPageShow)
-        cls.theme = config.get('theme', cls.theme)
-        cls.appConfigPath = config.get('appConfigPath', cls.appConfigPath)
-        cls.maxWorkers = config.get('maxWorkers', cls.maxWorkers)
-        pass
+        try:
+            # 使用with语句自动管理文件的打开和关闭
+            with open(get_path_relative_to_exe(config.get("appConfigPath", "config\\config.json")), 'r',
+                      encoding='utf-8') as file:
+                # 使用json.load()直接从文件对象读取并解析JSON
+                data = json.load(file)
+                # 合并字典
+                config = config | data
+                GlobalData.config = config
+                return config
+        except FileNotFoundError and json.decoder.JSONDecodeError:
+            with open(get_path_relative_to_exe(config.get("appConfigPath", "config\\config.json")), 'w',
+                      encoding='utf-8') as file:
+                json.dump(config, file, ensure_ascii=False, indent=4)
+            GlobalData.config = config
+            return config
 
-    @classmethod
-    def toDict(cls):
-        """
-        将配置转换为字典
-        :return:
-        """
-        return {
-            'appName': cls.appName,
-            'appVersion': cls.appVersion,
-            'appIcon': cls.appIcon,
-            'homePageShow': cls.homePageShow,
-            'taskPageShow': cls.taskPageShow,
-            'triggerPageShow': cls.triggerPageShow,
-            'settingPageShow': cls.settingPageShow,
-            'theme': cls.theme,
-            'appConfigPath': cls.appConfigPath,
-            'maxWorkers': cls.maxWorkers
-        }
-
-
-def isDarkTheme():
-    """
-    判断是否是黑暗模式
-    :return:
-    """
-    return qconfig.theme == Theme.DARK
-
-
-def themeToggleHandle():
-    """
-    主题切换事件
-    """
-    if isDarkTheme():
-        setTheme(Theme.LIGHT)
-        Config.theme = 'Light'
-        if Config.appConfigPath is not None:
-            with open(Config.appConfigPath, 'w', encoding='utf-8') as json_file:
-                json.dump(Config.toDict(), json_file, ensure_ascii=False, indent=4)
-    else:
-        setTheme(Theme.DARK)
-        Config.theme = 'Dark'
-        if Config.appConfigPath is not None:
-            with open(Config.appConfigPath, 'w', encoding='utf-8') as json_file:
-                json.dump(Config.toDict(), json_file, ensure_ascii=False, indent=4)
-    # 发射主题切换信号
-    communicate.themeChange.emit()
+    @staticmethod
+    def saveConfig(config):
+        with open(get_path_relative_to_exe(config.get("appConfigPath", "config\\config.json")), 'w',
+                  encoding='utf-8') as json_file:
+            json.dump(config, json_file, ensure_ascii=False, indent=4)
