@@ -1,5 +1,6 @@
 import sys
 
+from PySide6.QtCore import QRect
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QWidget, QStackedWidget
 from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
@@ -7,6 +8,8 @@ from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
 
 from meet.config.Config import Config
 from meet.config.GlobalGui import globalGui
+from meet.gui.plugin.BrowserHistory import browserHistory
+from meet.gui.plugin.Communicate import communicate
 from meet.gui.widget.TitleBar import TitleBar
 from meet.gui.widget.WidgetBase import WidgetBase
 from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
@@ -29,6 +32,10 @@ class MainWindow(MSFluentWindow):
 
         # 获取标题栏中的标签栏，类型为TabBar
         self.tabBar = self.titleBar.tabBar  # type: TabBar
+        # 前进按钮按下信号
+        titleBar.forwardButton.clicked.connect(self.onForwardClick)
+        # 后退按钮按下信号
+        titleBar.backButton.clicked.connect(self.onBackClick)
         config = Config.loadConfig(globalGui.config)
         # 初始化导航组件
         self.initNavigation(config)
@@ -114,7 +121,6 @@ class MainWindow(MSFluentWindow):
                 position=NavigationItemPosition.BOTTOM,
             )
         if firstPage is not None:
-            print("firstPage:", firstPage)
             self.navigationClicked(firstPage)
         # 设置标签栏关闭按钮的点击事件
         self.tabBar.tabCloseRequested.connect(self.onTabRemoved)
@@ -156,6 +162,10 @@ class MainWindow(MSFluentWindow):
         self.addTab(objectName, objectName, FluentIcon.ADD)
         # 切换标签
         self.tabBar.setCurrentTab(objectName)
+        # 添加历史记录
+        browserHistory.visit(WidgetBase.widgetDict.get(objectName))
+        # 发射信号
+        communicate.browserHistoryChange.emit()
 
     def initWindow(self, config):
         """
@@ -176,6 +186,7 @@ class MainWindow(MSFluentWindow):
         :return:
         """
         # 根据索引获取标签的文本 文本和routeKey相同
+        # 删除的标签
         objectName = self.tabBar.tabText(index)
         if self.tabBar.count() == 1:
             InfoBar.warning(
@@ -187,10 +198,6 @@ class MainWindow(MSFluentWindow):
                 parent=self
             )
             return
-        # 关闭标签同时关闭清理字典
-        self.mainPage.removeWidget(WidgetBase.widgetDict[objectName])
-        WidgetBase.widgetDict[objectName].close()
-        del WidgetBase.widgetDict[objectName]
         del TitleBar.tabBarDict[objectName]
         # 根据索引关闭标签
         self.tabBar.removeTab(index)
@@ -203,7 +210,9 @@ class MainWindow(MSFluentWindow):
         # 当前标签的routeKey
         objectName = self.tabBar.currentTab().routeKey()
         # 转到对应界面
-        self.navigationClicked(objectName, WidgetBase.widgetDict[objectName])
+        self.mainPage.setCurrentWidget(WidgetBase.widgetDict[objectName])
+        browserHistory.visit(WidgetBase.widgetDict[objectName])
+        communicate.browserHistoryChange.emit()
 
     def addTab(self, routeKey, text, icon):
         """
@@ -219,6 +228,43 @@ class MainWindow(MSFluentWindow):
             self.tabBar.setCurrentTab(routeKey)
             return
         TitleBar.tabBarDict[routeKey] = self.tabBar.addTab(routeKey, text, icon)
+
+    def onForwardClick(self):
+        page = browserHistory.forward()
+        # 发射信号
+        communicate.browserHistoryChange.emit()
+        if page is None:
+            InfoBar.warning(
+                title='警告',
+                content="最后一个页面了，无法再前进了",
+                isClosable=True,
+                position=InfoBarPosition.TOP_RIGHT,
+                duration=2000,
+                parent=self
+            )
+        self.addTab(page.objectName(), page.objectName(), FluentIcon.ADD)
+        # 转到对应界面
+        self.mainPage.setCurrentWidget(page)
+        self.tabBar.setCurrentTab(page.objectName())
+
+    def onBackClick(self):
+        page = browserHistory.back()
+        # 发射信号
+        communicate.browserHistoryChange.emit()
+        if page is None:
+            InfoBar.warning(
+                title='警告',
+                content="最后一个页面了，无法再往后跳转了",
+                isClosable=True,
+                position=InfoBarPosition.TOP_RIGHT,
+                duration=2000,
+                parent=self
+            )
+            return
+        self.addTab(page.objectName(), page.objectName(), FluentIcon.ADD)
+        # 转到对应界面
+        self.mainPage.setCurrentWidget(page)
+        self.tabBar.setCurrentTab(page.objectName())
 
 
 if __name__ == '__main__':
