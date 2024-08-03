@@ -4,7 +4,7 @@ from PySide6.QtWidgets import QApplication
 from qfluentwidgets import setTheme, Theme
 
 from meet.config.Config import Config
-from meet.config.GlobalData import GlobalData
+from meet.config.GlobalGui import globalGui
 from meet.gui.MainWindow import MainWindow
 from meet.task.TaskExecutor import TaskExecutor
 
@@ -21,6 +21,8 @@ class Meet:
         self.config = Config(config)
         # 创建APP
         self.app = QApplication(sys.argv)
+        globalGui.app = self.app
+        globalGui.meet = self
         # 初始化设置主题
         if self.config.get("theme") == 'Dark':
             setTheme(Theme.DARK)

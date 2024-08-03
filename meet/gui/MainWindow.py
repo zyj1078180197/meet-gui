@@ -9,7 +9,7 @@ from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
 from meet.config.Config import Config
 from meet.gui.plugin.BrowserHistory import browserHistory
 from meet.gui.plugin.Communicate import communicate
-from meet.config.GlobalData import GlobalData
+from meet.config.GlobalGui import globalGui
 from meet.gui.widget.TitleBar import TitleBar
 from meet.gui.widget.WidgetBase import WidgetBase
 from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
@@ -33,7 +33,7 @@ class MainWindow(MSFluentWindow):
 
         # 获取标题栏中的标签栏，类型为TabBar
         self.tabBar = self.titleBar.tabBar  # type: TabBar
-        config = Config.loadConfig(GlobalData.config)
+        config = Config.loadConfig(globalGui.config)
         # 初始化导航组件
         self.initNavigation(config)
 
@@ -69,7 +69,7 @@ class MainWindow(MSFluentWindow):
         if config.get("taskPageShow", True):
             # 创建一个名为' taskInterface  '的Widget作为应用界面
             taskInterface = FixedTaskTab()
-            GlobalData.fixedTaskTab = taskInterface
+            globalGui.fixedTaskTab = taskInterface
             if firstPage is None:
                 firstPage = taskInterface
             # 添加子界面

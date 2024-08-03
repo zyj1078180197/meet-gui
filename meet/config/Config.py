@@ -1,7 +1,7 @@
 # 默认配置
 import json
 
-from meet.config.GlobalData import GlobalData
+from meet.config.GlobalGui import globalGui
 from meet.util.Path import get_path_relative_to_exe
 
 
@@ -41,13 +41,13 @@ class Config(dict):
                 data = json.load(file)
                 # 合并字典
                 config = config | data
-                GlobalData.config = config
+                globalGui.config = config
                 return config
         except FileNotFoundError and json.decoder.JSONDecodeError:
             with open(get_path_relative_to_exe(config.get("appConfigPath", "config\\config.json")), 'w',
                       encoding='utf-8') as file:
                 json.dump(config, file, ensure_ascii=False, indent=4)
-            GlobalData.config = config
+            globalGui.config = config
             return config
 
     @staticmethod

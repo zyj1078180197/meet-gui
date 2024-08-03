@@ -1,7 +1,7 @@
 import copy
 from datetime import datetime
 
-from meet.config.GlobalData import GlobalData
+from meet.config.GlobalGui import globalGui
 from meet.task.BaseTask import BaseTask
 
 
@@ -14,7 +14,7 @@ class TaskDemo(BaseTask):
 
     def run(self):
         print("TaskDemo running")
-        GlobalData.fixedTaskTab.taskTabChange.emit(self.copyTask())
+        globalGui.fixedTaskTab.taskTabChange.emit(self.copyTask())
 
     def trigger(self):
         return True

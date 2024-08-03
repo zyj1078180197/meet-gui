@@ -19,8 +19,8 @@ def themeToggleHandle():
     主题切换事件
     """
     from meet.config.Config import Config
-    from meet.config.GlobalData import GlobalData
-    config = Config.loadConfig(GlobalData.config)
+    from meet.config.GlobalGui import globalGui
+    config = Config.loadConfig(globalGui.config)
     path = get_path_relative_to_exe(config.get("appConfigPath", "config\\config.json"))
     if isDarkTheme():
         setTheme(Theme.LIGHT)

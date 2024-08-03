@@ -12,8 +12,8 @@ class ConfigCard(ExpandSettingCard):
         self.viewLayout.setSpacing(0)
         self.viewLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.viewLayout.setContentsMargins(10, 0, 10, 0)
-        self.config = {'姓名': 11.23}
+        self.config = {'姓名': []}
         self.config_desc = {}
 
-        self.viewLayout.addWidget(configWidget({}, self.config_desc, self.config, "姓名", 11.23))
+        self.viewLayout.addWidget(configWidget({}, self.config_desc, self.config, "姓名",  []))
         self._adjustViewSize()
