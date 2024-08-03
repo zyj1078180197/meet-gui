@@ -7,13 +7,13 @@ from meet.gui.widget.task.ConfigCard import ConfigCard
 class TaskCard(ConfigCard):
     def __init__(self, task, taskClass):
         super().__init__(task, taskClass)
-        task = TaskButtons(task)
+        task = TaskButtons(self, task)
         self.addWidget(task)
 
 
 class TaskButtons(QWidget):
-    def __init__(self, task):
-        super().__init__()
+    def __init__(self, parent, task):
+        super().__init__(parent=parent)
         self.task = task
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(18)  # Set the spacing between widgets

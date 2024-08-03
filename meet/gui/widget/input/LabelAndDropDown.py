@@ -13,7 +13,7 @@ class LabelAndDropDown(ConfigLabelAndWidget):
         for option in options:
             self.options.append(option)
             self.dict[option] = option
-        self.comboBox = ComboBox()
+        self.comboBox = ComboBox(self)
         self.comboBox.addItems(self.options)
         self.comboBox.setCurrentIndex(findStringIndex(options, self.config.get(self.key)))
         self.comboBox.setMinimumWidth(210)

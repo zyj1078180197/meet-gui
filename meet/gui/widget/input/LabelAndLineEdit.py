@@ -8,7 +8,7 @@ class LabelAndLineEdit(ConfigLabelAndWidget):
     def __init__(self, configDesc, config, key: str):
         super().__init__(configDesc, config, key)
         self.key = key
-        self.lineEdit = LineEdit()
+        self.lineEdit = LineEdit(self)
         self.updateValue()
         self.lineEdit.textChanged.connect(self.valueChanged)
         self.addWidget(self.lineEdit)

@@ -23,7 +23,7 @@ class LabelAndWidget(QWidget):
         # 初始化水平布局作为主布局
         self.layout = QHBoxLayout(self)
         # 初始化用于放置标题和内容的垂直布局
-        self.titleLayout = QVBoxLayout()
+        self.titleLayout = QVBoxLayout(self)
         # 将垂直布局添加到主布局中
         self.layout.addLayout(self.titleLayout)
         # 创建并设置标题标签
