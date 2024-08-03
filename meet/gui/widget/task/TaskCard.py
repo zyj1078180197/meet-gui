@@ -5,9 +5,9 @@ from meet.gui.widget.task.ConfigCard import ConfigCard
 
 
 class TaskCard(ConfigCard):
-    def __init__(self):
-        super().__init__()
-        task = TaskButtons(11)
+    def __init__(self, task, taskClass):
+        super().__init__(task, taskClass)
+        task = TaskButtons(task)
         self.addWidget(task)
 
 

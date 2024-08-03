@@ -1,33 +1,34 @@
 from meet.task.BaseTask import BaseTask
 
 
-class TaskDemo(BaseTask):
+class TaskDemoTest01(BaseTask):
     def __init__(self):
         super().__init__()
-        self.taskName = "TaskDemo"
+        self.taskName = "TaskDemoTest01"
         self.interval = 5
         self.executeNumber = 10
         self.defaultConfig = {
             "姓名": "张三",
-            "年龄": 18,
-            "性别": "男",
+            "班级": "高一三班",
+            "年级": "高一",
         }  # 默认配置 属性：值
         self.configDesc = {
-            "年龄": "年龄按照周岁计算",
+            "班级": "请填写准确班级",
         }  # 配置描述 属性：描述
         self.configType = {
-            "性别":
+            "年级":
                 {
                     "type": "dropDown",
                     'options': [
-                        "男",
-                        "女"
+                        "高一",
+                        "高二",
+                        "高三"
                     ]
                 }
         }  # 配置类型 属性：{'type': "dropDown", 'options': ['Forward', 'Backward']}
 
     def run(self):
-        print("TaskDemo running")
+        print("TaskDemoTest01 running")
 
     def trigger(self):
         return True

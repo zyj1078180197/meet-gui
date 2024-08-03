@@ -30,12 +30,12 @@ class Meet:
             setTheme(Theme.LIGHT)
         if self.config.get("theme") == 'Auto':
             setTheme(Theme.AUTO)
+        # 初始化相关信息
+        self.doInit(self.config)
         # 创建窗口
         self.window = MainWindow()
         # 展示窗口
         self.window.show()
-        # 初始化相关信息
-        self.doInit(self.config)
 
     def run(self):
         """

@@ -2,28 +2,23 @@ from PySide6.QtCore import Signal
 
 from meet.gui.widget.task.TaskCard import TaskCard
 from meet.gui.widget.task.TaskTab import TaskTab
-from meet.task.BaseTask import BaseTask
+from meet.task.TaskExecutor import TaskExecutor
+from meet.util.Class import getClassByName
 
 
 class FixedTaskTab(TaskTab):
-    taskTabChange = Signal(BaseTask)
+    taskTabChange = Signal(dict)
 
     def __init__(self):
         super().__init__()
-        taskCard = TaskCard()
-        self.addWidget(taskCard)
-        self.setObjectName("任务")
-        taskCard2 = TaskCard()
-        self.addWidget(taskCard2)
-        taskCard3 = TaskCard()
-        self.addWidget(taskCard3)
-        taskCard4 = TaskCard()
-        self.addWidget(taskCard4)
-        taskCard5 = TaskCard()
-        self.addWidget(taskCard5)
+        for taskList in TaskExecutor.fixedTaskList:
+            for task in taskList:
+                taskClass = getClassByName(task.get("moduleName"), task.get("className"))()
+                taskCard = TaskCard(task, taskClass)
+                self.addWidget(taskCard)
         self.taskTabChange.connect(self.taskTabChanged)
+        self.setObjectName("任务")
 
     def taskTabChanged(self, task):
-        print(task)
-        taskCard = TaskCard()
-        self.addWidget(taskCard)
+        pass
+

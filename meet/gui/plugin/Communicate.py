@@ -10,7 +10,6 @@ class Communicate(QObject):
     # 浏览历史记录改变
     browserHistoryChange = Signal()
     themeChange = Signal()
-    fixedTaskChange = Signal(BaseTask)
 
 
 communicate = Communicate()

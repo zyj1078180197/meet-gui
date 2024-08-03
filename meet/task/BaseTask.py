@@ -10,12 +10,13 @@ class BaseTask:
     def __init__(self):
         self.taskName = None  # 任务名称
         self.executeNumber = 5  # 任务执行次数
-        self.status = BaseTask.StatusEnum.RUNNING  # Running, Paused, Stopped 状态
+        self.status = BaseTask.StatusEnum.STOPPED  # Running, Paused, Stopped 状态
         self.interval = 1  # 任务执行间隔
         self.defaultConfig = {}  # 默认配置 属性：值
         self.config = {}  # 配置 属性：值
         self.configDesc = {}  # 配置描述 属性：描述
-        self.configType = {}  # 配置类型 属性：类型
+        self.configType = {}  # 配置类型 属性：{'type': "dropDown", 'options': ['Forward', 'Backward']}
+        self.taskId = None
         pass
 
     def run(self):
@@ -28,7 +29,4 @@ class BaseTask:
         self.status = BaseTask.StatusEnum.STOPPED
 
     def trigger(self):
-        pass
-
-    def copyTask(self):
         pass

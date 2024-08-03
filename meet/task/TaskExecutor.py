@@ -3,6 +3,7 @@ from time import sleep
 
 from meet.task.BaseTask import BaseTask
 from meet.util.Class import getClassByName
+from meet.util.Task import Task
 
 
 class TaskExecutor:
@@ -17,11 +18,11 @@ class TaskExecutor:
     triggerTaskList = []
 
     def __init__(self, fixedTaskList, triggerTaskList, maxWorkers):
-        TaskExecutor.fixedTaskList = fixedTaskList
-        TaskExecutor.triggerTaskList = triggerTaskList
         TaskExecutor.threadPool = ThreadPoolExecutor(max_workers=maxWorkers)
+        TaskExecutor.fixedTaskList = Task.taskHandle(fixedTaskList)
+        TaskExecutor.triggerTaskList = Task.taskHandle(triggerTaskList)
         # 测试
-        self.execute()
+        # self.execute()
 
     def execute(self):
         for fixedTask in TaskExecutor.fixedTaskList:

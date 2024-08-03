@@ -12,6 +12,3 @@ class TriggerDemo(BaseTask):
 
     def trigger(self):
         return True
-
-
-triggerDemo = TriggerDemo()

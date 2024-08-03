@@ -2,6 +2,8 @@ import json
 
 from meet.util.Path import get_path_relative_to_exe
 from test.page.TaskDemo import TaskDemo
+from test.page.TaskDemoTest01 import TaskDemoTest01
+from test.page.TaskDemoTest02 import TaskDemoTest02
 from test.page.TriggerDemo import TriggerDemo
 
 config = {
@@ -20,15 +22,31 @@ config = {
             "moduleName": TaskDemo.__module__,
             "className": TaskDemo.__name__,
             "title": "任务测试",
-            "description": "任务测试类"
-        }
+            "description": "任务测试类",
+            "configPath": "config"
+        },
+        {
+            "moduleName": TaskDemoTest01.__module__,
+            "className": TaskDemoTest01.__name__,
+            "title": "任务测试",
+            "description": "任务测试类",
+            "configPath": "config"
+        },
+        {
+            "moduleName": TaskDemoTest02.__module__,
+            "className": TaskDemoTest02.__name__,
+            "title": "任务测试",
+            "description": "任务测试类",
+            "configPath": "config"
+        },
     ],
     "triggerTaskList": [  # 触发任务列表
         {
             "moduleName": TriggerDemo.__module__,
             "className": TriggerDemo.__name__,
             "title": "触发测试",
-            "description": "触发测试类"
+            "description": "触发测试类",
+            "configPath": "config"
         }
     ],
 }
