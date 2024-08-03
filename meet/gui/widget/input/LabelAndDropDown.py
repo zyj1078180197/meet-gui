@@ -16,7 +16,7 @@ class LabelAndDropDown(ConfigLabelAndWidget):
         self.comboBox = ComboBox(self)
         self.comboBox.addItems(self.options)
         self.comboBox.setCurrentIndex(findStringIndex(options, self.config.get(self.key)))
-        self.comboBox.setMinimumWidth(210)
+        self.comboBox.setFixedWidth(300)
         self.comboBox.currentTextChanged.connect(self.textChanged)
         self.addWidget(self.comboBox)
 

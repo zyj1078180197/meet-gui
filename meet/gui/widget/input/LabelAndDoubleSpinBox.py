@@ -9,7 +9,7 @@ class LabelAndDoubleSpinBox(ConfigLabelAndWidget):
         super().__init__(configDesc, config, key)
         self.key = key
         self.spinBox = DoubleSpinBox()
-        self.spinBox.setFixedWidth(180)
+        self.spinBox.setFixedWidth(300)
         self.updateValue()
         self.spinBox.valueChanged.connect(self.valueChanged)
         self.addWidget(self.spinBox)

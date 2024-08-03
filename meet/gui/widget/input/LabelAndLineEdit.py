@@ -9,6 +9,7 @@ class LabelAndLineEdit(ConfigLabelAndWidget):
         super().__init__(configDesc, config, key)
         self.key = key
         self.lineEdit = LineEdit(self)
+        self.lineEdit.setFixedWidth(300)
         self.updateValue()
         self.lineEdit.textChanged.connect(self.valueChanged)
         self.addWidget(self.lineEdit)

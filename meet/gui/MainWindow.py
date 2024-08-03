@@ -1,6 +1,5 @@
 import sys
 
-from PySide6.QtCore import QRect
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QWidget, QStackedWidget
 from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
@@ -92,7 +91,7 @@ class MainWindow(MSFluentWindow):
             # 添加一个不可选中的导航项
             self.navigationInterface.addItem(
                 routeKey='触发',
-                icon=FluentIcon.CONSTRACT,
+                icon=FluentIcon.SYNC,
                 text='触发',
                 onClick=lambda: self.navigationClicked("触发"),
                 selectable=False,
@@ -171,7 +170,8 @@ class MainWindow(MSFluentWindow):
         """
         初始化窗口配置
         """
-        self.resize(1100, 750)
+        self.setFixedSize(1080, 720)
+        # 隐藏缩放按钮
         desktop = QApplication.screens()[0].availableGeometry()
         wi, he = desktop.width(), desktop.height()
         self.move(wi // 2 - self.width() // 2, he // 2 - self.height() // 2)

@@ -48,7 +48,7 @@ class TitleBar(MSFluentTitleBar):
         # 设置标签栏可拖动
         self.tabBar.setMovable(True)
         # 设置标签栏最大宽度
-        self.tabBar.setTabMaximumWidth(220)
+        self.tabBar.setTabMaximumWidth(120)
         # 禁用标签栏阴影效果
         self.tabBar.setTabShadowEnabled(False)
         # 设置标签栏选中背景颜色

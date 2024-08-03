@@ -11,6 +11,7 @@ class ModifyListItem(ConfigLabelAndWidget):
     def __init__(self, configDesc, config, key: str):
         super().__init__(configDesc, config, key)
         self.switchButton = PushButton("修改", parent=self)
+        self.switchButton.setFixedWidth(100)
         self.switchButton.clicked.connect(self.clicked)
         self.listText = QLabel("")
         self.updateValue()
