@@ -1,14 +1,11 @@
 import sys
-from typing import Union
 
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtWidgets import QApplication, QWidget, QStackedWidget
 from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
-    NavigationItemPosition, FluentIconBase, NavigationBarPushButton, qrouter, InfoBar, InfoBarPosition, MessageBox
+    NavigationItemPosition, InfoBar, InfoBarPosition, MessageBox
 
 from meet.config.Config import Config
-from meet.gui.plugin.BrowserHistory import browserHistory
-from meet.gui.plugin.Communicate import communicate
 from meet.config.GlobalGui import globalGui
 from meet.gui.widget.TitleBar import TitleBar
 from meet.gui.widget.WidgetBase import WidgetBase
@@ -23,13 +20,12 @@ class MainWindow(MSFluentWindow):
         # 初始化Mica主题启用标志为False，表示默认情况下未启用Mica主题
         self.isMicaEnabled = False
         super().__init__()
+        self.mainPage = QStackedWidget(self)
+        self.stackedWidget.addWidget(self.mainPage)
+        self.stackedWidget.setCurrentWidget(self.mainPage)
         titleBar = TitleBar(self)
         # 为窗口设置自定义标题栏
         self.setTitleBar(titleBar)
-        # 前进按钮按下信号
-        titleBar.forwardButton.clicked.connect(self.onForwardClick)
-        # 后退按钮按下信号
-        titleBar.backButton.clicked.connect(self.onBackClick)
 
         # 获取标题栏中的标签栏，类型为TabBar
         self.tabBar = self.titleBar.tabBar  # type: TabBar
@@ -60,27 +56,41 @@ class MainWindow(MSFluentWindow):
         """
         firstPage = None
         if config.get('homePageShow', True):
-            # 创建一个名为' homeInterface '的QStackedWidget作为主界面
-            homeInterface = WidgetBase('主页', self)
             if firstPage is None:
-                firstPage = homeInterface
-            # 添加子界面
-            self.addSubInterface(homeInterface, FluentIcon.HOME, '主页', FluentIcon.HOME_FILL)
+                firstPage = "首页"
+            # 添加一个不可选中的导航项
+            self.navigationInterface.addItem(
+                routeKey='首页',
+                icon=FluentIcon.HOME,
+                text='首页',
+                onClick=lambda: self.navigationClicked("首页"),
+                selectable=False,
+                position=NavigationItemPosition.TOP,
+            )
         if config.get("taskPageShow", True):
-            # 创建一个名为' taskInterface  '的Widget作为应用界面
-            taskInterface = FixedTaskTab()
-            globalGui.fixedTaskTab = taskInterface
             if firstPage is None:
-                firstPage = taskInterface
-            # 添加子界面
-            self.addSubInterface(taskInterface, FluentIcon.BOOK_SHELF, '任务')
+                firstPage = "任务"
+            # 添加一个不可选中的导航项
+            self.navigationInterface.addItem(
+                routeKey='任务',
+                icon=FluentIcon.BOOK_SHELF,
+                text='任务',
+                onClick=lambda: self.navigationClicked("任务"),
+                selectable=False,
+                position=NavigationItemPosition.TOP,
+            )
         if config.get("triggerPageShow", True):
-            # 创建一个名为' triggerInterface '的Widget作为视频界面
-            triggerInterface = WidgetBase('触发', self)
             if firstPage is None:
-                firstPage = triggerInterface
-            # 添加子界面
-            self.addSubInterface(triggerInterface, FluentIcon.SYNC, '触发')
+                firstPage = "触发"
+            # 添加一个不可选中的导航项
+            self.navigationInterface.addItem(
+                routeKey='触发',
+                icon=FluentIcon.CONSTRACT,
+                text='触发',
+                onClick=lambda: self.navigationClicked("触发"),
+                selectable=False,
+                position=NavigationItemPosition.TOP,
+            )
 
         # 添加一个不可选中的导航项
         self.navigationInterface.addItem(
@@ -92,28 +102,60 @@ class MainWindow(MSFluentWindow):
             position=NavigationItemPosition.BOTTOM,
         )
         if config.get("settingPageShow", True):
-            # 创建一个名为' settingInterface '的Widget作为库界面
-            settingInterface = WidgetBase('设置', self)
             if firstPage is None:
-                firstPage = settingInterface
-            # 位置在底部的导航项
-            self.addSubInterface(settingInterface, FluentIcon.SETTING,
-                                 '设置', FluentIcon.SETTING, NavigationItemPosition.BOTTOM)
+                firstPage = "设置"
+            # 添加一个不可选中的导航项
+            self.navigationInterface.addItem(
+                routeKey='设置',
+                icon=FluentIcon.SETTING,
+                text='设置',
+                onClick=lambda: self.navigationClicked("设置"),
+                selectable=False,
+                position=NavigationItemPosition.BOTTOM,
+            )
         if firstPage is not None:
-            # 设置当前导航项
-            self.navigationInterface.setCurrentItem(
-                firstPage.objectName())
-            # 添加历史记录 第一个历史记录就是首页
-            browserHistory.visit(firstPage)
-            # 发射信号
-            communicate.browserHistoryChange.emit()
-            # 添加首页标签
-            self.addTab(firstPage.objectName(), firstPage.objectName(),
-                        FluentIcon.ADD)
+            print("firstPage:", firstPage)
+            self.navigationClicked(firstPage)
         # 设置标签栏关闭按钮的点击事件
         self.tabBar.tabCloseRequested.connect(self.onTabRemoved)
         # 设置标签栏的当前标签页的切换事件
         self.tabBar.currentChanged.connect(self.onTabChanged)
+
+    def navigationClicked(self, objectName, interface=None):
+        if objectName == "首页":
+            if WidgetBase.widgetDict.get(objectName) is None:
+                homeInterface = WidgetBase(objectName, self)
+                self.mainPage.addWidget(homeInterface)
+                WidgetBase.widgetDict[objectName] = homeInterface
+            self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
+        elif objectName == "任务":
+            if WidgetBase.widgetDict.get(objectName) is None:
+                taskInterface = FixedTaskTab()
+                globalGui.fixedTaskTab = taskInterface
+                self.mainPage.addWidget(taskInterface)
+                WidgetBase.widgetDict[objectName] = taskInterface
+            self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
+        elif objectName == "触发":
+            if WidgetBase.widgetDict.get(objectName) is None:
+                triggerInterface = WidgetBase(objectName, self)
+                self.mainPage.addWidget(triggerInterface)
+                WidgetBase.widgetDict[objectName] = triggerInterface
+            self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
+        elif objectName == "设置":
+            if WidgetBase.widgetDict.get(objectName) is None:
+                settingInterface = WidgetBase(objectName, self)
+                self.mainPage.addWidget(settingInterface)
+                WidgetBase.widgetDict[objectName] = settingInterface
+            self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
+        else:
+            self.mainPage.addWidget(WidgetBase(objectName, self))
+        # 如果当前标签页和点击的标签页相同，则不执行任何操作
+        if self.tabBar.currentTab() is not None and self.tabBar.currentTab().routeKey() == objectName:
+            return
+        # 添加标签
+        self.addTab(objectName, objectName, FluentIcon.ADD)
+        # 切换标签
+        self.tabBar.setCurrentTab(objectName)
 
     def initWindow(self, config):
         """
@@ -127,64 +169,6 @@ class MainWindow(MSFluentWindow):
         self.setWindowIcon(QIcon(appIcon))
         self.setWindowTitle(f"{config.get('appName', 'meet-gui')} V{config.get('appVersion', 1.0)}")
 
-    def addSubInterface(self, interface: QWidget, icon: Union[FluentIconBase, QIcon, str], text: str,
-                        selectedIcon=None, position=NavigationItemPosition.TOP,
-                        isTransparent=False) -> NavigationBarPushButton:
-        """
-        添加子界面
-        :param isTransparent: 是否透明
-        :param interface 第一个参数 插入的部件
-        :param icon 第二个参数 导航项的图标
-        :param text 第三个参数 导航项的文本
-        :param selectedIcon 第四个参数 导航项的选中的图标
-        :param position 第五个参数 导航项的位置 默认在头部
-        """
-        if not interface.objectName():
-            raise ValueError("The object name of `interface` can't be empty string.")
-
-        interface.setProperty("isStackedTransparent", isTransparent)
-        self.stackedWidget.addWidget(interface)
-
-        # 添加导航项
-        routeKey = interface.objectName()
-        item = self.navigationInterface.addItem(
-            routeKey=routeKey,
-            icon=icon,
-            text=text,
-            onClick=lambda: self.interfaceOnClicked(interface),
-            selectedIcon=selectedIcon,
-            position=position
-        )
-        # 存到字典里面
-        WidgetBase.widgetDict[routeKey] = interface
-        # 创建页面添加到stackedWidget里面
-        if self.stackedWidget.count() == 1:
-            self.stackedWidget.currentChanged.connect(super()._onCurrentInterfaceChanged)
-            self.navigationInterface.setCurrentItem(routeKey)
-            qrouter.setDefaultRouteKey(self.stackedWidget, routeKey)
-        super()._updateStackedBackground()
-        return item
-
-    def interfaceOnClicked(self, interface):
-        """
-        导航按钮被点击时触发的事件
-        :param interface:
-        :return:
-        """
-        # 如果当前标签页和点击的标签页相同，则不执行任何操作
-        if self.tabBar.currentTab().routeKey() == interface.objectName():
-            return
-        # 添加标签
-        self.addTab(interface.objectName(), interface.objectName(), FluentIcon.ADD)
-        # 切换标签
-        self.tabBar.setCurrentTab(interface.objectName())
-        # 转到对应界面
-        self.switchTo(interface)
-        # 添加历史记录
-        browserHistory.visit(interface)
-        # 发射信号
-        communicate.browserHistoryChange.emit()
-
     def onTabRemoved(self, index):
         """
         关闭标签
@@ -192,7 +176,7 @@ class MainWindow(MSFluentWindow):
         :return:
         """
         # 根据索引获取标签的文本 文本和routeKey相同
-        text = self.tabBar.tabText(index)
+        objectName = self.tabBar.tabText(index)
         if self.tabBar.count() == 1:
             InfoBar.warning(
                 title='警告',
@@ -204,15 +188,12 @@ class MainWindow(MSFluentWindow):
             )
             return
         # 关闭标签同时关闭清理字典
-        del TitleBar.tabBarDict[text]
+        self.mainPage.removeWidget(WidgetBase.widgetDict[objectName])
+        WidgetBase.widgetDict[objectName].close()
+        del WidgetBase.widgetDict[objectName]
+        del TitleBar.tabBarDict[objectName]
         # 根据索引关闭标签
         self.tabBar.removeTab(index)
-        # 关闭标签后当前的标签
-        t = self.tabBar.currentTab().routeKey()
-        # 添加历史记录
-        browserHistory.visit(WidgetBase.widgetDict[t])
-        # 发射信号
-        communicate.browserHistoryChange.emit()
 
     def onTabChanged(self):
         """
@@ -221,14 +202,8 @@ class MainWindow(MSFluentWindow):
         """
         # 当前标签的routeKey
         objectName = self.tabBar.currentTab().routeKey()
-        # 设置当前导航项
-        self.navigationInterface.setCurrentItem(
-            objectName)
-        self.switchTo(WidgetBase.widgetDict[objectName])
-        # 添加历史记录
-        browserHistory.visit(WidgetBase.widgetDict[objectName])
-        # 发射信号
-        communicate.browserHistoryChange.emit()
+        # 转到对应界面
+        self.navigationClicked(objectName, WidgetBase.widgetDict[objectName])
 
     def addTab(self, routeKey, text, icon):
         """
@@ -244,41 +219,6 @@ class MainWindow(MSFluentWindow):
             self.tabBar.setCurrentTab(routeKey)
             return
         TitleBar.tabBarDict[routeKey] = self.tabBar.addTab(routeKey, text, icon)
-
-    def onForwardClick(self):
-        page = browserHistory.forward()
-        # 发射信号
-        communicate.browserHistoryChange.emit()
-        if page is None:
-            InfoBar.warning(
-                title='警告',
-                content="最后一个页面了，无法再前进了",
-                isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
-                duration=2000,
-                parent=self
-            )
-        self.addTab(page.objectName(), page.objectName(), FluentIcon.ADD)
-        # 转到对应界面
-        self.switchTo(page)
-
-    def onBackClick(self):
-        page = browserHistory.back()
-        # 发射信号
-        communicate.browserHistoryChange.emit()
-        if page is None:
-            InfoBar.warning(
-                title='警告',
-                content="最后一个页面了，无法再往后跳转了",
-                isClosable=True,
-                position=InfoBarPosition.TOP_RIGHT,
-                duration=2000,
-                parent=self
-            )
-            return
-        self.addTab(page.objectName(), page.objectName(), FluentIcon.ADD)
-        # 转到对应界面
-        self.switchTo(page)
 
 
 if __name__ == '__main__':

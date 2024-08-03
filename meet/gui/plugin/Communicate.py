@@ -7,8 +7,7 @@ class Communicate(QObject):
     """
     自定义信号
     """
-    # 浏览历史记录改变
-    browserHistoryChange = Signal()
+    # 主题切换信号
     themeChange = Signal()
 
 

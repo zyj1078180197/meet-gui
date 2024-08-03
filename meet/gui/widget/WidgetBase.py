@@ -19,3 +19,7 @@ class WidgetBase(QFrame):
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.hBoxLayout.addWidget(self.label, 1, Qt.AlignmentFlag.AlignCenter)
         self.setObjectName(text.replace(' ', '-'))
+
+    def closeEvent(self, event):
+        self.deleteLater()
+        event.accept()
