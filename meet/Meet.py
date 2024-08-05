@@ -1,5 +1,7 @@
 import sys
 
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 from qfluentwidgets import setTheme, Theme
 
@@ -7,6 +9,7 @@ from meet.config.Config import Config
 from meet.config.GlobalGui import globalGui
 from meet.gui.MainWindow import MainWindow
 from meet.task.TaskExecutor import TaskExecutor
+from meet.util.Path import get_path_relative_to_exe
 
 
 class Meet:
@@ -34,6 +37,7 @@ class Meet:
         self.doInit(self.config)
         # 创建窗口
         self.window = MainWindow()
+        self.showWindow()
         # 展示窗口
         self.window.show()
 
@@ -67,3 +71,28 @@ class Meet:
                                          triggerTaskList=config.get("triggerTaskList", []),
                                          maxWorkers=10
                                          )
+
+    def size_relative_to_screen(self, width, height):
+        screen = self.app.primaryScreen()
+        size = screen.size()
+        # Calculate half the screen size
+        half_screen_width = size.width() * width
+        half_screen_height = size.height() * height
+        # Resize the window to half the screen size
+        size = QSize(half_screen_width, half_screen_height)
+        return size
+
+    def showWindow(self):
+        """
+        展示窗口
+        :return:
+        """
+        size = self.size_relative_to_screen(width=0.5, height=0.6)
+        self.window.setFixedSize(size)
+        # 隐藏缩放按钮
+        desktop = QApplication.screens()[0].availableGeometry()
+        wi, he = desktop.width(), desktop.height()
+        self.window.move(wi // 2 - self.window.width() // 2, he // 2 - self.window.height() // 2)
+        appIcon = get_path_relative_to_exe(self.config.get("appIcon", "resource\\shoko.png"))
+        self.window.setWindowIcon(QIcon(appIcon))
+        self.window.setWindowTitle(f"{self.config.get('appName', 'meet-gui')} V{self.config.get('appVersion', 1.0)}")

@@ -1,6 +1,5 @@
 import sys
 
-from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QWidget, QStackedWidget
 from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
     NavigationItemPosition, InfoBar, InfoBarPosition, MessageBox
@@ -13,7 +12,6 @@ from meet.gui.widget.TitleBar import TitleBar
 from meet.gui.widget.WidgetBase import WidgetBase
 from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
 from meet.task.TaskExecutor import TaskExecutor
-from meet.util.Path import get_path_relative_to_exe
 from meet.util.Theme import themeToggleHandle
 
 
@@ -39,9 +37,6 @@ class MainWindow(MSFluentWindow):
         config = Config.loadConfig(globalGui.config)
         # 初始化导航组件
         self.initNavigation(config)
-
-        # 初始化窗口配置
-        self.initWindow(config)
 
     def closeEvent(self, event):
         """
@@ -166,19 +161,6 @@ class MainWindow(MSFluentWindow):
         browserHistory.visit(self.widgetDict.get(objectName))
         # 发射信号
         communicate.browserHistoryChange.emit()
-
-    def initWindow(self, config):
-        """
-        初始化窗口配置
-        """
-        self.setFixedSize(1080, 720)
-        # 隐藏缩放按钮
-        desktop = QApplication.screens()[0].availableGeometry()
-        wi, he = desktop.width(), desktop.height()
-        self.move(wi // 2 - self.width() // 2, he // 2 - self.height() // 2)
-        appIcon = get_path_relative_to_exe(config.get("appIcon", "resource\\shoko.png"))
-        self.setWindowIcon(QIcon(appIcon))
-        self.setWindowTitle(f"{config.get('appName', 'meet-gui')} V{config.get('appVersion', 1.0)}")
 
     def onTabRemoved(self, index):
         """
