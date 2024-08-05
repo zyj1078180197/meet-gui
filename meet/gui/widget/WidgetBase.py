@@ -7,8 +7,6 @@ class WidgetBase(QFrame):
     """
     部件基类
     """
-    # 存储系统内存里的部件
-    widgetDict = {}
 
     def __init__(self, text: str, parent=None):
         super().__init__(parent=parent)

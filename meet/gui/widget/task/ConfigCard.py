@@ -1,32 +1,41 @@
 from PySide6.QtCore import Qt
-from qfluentwidgets import ExpandSettingCard, FluentIcon, PushButton
+from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
+from qfluentwidgets import CardWidget, IconWidget, BodyLabel, CaptionLabel, FluentIcon, ToolButton
 
-from meet.gui.widget.input.ConfigItemFactory import configWidget
-from meet.util.Task import Task
+from meet.util.Path import get_path_relative_to_exe
 
 
-class ConfigCard(ExpandSettingCard):
-    def __init__(self, task, taskClass):
-        super().__init__(FluentIcon.INFO, task.get('title')+str(task.get("taskId")), task.get('description'))
-        self.resetConfig = PushButton(FluentIcon.CANCEL, "重置", self)
-        self.addWidget(self.resetConfig)
-        self.viewLayout.setSpacing(0)
-        self.viewLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.viewLayout.setContentsMargins(10, 0, 10, 0)
-        if task.get('config') is None or task.get('config') == {}:
-            task['config'] = taskClass.defaultConfig
-            taskClass.config = taskClass.defaultConfig
-            self.config = taskClass.config
-            Task.updateTask(task)
-        else:
-            self.config = task.get('config')
-        self.configType = taskClass.configType
-        self.configDesc = taskClass.configDesc
-        taskClass.taskId = task.get('taskId')
-        for k, v in self.config.items():
-            self.viewLayout.addWidget(configWidget(self.configType, self.configDesc, self.config, k, v))
-            self._adjustViewSize()
+class ConfigCard(CardWidget):
+    def __init__(self, task, taskClass, parent=None):
+        super().__init__(parent=parent)
+        iconPath = get_path_relative_to_exe(task.get('iconPath'))
+        self.iconWidget = IconWidget(iconPath)
+        self.titleLabel = BodyLabel(task.get('title') + str(task.get("taskId")), self)
+        self.contentLabel = CaptionLabel(task.get('description'), self)
+
+        self.hBoxLayout = QHBoxLayout(self)
+        self.vBoxLayout = QVBoxLayout(self)
+
+        self.setFixedHeight(73)
+        self.iconWidget.setFixedSize(48, 48)
+
+        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.setSpacing(15)
+        self.hBoxLayout.addWidget(self.iconWidget)
+
+        self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
+        self.vBoxLayout.setSpacing(0)
+        self.contentLabel.setTextColor("#606060", "#d2d2d2")
+        self.vBoxLayout.addWidget(self.titleLabel, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.vBoxLayout.addWidget(self.contentLabel, 0, Qt.AlignmentFlag.AlignVCenter)
+        self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignVCenter)
+        self.hBoxLayout.addLayout(self.vBoxLayout)
+
+        self.hBoxLayout.addStretch(1)
 
     def wheelEvent(self, event):
         # 忽略滚轮事件，让父组件处理
         event.ignore()
+
+    def addWidget(self, widget):
+        self.hBoxLayout.addWidget(widget)

@@ -2,9 +2,6 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QSizePolicy
 from qfluentwidgets import ScrollArea
 
-from meet.gui.plugin.Communicate import communicate
-from meet.util.Theme import isDarkTheme
-
 
 class Tab(ScrollArea):
     def __init__(self):
@@ -26,18 +23,16 @@ class Tab(ScrollArea):
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         # 设置布局间距为30
-        self.vBoxLayout.setSpacing(30)
+        self.vBoxLayout.setSpacing(10)
         # 设置布局对齐方式为顶部对齐
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
         # 设置布局内容边距
-        self.vBoxLayout.setContentsMargins(36, 20, 36, 36)
+        self.vBoxLayout.setContentsMargins(20, 20, 20, 20)
         self.view.setObjectName('view')
-        if isDarkTheme():
-            self.view.setStyleSheet("background-color: #1A212E;")
-        else:
-            self.view.setStyleSheet("background-color: #ffffff;")
-        # 主题改变事件
-        communicate.themeChange.connect(self.themeChange)
+        self.setStyleSheet("QScrollArea{background: transparent; border: none}")
+
+        # 必须给内部的视图也加上透明背景样式
+        self.view.setStyleSheet("QWidget{background: transparent}")
         # 设置当前类对象的名称为类名
         self.setObjectName(self.__class__.__name__)
 
@@ -48,9 +43,3 @@ class Tab(ScrollArea):
     def addLayout(self, layout, stretch=0):
         self.vBoxLayout.addLayout(layout, stretch)
         return layout
-
-    def themeChange(self):
-        if isDarkTheme():
-            self.view.setStyleSheet("background-color: #1A212E;")
-        else:
-            self.view.setStyleSheet("background-color: #ffffff;")

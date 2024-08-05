@@ -14,7 +14,7 @@ class FixedTaskTab(TaskTab):
         for taskList in TaskExecutor.fixedTaskList:
             for task in taskList:
                 taskClass = getClassByName(task.get("moduleName"), task.get("className"))()
-                taskCard = TaskCard(task, taskClass)
+                taskCard = TaskCard(task, taskClass, self)
                 self.addWidget(taskCard)
         self.taskTabChange.connect(self.taskTabChanged)
         self.setObjectName("任务")

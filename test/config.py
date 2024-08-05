@@ -23,21 +23,24 @@ config = {
             "className": TaskDemo.__name__,
             "title": "任务测试",
             "description": "任务测试类",
-            "configPath": "config"
+            "configPath": "config",
+            "iconPath": "resource\\shoko.png"
         },
         {
             "moduleName": TaskDemoTest01.__module__,
             "className": TaskDemoTest01.__name__,
             "title": "任务测试",
             "description": "任务测试类",
-            "configPath": "config"
+            "configPath": "config",
+            "iconPath": "resource\\shoko.png"
         },
         {
             "moduleName": TaskDemoTest02.__module__,
             "className": TaskDemoTest02.__name__,
             "title": "任务测试",
             "description": "任务测试类",
-            "configPath": "config"
+            "configPath": "config",
+            "iconPath": "resource\\shoko.png"
         },
     ],
     "triggerTaskList": [  # 触发任务列表
@@ -46,7 +49,8 @@ config = {
             "className": TriggerDemo.__name__,
             "title": "触发测试",
             "description": "触发测试类",
-            "configPath": "config"
+            "configPath": "config",
+            "iconPath": "resource\\shoko.png"
         }
     ],
 }

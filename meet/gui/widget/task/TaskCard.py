@@ -5,8 +5,8 @@ from meet.gui.widget.task.ConfigCard import ConfigCard
 
 
 class TaskCard(ConfigCard):
-    def __init__(self, task, taskClass):
-        super().__init__(task, taskClass)
+    def __init__(self, task, taskClass, parent=None):
+        super().__init__(task, taskClass, parent=parent)
         task = TaskButtons(self, task)
         self.addWidget(task)
 
@@ -26,7 +26,6 @@ class TaskButtons(QWidget):
 
         self.pauseButton = PushButton(FluentIcon.PAUSE, "暂停", self)
         self.pauseButton.clicked.connect(self.pauseClicked)
-        # Add buttons to the layout
         self.layout.addWidget(self.startButton)
         self.layout.addWidget(self.stopButton)
         self.layout.addWidget(self.pauseButton)

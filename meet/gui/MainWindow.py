@@ -22,6 +22,7 @@ class MainWindow(MSFluentWindow):
         # 初始化Mica主题启用标志为False，表示默认情况下未启用Mica主题
         self.isMicaEnabled = False
         super().__init__()
+        self.widgetDict = {}
         self.mainPage = QStackedWidget(self)
         self.stackedWidget.addWidget(self.mainPage)
         self.stackedWidget.setCurrentWidget(self.mainPage)
@@ -128,29 +129,29 @@ class MainWindow(MSFluentWindow):
 
     def navigationClicked(self, objectName, interface=None):
         if objectName == "首页":
-            if WidgetBase.widgetDict.get(objectName) is None:
+            if self.widgetDict.get(objectName) is None:
                 homeInterface = WidgetBase(objectName, self)
                 self.mainPage.addWidget(homeInterface)
-                WidgetBase.widgetDict[objectName] = homeInterface
+                self.widgetDict[objectName] = homeInterface
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         elif objectName == "任务":
-            if WidgetBase.widgetDict.get(objectName) is None:
+            if self.widgetDict.get(objectName) is None:
                 taskInterface = FixedTaskTab()
                 globalGui.fixedTaskTab = taskInterface
                 self.mainPage.addWidget(taskInterface)
-                WidgetBase.widgetDict[objectName] = taskInterface
+                self.widgetDict[objectName] = taskInterface
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         elif objectName == "触发":
-            if WidgetBase.widgetDict.get(objectName) is None:
+            if self.widgetDict.get(objectName) is None:
                 triggerInterface = WidgetBase(objectName, self)
                 self.mainPage.addWidget(triggerInterface)
-                WidgetBase.widgetDict[objectName] = triggerInterface
+                self.widgetDict[objectName] = triggerInterface
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         elif objectName == "设置":
-            if WidgetBase.widgetDict.get(objectName) is None:
+            if self.widgetDict.get(objectName) is None:
                 settingInterface = WidgetBase(objectName, self)
                 self.mainPage.addWidget(settingInterface)
-                WidgetBase.widgetDict[objectName] = settingInterface
+                self.widgetDict[objectName] = settingInterface
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         else:
             self.mainPage.addWidget(WidgetBase(objectName, self))
@@ -162,7 +163,7 @@ class MainWindow(MSFluentWindow):
         # 切换标签
         self.tabBar.setCurrentTab(objectName)
         # 添加历史记录
-        browserHistory.visit(WidgetBase.widgetDict.get(objectName))
+        browserHistory.visit(self.widgetDict.get(objectName))
         # 发射信号
         communicate.browserHistoryChange.emit()
 
@@ -210,8 +211,8 @@ class MainWindow(MSFluentWindow):
         # 当前标签的routeKey
         objectName = self.tabBar.currentTab().routeKey()
         # 转到对应界面
-        self.mainPage.setCurrentWidget(WidgetBase.widgetDict[objectName])
-        browserHistory.visit(WidgetBase.widgetDict[objectName])
+        self.mainPage.setCurrentWidget(self.widgetDict[objectName])
+        browserHistory.visit(self.widgetDict[objectName])
         communicate.browserHistoryChange.emit()
 
     def addTab(self, routeKey, text, icon):
