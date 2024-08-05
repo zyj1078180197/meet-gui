@@ -22,7 +22,7 @@ class Tab(ScrollArea):
         # 设置大小策略为水平方向扩展，垂直方向最小
         self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        # 设置布局间距为30
+        # 设置布局间距为10
         self.vBoxLayout.setSpacing(10)
         # 设置布局对齐方式为顶部对齐
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
