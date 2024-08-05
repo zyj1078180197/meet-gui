@@ -21,7 +21,7 @@ class Config(dict):
                 "taskPageShow": True,  # 任务页面是否展示
                 "triggerPageShow": True,  # 触发页面是否展示
                 "settingPageShow": True,  # 设置页面是否展示
-                "theme": 'Dark',  # 主题(Light Dark Auto)
+                "theme": 'Auto',  # 主题(Light Dark Auto)
                 "maxWorkers": 10  # 线程池最大线程数
             }
         config = Config.loadConfig(config)
