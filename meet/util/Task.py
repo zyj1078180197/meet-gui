@@ -25,6 +25,7 @@ class Task:
                     "taskId": snowflake.generate(),
                     "configPath": task.get("configPath"),
                     "iconPath": task.get("iconPath"),
+                    "showStyle": task.get("showStyle", "Expand"),
                 }
                 taskConfig.append(taskNew)
                 Task.saveConfig(taskPath, taskConfig)

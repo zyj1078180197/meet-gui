@@ -24,7 +24,8 @@ config = {
             "title": "任务测试",
             "description": "任务测试类",
             "configPath": "config",
-            "iconPath": "resource\\shoko.png"
+            "iconPath": "resource\\shoko.png",
+            "showStyle": "Expand",  # Normal Expand 展示风格
         },
         {
             "moduleName": TaskDemoTest01.__module__,
@@ -32,7 +33,8 @@ config = {
             "title": "任务测试",
             "description": "任务测试类",
             "configPath": "config",
-            "iconPath": "resource\\shoko.png"
+            "iconPath": "resource\\shoko.png",
+            "showStyle": "Normal"
         },
         {
             "moduleName": TaskDemoTest02.__module__,
@@ -40,7 +42,8 @@ config = {
             "title": "任务测试",
             "description": "任务测试类",
             "configPath": "config",
-            "iconPath": "resource\\shoko.png"
+            "iconPath": "resource\\shoko.png",
+            "showStyle": "Expand"
         },
     ],
     "triggerTaskList": [  # 触发任务列表
@@ -50,7 +53,8 @@ config = {
             "title": "触发测试",
             "description": "触发测试类",
             "configPath": "config",
-            "iconPath": "resource\\shoko.png"
+            "iconPath": "resource\\shoko.png",
+            "showStyle": "Expand"
         }
     ],
 }

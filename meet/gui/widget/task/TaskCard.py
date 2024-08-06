@@ -1,29 +1,37 @@
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QApplication
+from PySide6.QtWidgets import QWidget, QHBoxLayout
 from qfluentwidgets import PushButton, FluentIcon
 
-from meet.gui.widget.MicaWindow import MicaWindow
-from meet.gui.widget.task.ConfigCard import ConfigCard
-from meet.util.Class import getClassByName
-from meet.util.Path import get_path_relative_to_exe
+from meet.gui.widget.task.ConfigCard import ConfigCard, ConfigExpandCard
 
 
 class TaskCard(ConfigCard):
-    def __init__(self, task, parent=None):
+    def __init__(self, task, taskBase, parent=None):
         super().__init__(task, parent=parent)
-        task = TaskButtons(self, task)
+        task = TaskButtons(self, task, taskBase)
+        self.addWidget(task)
+
+
+class TaskExpandCard(ConfigExpandCard):
+    def __init__(self, task, taskBase, parent=None):
+        super().__init__(task, taskBase, parent=parent)
+        task = TaskButtons(self, task, taskBase)
         self.addWidget(task)
 
 
 class TaskButtons(QWidget):
-    def __init__(self, parent, task):
+    def __init__(self, parent, task, taskBase):
         super().__init__(parent=parent)
         self.task = task
-        self.taskBase = getClassByName(task.get("moduleName"), task.get("className"))()
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(18)  # Set the spacing between widgets
-        self.editButton = PushButton(FluentIcon.EDIT, "编辑", self)
-        self.editButton.clicked.connect(self.editClicked)
+        if isinstance(parent, TaskCard):
+            self.editButton = PushButton(FluentIcon.EDIT, "编辑", self)
+            self.editButton.clicked.connect(self.editClicked)
+            self.layout.addWidget(self.editButton)
+        if isinstance(parent, TaskExpandCard):
+            self.resetConfig = PushButton(FluentIcon.CANCEL, "重置", self)
+            self.resetConfig.clicked.connect(self.resetConfigClicked)
+            self.layout.addWidget(self.resetConfig)
 
         self.startButton = PushButton(FluentIcon.PLAY, "开始", self)
         self.startButton.clicked.connect(self.startClicked)
@@ -37,7 +45,6 @@ class TaskButtons(QWidget):
         self.pauseButton.hide()
         self.deleteButton = PushButton(FluentIcon.DELETE, "删除", self)
         self.deleteButton.clicked.connect(self.editClicked)
-        self.layout.addWidget(self.editButton)
         self.layout.addWidget(self.startButton)
         self.layout.addWidget(self.stopButton)
         self.layout.addWidget(self.pauseButton)
@@ -67,4 +74,7 @@ class TaskButtons(QWidget):
         pass
 
     def editClicked(self):
+        pass
+
+    def resetConfigClicked(self):
         pass

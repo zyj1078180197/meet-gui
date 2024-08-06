@@ -1,8 +1,9 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
-from qfluentwidgets import IconWidget, BodyLabel, CaptionLabel, CardWidget, FluentIcon
+from qfluentwidgets import IconWidget, BodyLabel, CaptionLabel, CardWidget, FluentIcon, ExpandSettingCard, PushButton
 
-from meet.util.Path import get_path_relative_to_exe
+from meet.gui.widget.input.ConfigItemFactory import configWidget
+from meet.util.Task import Task
 
 
 class ConfigCard(CardWidget):
@@ -38,3 +39,29 @@ class ConfigCard(CardWidget):
 
     def addWidget(self, widget):
         self.hBoxLayout.addWidget(widget)
+
+
+class ConfigExpandCard(ExpandSettingCard):
+    def __init__(self, task, taskBase, parent=None):
+        super().__init__(FluentIcon.INFO, task.get('title') + str(task.get("taskId")), task.get('description'),
+                         parent=parent)
+        self.viewLayout.setSpacing(0)
+        self.viewLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        self.viewLayout.setContentsMargins(10, 0, 10, 0)
+        if task.get('config') is None or task.get('config') == {}:
+            task['config'] = taskBase.defaultConfig
+            taskBase.config = taskBase.defaultConfig
+            self.config = taskBase.config
+            Task.updateTask(task)
+        else:
+            self.config = task.get('config')
+        self.configType = taskBase.configType
+        self.configDesc = taskBase.configDesc
+        taskBase.taskId = task.get('taskId')
+        for k, v in self.config.items():
+            self.viewLayout.addWidget(configWidget(self.configType, self.configDesc, self.config, k, v))
+            self._adjustViewSize()
+
+    def wheelEvent(self, event):
+        # 忽略滚轮事件，让父组件处理
+        event.ignore()
