@@ -158,7 +158,7 @@ class MainWindow(MSFluentWindow):
         # 切换标签
         self.tabBar.setCurrentTab(objectName)
         # 添加历史记录
-        browserHistory.visit(self.widgetDict.get(objectName))
+        browserHistory.visit(objectName)
         # 发射信号
         communicate.browserHistoryChange.emit()
 
@@ -194,7 +194,7 @@ class MainWindow(MSFluentWindow):
         objectName = self.tabBar.currentTab().routeKey()
         # 转到对应界面
         self.mainPage.setCurrentWidget(self.widgetDict[objectName])
-        browserHistory.visit(self.widgetDict[objectName])
+        browserHistory.visit(objectName)
         communicate.browserHistoryChange.emit()
 
     def addTab(self, routeKey, text, icon):
@@ -213,10 +213,10 @@ class MainWindow(MSFluentWindow):
         TitleBar.tabBarDict[routeKey] = self.tabBar.addTab(routeKey, text, icon)
 
     def onForwardClick(self):
-        page = browserHistory.forward()
+        objectName = browserHistory.forward()
         # 发射信号
         communicate.browserHistoryChange.emit()
-        if page is None:
+        if objectName is None:
             InfoBar.warning(
                 title='警告',
                 content="最后一个页面了，无法再前进了",
@@ -225,16 +225,20 @@ class MainWindow(MSFluentWindow):
                 duration=2000,
                 parent=self
             )
-        self.addTab(page.objectName(), page.objectName(), FluentIcon.ADD)
+        # 转到对应界面
+        page = self.widgetDict[objectName]
+        if page is None:
+            return
+        self.addTab(objectName, objectName, FluentIcon.ADD)
         # 转到对应界面
         self.mainPage.setCurrentWidget(page)
-        self.tabBar.setCurrentTab(page.objectName())
+        self.tabBar.setCurrentTab(objectName)
 
     def onBackClick(self):
-        page = browserHistory.back()
+        objectName = browserHistory.back()
         # 发射信号
         communicate.browserHistoryChange.emit()
-        if page is None:
+        if objectName is None:
             InfoBar.warning(
                 title='警告',
                 content="最后一个页面了，无法再往后跳转了",
@@ -244,10 +248,13 @@ class MainWindow(MSFluentWindow):
                 parent=self
             )
             return
-        self.addTab(page.objectName(), page.objectName(), FluentIcon.ADD)
         # 转到对应界面
+        page = self.widgetDict[objectName]
+        if page is None:
+            return
+        self.addTab(objectName, objectName, FluentIcon.ADD)
         self.mainPage.setCurrentWidget(page)
-        self.tabBar.setCurrentTab(page.objectName())
+        self.tabBar.setCurrentTab(objectName)
 
 
 if __name__ == '__main__':

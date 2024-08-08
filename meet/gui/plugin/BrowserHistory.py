@@ -8,10 +8,10 @@ class BrowserHistory:
         self.forward_stack = []  # 前进历史栈
         self.max_history = 10  # 最大历史记录数
 
-    def visit(self, page):
+    def visit(self, path):
         if len(self.back_stack) > self.max_history:
             self.back_stack.pop(0)  # 移除最旧的记录
-        self.back_stack.append(page)
+        self.back_stack.append(path)
         self.forward_stack.clear()  # 清空前进历史，因为访问新页面后不能前进
 
     def back(self):
