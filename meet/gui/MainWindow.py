@@ -65,7 +65,7 @@ class MainWindow(MSFluentWindow):
                 routeKey='首页',
                 icon=FluentIcon.HOME,
                 text='首页',
-                onClick=lambda: self.navigationClicked("首页"),
+                onClick=lambda: self.onPageClicked("首页"),
                 selectable=False,
                 position=NavigationItemPosition.TOP,
             )
@@ -77,7 +77,7 @@ class MainWindow(MSFluentWindow):
                 routeKey='任务',
                 icon=FluentIcon.BOOK_SHELF,
                 text='任务',
-                onClick=lambda: self.navigationClicked("任务"),
+                onClick=lambda: self.onPageClicked("任务"),
                 selectable=False,
                 position=NavigationItemPosition.TOP,
             )
@@ -89,7 +89,7 @@ class MainWindow(MSFluentWindow):
                 routeKey='触发',
                 icon=FluentIcon.SYNC,
                 text='触发',
-                onClick=lambda: self.navigationClicked("触发"),
+                onClick=lambda: self.onPageClicked("触发"),
                 selectable=False,
                 position=NavigationItemPosition.TOP,
             )
@@ -111,18 +111,18 @@ class MainWindow(MSFluentWindow):
                 routeKey='设置',
                 icon=FluentIcon.SETTING,
                 text='设置',
-                onClick=lambda: self.navigationClicked("设置"),
+                onClick=lambda: self.onPageClicked("设置"),
                 selectable=False,
                 position=NavigationItemPosition.BOTTOM,
             )
         if firstPage is not None:
-            self.navigationClicked(firstPage)
+            self.onPageClicked(firstPage)
         # 设置标签栏关闭按钮的点击事件
         self.tabBar.tabCloseRequested.connect(self.onTabRemoved)
         # 设置标签栏的当前标签页的切换事件
         self.tabBar.currentChanged.connect(self.onTabChanged)
 
-    def navigationClicked(self, objectName, interface=None):
+    def onPageClicked(self, objectName, page=None):
         if objectName == "首页":
             if self.widgetDict.get(objectName) is None:
                 homeInterface = WidgetBase(objectName, self)
@@ -131,7 +131,7 @@ class MainWindow(MSFluentWindow):
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         elif objectName == "任务":
             if self.widgetDict.get(objectName) is None:
-                taskInterface = FixedTaskTab()
+                taskInterface = FixedTaskTab(self)
                 globalGui.fixedTaskTab = taskInterface
                 self.mainPage.addWidget(taskInterface)
                 self.widgetDict[objectName] = taskInterface
@@ -149,7 +149,10 @@ class MainWindow(MSFluentWindow):
                 self.widgetDict[objectName] = settingInterface
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         else:
-            self.mainPage.addWidget(WidgetBase(objectName, self))
+            if self.widgetDict.get(objectName) is None:
+                self.widgetDict[objectName] = page
+                self.mainPage.addWidget(page)
+            self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         # 如果当前标签页和点击的标签页相同，则不执行任何操作
         if self.tabBar.currentTab() is not None and self.tabBar.currentTab().routeKey() == objectName:
             return

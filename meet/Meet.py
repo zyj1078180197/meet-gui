@@ -3,7 +3,7 @@ import sys
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
-from qfluentwidgets import setTheme, Theme
+from qfluentwidgets import setTheme, Theme, FluentIcon
 
 from meet.config.Config import Config
 from meet.config.GlobalGui import globalGui
@@ -96,3 +96,6 @@ class Meet:
         appIcon = get_path_relative_to_exe(self.config.get("appIcon", "resource\\shoko.png"))
         self.window.setWindowIcon(QIcon(appIcon))
         self.window.setWindowTitle(f"{self.config.get('appName', 'meet-gui')} V{self.config.get('appVersion', 1.0)}")
+
+    def addNoNavigationPage(self, page, objectName):
+        self.window.onPageClicked(objectName, page)

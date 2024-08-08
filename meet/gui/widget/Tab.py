@@ -4,8 +4,8 @@ from qfluentwidgets import ScrollArea
 
 
 class Tab(ScrollArea):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
         # 创建一个QWidget作为视图，并设置为该类的属性
         self.view = QWidget(self)
         # 创建一个QVBoxLayout，并将视图作为其父对象

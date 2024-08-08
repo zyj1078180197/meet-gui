@@ -15,8 +15,8 @@ class FixedTaskTab(TaskTab):
 
     taskTabChange = Signal(dict)
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self,parent=None):
+        super().__init__(parent)
         for taskList in TaskExecutor.fixedTaskList:
             for task in taskList:
                 taskBase = getClassByName(task.get("moduleName"), task.get("className"))()

@@ -22,6 +22,7 @@ class TaskButtons(QWidget):
     def __init__(self, parent, task, taskBase):
         super().__init__(parent=parent)
         self.task = task
+        self.taskBase = taskBase
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(18)  # Set the spacing between widgets
         if isinstance(parent, TaskCard):
@@ -74,7 +75,14 @@ class TaskButtons(QWidget):
         pass
 
     def editClicked(self):
-        pass
+        from meet.config.GlobalGui import globalGui
+        from meet.gui.widget.task.TaskEditTab import TaskEditTab
+        # 添加新的页面，用于处理配置的改变
+        page = globalGui.meet.window.widgetDict.get("编辑任务" + str(self.task.get("taskId")))
+        if page is None:
+            page = TaskEditTab(self.task, self.taskBase)
+            page.setObjectName("编辑任务" + str(self.task.get("taskId")))
+        globalGui.meet.addNoNavigationPage(page, "编辑任务" + str(self.task.get("taskId")))
 
     def resetConfigClicked(self):
         pass
