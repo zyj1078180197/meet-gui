@@ -97,5 +97,38 @@ class Meet:
         self.window.setWindowIcon(QIcon(appIcon))
         self.window.setWindowTitle(f"{self.config.get('appName', 'meet-gui')} V{self.config.get('appVersion', 1.0)}")
 
-    def addNoNavigationPage(self, page, objectName):
-        self.window.onPageClicked(objectName, page)
+    def openEditPage(self, page, objectName):
+        """
+        打开编辑页面
+        :param page:
+        :param objectName:
+        :return:
+        """
+        self.window.openEditPage(objectName, page)
+
+    def addNavigation(self, navigationName, icon, position, page):
+        """
+        添加导航栏
+        :param navigationName: 名字
+        :param icon: 图标
+        :param position:位置
+        :param page:页面
+        """
+        self.window.addNavigation(navigationName, icon, position, page)
+
+    def openNavigationPage(self, objectName, page=None):
+        """
+        打开导航栏
+        :param objectName:
+        :param page:
+        :return:
+        """
+        self.window.openNavigationPage(objectName, page)
+
+    def removeEditPage(self, objectName):
+        """
+        移除导航栏
+        :param objectName:
+        :return:
+        """
+        self.window.removeEditPage(objectName)

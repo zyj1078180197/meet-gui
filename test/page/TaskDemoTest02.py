@@ -18,6 +18,7 @@ class TaskDemoTest02(BaseTask):
 
     def run(self):
         print("TaskDemoTest02 running")
+        print(self.config.__str__())
 
     def trigger(self):
         return True

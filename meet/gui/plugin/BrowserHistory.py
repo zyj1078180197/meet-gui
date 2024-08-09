@@ -28,6 +28,10 @@ class BrowserHistory:
         else:
             return None  # 或者保持当前页面，或者抛出异常，根据具体需求
 
+    def remove(self, objectName):
+        self.back_stack = [item for item in self.back_stack if item != objectName]
+        self.forward_stack = [item for item in self.forward_stack if item != objectName]
+
 
 # 浏览历史记录
 browserHistory = BrowserHistory()

@@ -5,8 +5,9 @@ from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 
 class LabelAndDoubleSpinBox(ConfigLabelAndWidget):
 
-    def __init__(self, configDesc, config, key: str):
+    def __init__(self, task,configDesc, config, key: str):
         super().__init__(configDesc, config, key)
+        self.task = task
         self.key = key
         self.spinBox = DoubleSpinBox()
         self.spinBox.setFixedWidth(300)
@@ -18,4 +19,4 @@ class LabelAndDoubleSpinBox(ConfigLabelAndWidget):
         self.spinBox.setValue(self.config.get(self.key))
 
     def valueChanged(self, value):
-        self.updateConfig(value)
+        self.updateConfig(self.task,value)

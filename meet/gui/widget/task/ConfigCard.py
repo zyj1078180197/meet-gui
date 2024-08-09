@@ -42,24 +42,24 @@ class ConfigCard(CardWidget):
 
 
 class ConfigExpandCard(ExpandSettingCard):
-    def __init__(self, task, taskBase, parent=None):
+    def __init__(self, task, baseTask, parent=None):
         super().__init__(FluentIcon.INFO, task.get('title') + str(task.get("taskId")), task.get('description'),
                          parent=parent)
         self.viewLayout.setSpacing(0)
         self.viewLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.viewLayout.setContentsMargins(10, 0, 10, 0)
         if task.get('config') is None or task.get('config') == {}:
-            task['config'] = taskBase.defaultConfig
-            taskBase.config = taskBase.defaultConfig
-            self.config = taskBase.config
+            task['config'] = baseTask.defaultConfig
+            baseTask.config = baseTask.defaultConfig
+            self.config = baseTask.defaultConfig
             Task.updateTask(task)
         else:
             self.config = task.get('config')
-        self.configType = taskBase.configType
-        self.configDesc = taskBase.configDesc
-        taskBase.taskId = task.get('taskId')
+        self.configType = baseTask.configType
+        self.configDesc = baseTask.configDesc
+        baseTask.config = self.config
         for k, v in self.config.items():
-            self.viewLayout.addWidget(configWidget(self.configType, self.configDesc, self.config, k, v))
+            self.viewLayout.addWidget(configWidget(task,self.configType, self.configDesc, self.config, k, v))
             self._adjustViewSize()
 
     def wheelEvent(self, event):

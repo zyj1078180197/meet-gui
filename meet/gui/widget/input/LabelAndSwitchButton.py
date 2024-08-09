@@ -5,9 +5,10 @@ from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 
 class LabelAndSwitchButton(ConfigLabelAndWidget):
 
-    def __init__(self, configDesc, config, key: str):
+    def __init__(self,task, configDesc, config, key: str):
         super().__init__(configDesc, config, key)
         self.key = key
+        self.task = task
         self.switchButton = SwitchButton(self)
         self.switchButton.setOnText('是')
         self.switchButton.setOffText('否')
@@ -19,4 +20,4 @@ class LabelAndSwitchButton(ConfigLabelAndWidget):
         self.switchButton.setChecked(self.config.get(self.key))
 
     def checkChanged(self, checked):
-        self.updateConfig(checked)
+        self.updateConfig(self.task,checked)

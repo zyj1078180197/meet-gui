@@ -16,7 +16,6 @@ class BaseTask:
         self.config = {}  # 配置 属性：值
         self.configDesc = {}  # 配置描述 属性：描述
         self.configType = {}  # 配置类型 属性：{'type': "dropDown", 'options': ['Forward', 'Backward']}
-        self.taskId = None
         pass
 
     def run(self):
