@@ -28,7 +28,7 @@ class TaskExecutor:
         :param task:
         :return:
         """
-        while task.executeNumber > 0 and task.status == BaseTask.StatusEnum.RUNNING:
+        while task.executeNumber > 0 and task.status != BaseTask.StatusEnum.STOPPED:
             # 程序退出或任务停止时结束线程
             if cls.isExit or task.status == BaseTask.StatusEnum.STOPPED:
                 break
@@ -39,6 +39,7 @@ class TaskExecutor:
             task.executeNumber -= 1
             sleep(task.interval)
         # todo 停止后发射信号，按钮状态改变
+        print("关闭固定任务" + task.taskName + "-" + str(task.taskId))
 
     @classmethod
     def triggerTaskRun(cls, task):
@@ -47,7 +48,7 @@ class TaskExecutor:
         :param task:
         :return:
         """
-        while task.status == BaseTask.StatusEnum.RUNNING:
+        while task.status != BaseTask.StatusEnum.STOPPED:
             # 程序退出或触发停止时结束线程
             if cls.isExit or task.status == BaseTask.StatusEnum.STOPPED:
                 break
@@ -57,6 +58,7 @@ class TaskExecutor:
                 continue
             task.run()
             sleep(task.interval)
+        print("关闭触发器" + task.taskName + "-" + str(task.taskId))
         # todo 停止后发射信号，按钮状态改变
 
     @classmethod

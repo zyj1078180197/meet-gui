@@ -3,7 +3,7 @@ import sys
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
-from qfluentwidgets import setTheme, Theme, FluentIcon
+from qfluentwidgets import setTheme, Theme
 
 from meet.config.Config import Config
 from meet.config.GlobalGui import globalGui

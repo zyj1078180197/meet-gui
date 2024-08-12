@@ -7,8 +7,14 @@ class BaseTask:
         PAUSED = "Paused"  # 暂停
         STOPPED = "Stopped"  # 停止
 
+    class TaskTypeEnum(Enum):
+        FIXED = "Fixed"
+        TRIGGER = "Trigger"
+
     def __init__(self):
+        self.type = BaseTask.TaskTypeEnum.FIXED
         self.taskName = None  # 任务名称
+        self.taskId = None
         self.executeNumber = 5  # 任务执行次数
         self.status = BaseTask.StatusEnum.STOPPED  # Running, Paused, Stopped 状态
         self.interval = 1  # 任务执行间隔

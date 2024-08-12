@@ -9,6 +9,7 @@ class TaskCard(ConfigCard):
     def __init__(self, task, baseTask, parent=None):
         super().__init__(task, parent=parent)
         baseTask.config = task.get('config')
+        baseTask.taskId = task.get("taskId")
         taskButton = TaskButtons(self, task, baseTask)
         self.addWidget(taskButton)
 
@@ -53,7 +54,10 @@ class TaskButtons(QWidget):
     def startClicked(self, baseTask):
         from meet.task.BaseTask import BaseTask
         baseTask.status = BaseTask.StatusEnum.RUNNING
-        TaskExecutor.submitTask(TaskExecutor.fixedTaskRun, baseTask)
+        if baseTask.type == BaseTask.TaskTypeEnum.FIXED:
+            TaskExecutor.submitTask(TaskExecutor.fixedTaskRun, baseTask)
+        if baseTask.type == BaseTask.TaskTypeEnum.TRIGGER:
+            TaskExecutor.submitTask(TaskExecutor.triggerTaskRun, baseTask)
         self.stopButton.show()
         self.pauseButton.show()
         self.deleteButton.hide()

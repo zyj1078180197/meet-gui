@@ -5,6 +5,7 @@ class TriggerDemo(BaseTask):
     def __init__(self):
         super().__init__()
         self.taskName = "TriggerDemo"
+        self.type = BaseTask.TaskTypeEnum.TRIGGER
         pass
 
     def run(self):
