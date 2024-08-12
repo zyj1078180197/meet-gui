@@ -1,14 +1,14 @@
 from PySide6.QtWidgets import QLabel
 from qfluentwidgets import PushButton
 
-from meet.gui.widget.UpdateConfigWidgetItem import value_to_string
+from meet.gui.widget.input.UpdateConfigWidgetItem import valueToString
 from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 from meet.gui.widget.input.ModifyListDialog import ModifyListDialog
 
 
 class ModifyListItem(ConfigLabelAndWidget):
 
-    def __init__(self,task, configDesc, config, key: str):
+    def __init__(self, task, configDesc, config, key: str):
         super().__init__(configDesc, config, key)
         self.task = task
         self.switchButton = PushButton("修改", parent=self)
@@ -26,7 +26,7 @@ class ModifyListItem(ConfigLabelAndWidget):
         if totalLength > 30:
             displayText = "\n".join(items)
         else:
-            displayText = value_to_string(items)
+            displayText = valueToString(items)
 
         self.listText.setText(displayText)
 
@@ -36,5 +36,5 @@ class ModifyListItem(ConfigLabelAndWidget):
         dialog.exec()
 
     def listModified(self, theList):
-        self.updateConfig(self.task,theList)
+        self.updateConfig(self.task, theList)
         self.updateValue()

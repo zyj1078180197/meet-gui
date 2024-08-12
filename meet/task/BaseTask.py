@@ -15,7 +15,8 @@ class BaseTask:
         self.type = BaseTask.TaskTypeEnum.FIXED
         self.taskName = None  # 任务名称
         self.taskId = None
-        self.executeNumber = 1  # 任务执行次数
+        self.executeNumber = None
+        self.defaultExecuteNumber = 1  # 任务执行次数
         self.status = BaseTask.StatusEnum.STOPPED  # Running, Paused, Stopped 状态
         self.interval = 0.5  # 任务执行间隔
         self.defaultConfig = {}  # 默认配置 属性：值

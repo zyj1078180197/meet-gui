@@ -11,10 +11,10 @@ config = {
     "appVersion": 1.0,  # 应用版本
     "appIcon": "resource\\shoko.png",  # 应用图标
     "appConfigPath": "config\\config.json",
-    "homePageShow": True,  # 首页是否展示
+    "homePageShow": False,  # 首页是否展示
     "taskPageShow": True,  # 任务页面是否展示
     "triggerPageShow": True,  # 触发页面是否展示
-    "settingPageShow": True,  # 设置页面是否展示
+    "settingPageShow": False,  # 设置页面是否展示
     "theme": 'Auto',  # 主题(Light Dark Auto)
     "maxWorkers": 10,  # 线程池最大线程数
     "fixedTaskList": [  # 固定任务列表

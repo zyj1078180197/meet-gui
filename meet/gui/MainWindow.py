@@ -285,7 +285,7 @@ class MainWindow(MSFluentWindow):
         if objectName is None:
             InfoBar.warning(
                 title='警告',
-                content="最后一个页面了，无法再前进了",
+                content="页面不存在了，无法再前进了",
                 isClosable=True,
                 position=InfoBarPosition.TOP_RIGHT,
                 duration=2000,
@@ -301,13 +301,22 @@ class MainWindow(MSFluentWindow):
         if objectName is None:
             InfoBar.warning(
                 title='警告',
-                content="最后一个页面了，无法再往后跳转了",
+                content="页面不存在了，无法再往后跳转了",
                 isClosable=True,
                 position=InfoBarPosition.TOP_RIGHT,
                 duration=2000,
                 parent=self
             )
             return
+        # 转到对应界面
+        self.__skipPage(objectName)
+
+    def onBack(self):
+        """
+        返回到上一个页面，不是点击返回按钮，而是编辑页面关闭后，用于回到原来的页面
+        :return:
+        """
+        objectName = browserHistory.back_stack[-2]
         # 转到对应界面
         self.__skipPage(objectName)
 

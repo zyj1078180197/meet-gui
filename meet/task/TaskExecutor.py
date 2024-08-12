@@ -38,7 +38,6 @@ class TaskExecutor:
             task.run()
             task.executeNumber -= 1
             sleep(task.interval)
-        print("关闭固定任务" + task.taskName + "-" + str(task.taskId))
         from meet.gui.plugin.Communicate import communicate
         task.status = BaseTask.StatusEnum.STOPPED
         communicate.taskStatusChange.emit(task)
@@ -60,7 +59,6 @@ class TaskExecutor:
                 continue
             task.run()
             sleep(task.interval)
-        print("关闭触发器" + task.taskName + "-" + str(task.taskId))
         from meet.gui.plugin.Communicate import communicate
         task.status = BaseTask.StatusEnum.STOPPED
         communicate.taskStatusChange.emit(task)

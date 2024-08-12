@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout
 from qfluentwidgets import PushButton, FluentIcon
 
 from meet.gui.plugin.Communicate import communicate
+from meet.util.MessageTips import showSuccess
 from meet.gui.widget.task.ConfigCard import ConfigCard, ConfigExpandCard
 from meet.task.TaskExecutor import TaskExecutor
 
@@ -57,6 +58,7 @@ class TaskButtons(QWidget):
     def startClicked(self, baseTask):
         from meet.task.BaseTask import BaseTask
         baseTask.status = BaseTask.StatusEnum.RUNNING
+        baseTask.executeNumber = baseTask.defaultExecuteNumber
         if baseTask.type == BaseTask.TaskTypeEnum.FIXED:
             TaskExecutor.submitTask(TaskExecutor.fixedTaskRun, baseTask)
         if baseTask.type == BaseTask.TaskTypeEnum.TRIGGER:
@@ -65,7 +67,7 @@ class TaskButtons(QWidget):
         self.pauseButton.show()
         self.deleteButton.hide()
         self.startButton.hide()
-        pass
+        showSuccess(baseTask.taskName+"-"+str(baseTask.taskId)+"任务已开始")
 
     def stopClicked(self, baseTask):
         from meet.task.BaseTask import BaseTask
@@ -82,10 +84,12 @@ class TaskButtons(QWidget):
             baseTask.status = BaseTask.StatusEnum.PAUSED
             self.pauseButton.setIcon(FluentIcon.PLAY)
             self.pauseButton.setText("继续")
+            showSuccess(baseTask.taskName+"-"+str(baseTask.taskId)+"任务已暂停")
         else:
             baseTask.status = BaseTask.StatusEnum.RUNNING
             self.pauseButton.setIcon(FluentIcon.PAUSE)
             self.pauseButton.setText("暂停")
+            showSuccess(baseTask.taskName+"-"+str(baseTask.taskId)+"任务已继续")
         pass
 
     def editClicked(self, task, baseTask):
@@ -112,3 +116,4 @@ class TaskButtons(QWidget):
                 self.stopButton.hide()
                 self.pauseButton.hide()
                 self.deleteButton.show()
+                showSuccess(baseTask.taskName+"-"+str(baseTask.taskId)+"任务已停止")

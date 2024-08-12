@@ -30,9 +30,6 @@ class TaskEditTab(Tab):
         # 添加操作按钮
         self.addWidget(OperationButton(self))
 
-    def closeEvent(self, event):
-        print("closeEvent")
-
 
 class OperationButton(QWidget):
     def __init__(self, parent):
@@ -50,5 +47,7 @@ class OperationButton(QWidget):
     def saveClicked(self, parent):
         from meet.config.GlobalGui import globalGui
         from meet.gui.widget.TitleBar import TitleBar
+        # 返回上一个页面
+        globalGui.meet.onBack()
         globalGui.meet.removeEditPage(parent.objectName())
         del TitleBar.tabBarDict[parent.objectName()]

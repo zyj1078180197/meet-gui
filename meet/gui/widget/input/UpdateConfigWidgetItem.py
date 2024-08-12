@@ -4,12 +4,12 @@ class UpdateConfigWidgetItem:
         self.config = config
         self.value = value
 
-    def set_value(self, value):
+    def setValue(self, value):
         self.config[self.key] = value
         self.value = value
 
 
-def value_to_string(obj):
+def valueToString(obj):
     if isinstance(obj, list):
         return ', '.join(map(str, obj))
     else:

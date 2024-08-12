@@ -128,3 +128,10 @@ class Meet:
         :return:
         """
         self.window.removeEditPage(objectName)
+
+    def onBack(self):
+        """
+        返回到上一个页面，不是点击返回按钮，而是编辑页面关闭后，用于回到原来的页面
+        :return:
+        """
+        self.window.onBack()
