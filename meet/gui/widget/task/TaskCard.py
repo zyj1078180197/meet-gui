@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QWidget, QHBoxLayout
 from qfluentwidgets import PushButton, FluentIcon
 
+from meet.gui.plugin.Communicate import communicate
 from meet.gui.widget.task.ConfigCard import ConfigCard, ConfigExpandCard
 from meet.task.TaskExecutor import TaskExecutor
 
@@ -23,6 +24,7 @@ class TaskExpandCard(ConfigExpandCard):
 
 class TaskButtons(QWidget):
     def __init__(self, parent, task, baseTask):
+        self.baseTask = baseTask
         super().__init__(parent=parent)
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(18)  # Set the spacing between widgets
@@ -50,6 +52,7 @@ class TaskButtons(QWidget):
         self.layout.addWidget(self.stopButton)
         self.layout.addWidget(self.pauseButton)
         self.layout.addWidget(self.deleteButton)
+        communicate.taskStatusChange.connect(self.taskStatusChanged)
 
     def startClicked(self, baseTask):
         from meet.task.BaseTask import BaseTask
@@ -97,3 +100,15 @@ class TaskButtons(QWidget):
 
     def resetConfigClicked(self):
         pass
+
+    def taskStatusChanged(self, baseTask):
+        """
+        任务结束 按钮的变化
+        """
+        from meet.task.BaseTask import BaseTask
+        if baseTask.taskId == self.baseTask.taskId:
+            if baseTask.status == BaseTask.StatusEnum.STOPPED:
+                self.startButton.show()
+                self.stopButton.hide()
+                self.pauseButton.hide()
+                self.deleteButton.show()

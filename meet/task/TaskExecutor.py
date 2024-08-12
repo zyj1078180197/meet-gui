@@ -38,8 +38,10 @@ class TaskExecutor:
             task.run()
             task.executeNumber -= 1
             sleep(task.interval)
-        # todo 停止后发射信号，按钮状态改变
         print("关闭固定任务" + task.taskName + "-" + str(task.taskId))
+        from meet.gui.plugin.Communicate import communicate
+        task.status = BaseTask.StatusEnum.STOPPED
+        communicate.taskStatusChange.emit(task)
 
     @classmethod
     def triggerTaskRun(cls, task):
@@ -59,7 +61,9 @@ class TaskExecutor:
             task.run()
             sleep(task.interval)
         print("关闭触发器" + task.taskName + "-" + str(task.taskId))
-        # todo 停止后发射信号，按钮状态改变
+        from meet.gui.plugin.Communicate import communicate
+        task.status = BaseTask.StatusEnum.STOPPED
+        communicate.taskStatusChange.emit(task)
 
     @classmethod
     def submitTask(cls, func, *args, **kwargs):

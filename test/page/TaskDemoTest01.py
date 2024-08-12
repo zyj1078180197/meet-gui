@@ -5,8 +5,6 @@ class TaskDemoTest01(BaseTask):
     def __init__(self):
         super().__init__()
         self.taskName = "TaskDemoTest01"
-        self.interval = 5
-        self.executeNumber = 10
         self.defaultConfig = {
             "姓名": "张三",
             "班级": "高一三班",
