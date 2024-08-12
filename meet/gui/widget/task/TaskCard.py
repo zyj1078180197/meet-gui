@@ -65,6 +65,8 @@ class TaskButtons(QWidget):
             TaskExecutor.submitTask(TaskExecutor.triggerTaskRun, baseTask)
         self.stopButton.show()
         self.pauseButton.show()
+        self.pauseButton.setText("暂停")
+        self.pauseButton.setIcon(FluentIcon.PAUSE)
         self.deleteButton.hide()
         self.startButton.hide()
         showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已开始")
