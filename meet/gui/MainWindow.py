@@ -157,7 +157,6 @@ class MainWindow(MSFluentWindow):
         elif objectName == "任务":
             if self.navigationPageDict.get(objectName) is None:
                 taskInterface = FixedTaskTab(self)
-                globalGui.fixedTaskTab = taskInterface
                 self.mainPage.addWidget(taskInterface)
                 self.navigationPageDict[objectName] = taskInterface
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))

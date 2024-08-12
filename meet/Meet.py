@@ -55,16 +55,6 @@ class Meet:
         """
         return self.window
 
-    def addPage(self, widget, text, icon):
-        """
-        添加页面
-        :param widget:
-        :param text:
-        :param icon:
-        :return:
-        """
-        self.window.addSubInterface(widget, text, icon)
-
     def doInit(self, config=None):
         # 初始化任务和触发器执行器
         self.taskExecutor = TaskExecutor(fixedTaskList=config.get("fixedTaskList", []),
@@ -72,7 +62,13 @@ class Meet:
                                          maxWorkers=10
                                          )
 
-    def size_relative_to_screen(self, width, height):
+    def sizeRelativeToScreen(self, width, height):
+        """
+        相对于屏幕的尺寸
+        :param width:
+        :param height:
+        :return:
+        """
         screen = self.app.primaryScreen()
         size = screen.size()
         # Calculate half the screen size
@@ -87,7 +83,7 @@ class Meet:
         展示窗口
         :return:
         """
-        size = self.size_relative_to_screen(width=0.5, height=0.6)
+        size = self.sizeRelativeToScreen(width=0.5, height=0.6)
         self.window.setFixedSize(size)
         # 隐藏缩放按钮
         desktop = QApplication.screens()[0].availableGeometry()
