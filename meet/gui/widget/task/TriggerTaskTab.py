@@ -35,5 +35,4 @@ class TriggerTaskTab(Tab):
     def closeEvent(self, event):
         from meet.config.GlobalGui import globalGui
         self.deleteLater()
-        globalGui.fixedTaskTab = None
         event.accept()
