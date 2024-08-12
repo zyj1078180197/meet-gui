@@ -33,6 +33,5 @@ class FixedTaskTab(Tab):
         pass
 
     def closeEvent(self, event):
-        from meet.config.GlobalGui import globalGui
         self.deleteLater()
         event.accept()
