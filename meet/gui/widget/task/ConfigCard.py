@@ -1,6 +1,6 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout, QVBoxLayout
-from qfluentwidgets import IconWidget, BodyLabel, CaptionLabel, CardWidget, FluentIcon, ExpandSettingCard, PushButton
+from qfluentwidgets import IconWidget, BodyLabel, CaptionLabel, CardWidget, FluentIcon, ExpandSettingCard
 
 from meet.gui.widget.input.ConfigItemFactory import configWidget
 from meet.util.Task import Task
@@ -46,6 +46,8 @@ class ConfigExpandCard(ExpandSettingCard):
         super().__init__(FluentIcon.INFO, task.get('title') + str(task.get("taskId")), task.get('description'),
                          parent=parent)
         self.viewLayout.setSpacing(0)
+        self.configWidgets = []
+        self.defaultConfig = baseTask.defaultConfig
         self.viewLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.viewLayout.setContentsMargins(10, 0, 10, 0)
         if task.get('config') is None or task.get('config') == {}:
@@ -60,9 +62,16 @@ class ConfigExpandCard(ExpandSettingCard):
         baseTask.config = self.config
         baseTask.taskId = task.get("taskId")
         for k, v in self.config.items():
-            self.viewLayout.addWidget(configWidget(task,self.configType, self.configDesc, self.config, k, v))
+            widget = configWidget(task, self.configType, self.configDesc, self.config, k, v)
+            self.configWidgets.append(widget)
+            self.viewLayout.addWidget(widget)
             self._adjustViewSize()
 
     def wheelEvent(self, event):
         # 忽略滚轮事件，让父组件处理
         event.ignore()
+
+    def resetConfigValue(self):
+        self.config.update(self.defaultConfig)
+        for widget in self.configWidgets:
+            widget.updateValue()

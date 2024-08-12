@@ -35,7 +35,7 @@ class TaskButtons(QWidget):
             self.layout.addWidget(self.editButton)
         if isinstance(parent, TaskExpandCard):
             self.resetConfig = PushButton(FluentIcon.CANCEL, "重置", self)
-            self.resetConfig.clicked.connect(self.resetConfigClicked)
+            self.resetConfig.clicked.connect(lambda: self.resetConfigClicked(parent))
             self.layout.addWidget(self.resetConfig)
 
         self.startButton = PushButton(FluentIcon.PLAY, "开始", self)
@@ -67,7 +67,7 @@ class TaskButtons(QWidget):
         self.pauseButton.show()
         self.deleteButton.hide()
         self.startButton.hide()
-        showSuccess(baseTask.taskName+"-"+str(baseTask.taskId)+"任务已开始")
+        showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已开始")
 
     def stopClicked(self, baseTask):
         from meet.task.BaseTask import BaseTask
@@ -84,12 +84,12 @@ class TaskButtons(QWidget):
             baseTask.status = BaseTask.StatusEnum.PAUSED
             self.pauseButton.setIcon(FluentIcon.PLAY)
             self.pauseButton.setText("继续")
-            showSuccess(baseTask.taskName+"-"+str(baseTask.taskId)+"任务已暂停")
+            showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已暂停")
         else:
             baseTask.status = BaseTask.StatusEnum.RUNNING
             self.pauseButton.setIcon(FluentIcon.PAUSE)
             self.pauseButton.setText("暂停")
-            showSuccess(baseTask.taskName+"-"+str(baseTask.taskId)+"任务已继续")
+            showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已继续")
         pass
 
     def editClicked(self, task, baseTask):
@@ -102,8 +102,9 @@ class TaskButtons(QWidget):
             page.setObjectName("编辑任务:" + str(task.get("taskId")))
         globalGui.meet.openEditPage(page, "编辑任务:" + str(task.get("taskId")))
 
-    def resetConfigClicked(self):
-        pass
+    def resetConfigClicked(self, parent: TaskExpandCard = None):
+        parent.resetConfigValue()
+        showSuccess("重置成功")
 
     def taskStatusChanged(self, baseTask):
         """
@@ -116,4 +117,4 @@ class TaskButtons(QWidget):
                 self.stopButton.hide()
                 self.pauseButton.hide()
                 self.deleteButton.show()
-                showSuccess(baseTask.taskName+"-"+str(baseTask.taskId)+"任务已停止")
+                showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已停止")
