@@ -5,11 +5,15 @@ from meet.gui.plugin.Communicate import communicate
 from meet.util.MessageTips import showSuccess
 from meet.gui.widget.task.ConfigCard import ConfigCard, ConfigExpandCard
 from meet.task.TaskExecutor import TaskExecutor
+from meet.util.Task import Task
 
 
 class TaskCard(ConfigCard):
     def __init__(self, task, baseTask, parent=None):
         super().__init__(task, parent=parent)
+        if task.get('config') is None or task.get('config') == {}:
+            task['config'] = baseTask.defaultConfig
+            Task.updateTask(task)
         baseTask.config = task.get('config')
         baseTask.taskId = task.get("taskId")
         taskButton = TaskButtons(self, task, baseTask)
