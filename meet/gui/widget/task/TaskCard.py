@@ -13,6 +13,7 @@ class TaskCard(ConfigCard):
         baseTask.config = task.get('config')
         baseTask.taskId = task.get("taskId")
         taskButton = TaskButtons(self, task, baseTask)
+        self.clicked.connect(lambda: TaskButtons.editClicked(task, baseTask))
         self.addWidget(taskButton)
 
 
@@ -94,7 +95,8 @@ class TaskButtons(QWidget):
             showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已继续")
         pass
 
-    def editClicked(self, task, baseTask):
+    @staticmethod
+    def editClicked(task, baseTask):
         from meet.config.GlobalGui import globalGui
         from meet.gui.widget.task.TaskEditTab import TaskEditTab
         # 添加新的页面，用于处理配置的改变
@@ -104,7 +106,8 @@ class TaskButtons(QWidget):
             page.setObjectName("编辑任务:" + str(task.get("taskId")))
         globalGui.meet.openEditPage(page, "编辑任务:" + str(task.get("taskId")))
 
-    def resetConfigClicked(self, parent: TaskExpandCard = None):
+    @staticmethod
+    def resetConfigClicked(parent: TaskExpandCard = None):
         parent.resetConfigValue()
         showSuccess("重置成功")
 

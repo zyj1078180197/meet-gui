@@ -55,7 +55,8 @@ class OperationButton(QWidget):
         self.layout.addWidget(self.saveButton)
         self.layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
 
-    def saveClicked(self, parent):
+    @staticmethod
+    def saveClicked(parent):
         from meet.config.GlobalGui import globalGui
         from meet.gui.widget.TitleBar import TitleBar
         # 返回上一个页面
@@ -64,6 +65,7 @@ class OperationButton(QWidget):
         globalGui.meet.removeEditPage(parent.objectName())
         del TitleBar.tabBarDict[parent.objectName()]
 
-    def resetConfigClicked(self, parent: TaskEditTab = None):
+    @staticmethod
+    def resetConfigClicked(parent: TaskEditTab = None):
         parent.resetConfigValue()
         showSuccess("重置成功")

@@ -15,7 +15,7 @@ class TriggerTaskTab(Tab):
 
     taskTabChange = Signal(dict)
 
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
         for taskList in TaskExecutor.triggerTaskList:
             for task in taskList:
@@ -33,6 +33,5 @@ class TriggerTaskTab(Tab):
         pass
 
     def closeEvent(self, event):
-        from meet.config.GlobalGui import globalGui
         self.deleteLater()
         event.accept()
