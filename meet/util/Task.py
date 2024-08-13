@@ -1,6 +1,6 @@
 import json
 
-from meet.util.Path import get_path_relative_to_exe
+from meet.util.Path import getPathRelativeToExe
 from meet.util.Snowflake import snowflake
 
 
@@ -11,7 +11,7 @@ class Task:
         taskProcessed = []
         for task in taskList:
             # 获取任务配置路径
-            taskPath = get_path_relative_to_exe(task.get("configPath")) + "//" + task.get("className") + ".json"
+            taskPath = getPathRelativeToExe(task.get("configPath")) + "//" + task.get("className") + ".json"
             # 读取任务配置
             taskConfig = Task.loadConfig(taskPath)
             if taskConfig is None or len(taskConfig) == 0:
@@ -63,7 +63,7 @@ class Task:
 
     @staticmethod
     def updateTask(task):
-        taskPath = get_path_relative_to_exe(task.get("configPath")) + "//" + task.get("className") + ".json"
+        taskPath = getPathRelativeToExe(task.get("configPath")) + "//" + task.get("className") + ".json"
         taskFile = Task.loadConfig(taskPath)
         for i in range(0, len(taskFile)):
             if taskFile[i].get("taskId") == task.get("taskId"):

@@ -2,7 +2,7 @@ import os
 import sys
 
 
-def get_path_relative_to_exe(*files):
+def getPathRelativeToExe(*files):
     """
     获取相对于可执行文件的文件路径。
 
@@ -23,19 +23,19 @@ def get_path_relative_to_exe(*files):
     # 判断当前应用是否作为捆绑的可执行文件运行
     if getattr(sys, 'frozen', False):
         # 应用作为捆绑的可执行文件运行时，获取可执行文件的绝对路径
-        application_path = os.path.abspath(sys.executable)
+        applicationPath = os.path.abspath(sys.executable)
     else:
         # 应用作为Python脚本运行时，获取脚本文件的绝对路径
-        application_path = os.path.abspath(sys.argv[0])
+        applicationPath = os.path.abspath(sys.argv[0])
 
     # 获取应用路径所在的目录
-    the_dir = os.path.dirname(application_path)
+    theDir = os.path.dirname(applicationPath)
 
     # 将目录与文件路径拼接起来
-    path = os.path.join(the_dir, *files)
+    path = os.path.join(theDir, *files)
 
     # 规范化路径，以确保路径格式正确
-    normalized_path = os.path.normpath(path)
+    normalizedPath = os.path.normpath(path)
 
     # 返回规范化后的路径
-    return normalized_path
+    return normalizedPath

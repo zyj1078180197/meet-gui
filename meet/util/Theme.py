@@ -3,7 +3,7 @@ import json
 from qfluentwidgets import qconfig, Theme, setTheme
 
 from meet.gui.plugin.Communicate import communicate
-from meet.util.Path import get_path_relative_to_exe
+from meet.util.Path import getPathRelativeToExe
 
 
 def isDarkTheme():
@@ -21,7 +21,7 @@ def themeToggleHandle():
     from meet.config.Config import Config
     from meet.config.GlobalGui import globalGui
     config = Config.loadConfig(globalGui.config)
-    path = get_path_relative_to_exe(config.get("appConfigPath", "config\\config.json"))
+    path = getPathRelativeToExe(config.get("appConfigPath", "config\\config.json"))
     if isDarkTheme():
         setTheme(Theme.LIGHT)
         config["theme"] = 'Light'

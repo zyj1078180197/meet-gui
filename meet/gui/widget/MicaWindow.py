@@ -30,7 +30,7 @@ class MicaWindow(Window):
 #      desktop = QApplication.screens()[0].availableGeometry()
 #      wi, he = desktop.width(), desktop.height()
 #      win.move(wi // 2 - win.width() // 2, he // 2 - win.height() // 2)
-#      appIcon = get_path_relative_to_exe(globalGui.config.get("appIcon", "resource\\shoko.png"))
+#      appIcon = getPathRelativeToExe(globalGui.config.get("appIcon", "resource\\shoko.png"))
 #      win.setWindowIcon(QIcon(appIcon))
 #      win.setWindowTitle(f"{self.task.get('title') + str(self.task.get('taskId'))}")
 #      win.show()

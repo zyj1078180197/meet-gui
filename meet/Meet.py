@@ -9,7 +9,7 @@ from meet.config.Config import Config
 from meet.config.GlobalGui import globalGui
 from meet.gui.MainWindow import MainWindow
 from meet.task.TaskExecutor import TaskExecutor
-from meet.util.Path import get_path_relative_to_exe
+from meet.util.Path import getPathRelativeToExe
 
 
 class Meet:
@@ -89,7 +89,7 @@ class Meet:
         desktop = QApplication.screens()[0].availableGeometry()
         wi, he = desktop.width(), desktop.height()
         self.window.move(wi // 2 - self.window.width() // 2, he // 2 - self.window.height() // 2)
-        appIcon = get_path_relative_to_exe(self.config.get("appIcon", "resource\\shoko.png"))
+        appIcon = getPathRelativeToExe(self.config.get("appIcon", "resource\\shoko.png"))
         self.window.setWindowIcon(QIcon(appIcon))
         self.window.setWindowTitle(f"{self.config.get('appName', 'meet-gui')} V{self.config.get('appVersion', 1.0)}")
 
