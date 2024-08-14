@@ -11,13 +11,13 @@ class LabelAndFolderSelect(ConfigLabelAndWidget):
         self.key = key
         self.button = PushButton(FluentIcon.FOLDER, '请选择文件夹', self)
         self.button.clicked.connect(self.selectFolder)
-        self.listText = QLabel(text="", parent=self)
+        self.text = QLabel(text="", parent=self)
         self.updateValue()
-        self.addWidget(self.listText)
+        self.addWidget(self.text)
         self.addWidget(self.button)
 
     def updateValue(self):
-        self.listText.setText(self.config.get(self.key))
+        self.text.setText(self.config.get(self.key))
 
     def valueChanged(self, value):
         self.updateConfig(self.task, value)
@@ -25,5 +25,5 @@ class LabelAndFolderSelect(ConfigLabelAndWidget):
     def selectFolder(self):
         folderPath = QFileDialog.getExistingDirectory(self, '请选择文件夹', self.config.get(self.key))
         if folderPath:
-            self.listText.setText(folderPath)
+            self.text.setText(folderPath)
             self.valueChanged(folderPath)

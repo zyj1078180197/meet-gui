@@ -12,13 +12,13 @@ class LabelAndFileSelect(ConfigLabelAndWidget):
         self.theType = theType
         self.button = PushButton(FluentIcon.FOLDER, '请选择文件', self)
         self.button.clicked.connect(self.selectFile)
-        self.listText = QLabel(text="", parent=self)
+        self.text = QLabel(text="", parent=self)
         self.updateValue()
-        self.addWidget(self.listText)
+        self.addWidget(self.text)
         self.addWidget(self.button)
 
     def updateValue(self):
-        self.listText.setText(self.config.get(self.key))
+        self.text.setText(self.config.get(self.key))
 
     def valueChanged(self, value):
         self.updateConfig(self.task, value)
@@ -26,5 +26,5 @@ class LabelAndFileSelect(ConfigLabelAndWidget):
     def selectFile(self):
         filePath = QFileDialog.getOpenFileName(self, '请选择文件', self.config.get(self.key), self.theType['filter'])
         if filePath and filePath[0] != '':
-            self.listText.setText(filePath[0])
+            self.text.setText(filePath[0])
             self.valueChanged(filePath[0])
