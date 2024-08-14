@@ -1,5 +1,7 @@
 from meet.gui.widget.input.LabelAndDoubleSpinBox import LabelAndDoubleSpinBox
 from meet.gui.widget.input.LabelAndDropDown import LabelAndDropDown
+from meet.gui.widget.input.LabelAndFile import LabelAndFile
+from meet.gui.widget.input.LabelAndFolder import LabelAndFolder
 from meet.gui.widget.input.LabelAndLineEdit import LabelAndLineEdit
 from meet.gui.widget.input.LabelAndSpinBox import LabelAndSpinBox
 from meet.gui.widget.input.LabelAndSwitchButton import LabelAndSwitchButton
@@ -11,6 +13,10 @@ def configWidget(task, configType, configDesc, config, key, value):
     if theType:
         if theType['type'] == 'dropDown':
             return LabelAndDropDown(task, configDesc, theType['options'], config, key)
+        if theType['type'] == 'fileSelect':
+            return LabelAndFile(task, configDesc, config, key, theType)
+        if theType['type'] == 'folderSelect':
+            return LabelAndFolder(task, configDesc, config, key)
     if isinstance(value, bool):
         return LabelAndSwitchButton(task, configDesc, config, key)
     elif isinstance(value, list):

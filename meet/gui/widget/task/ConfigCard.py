@@ -52,11 +52,11 @@ class ConfigExpandCard(ExpandSettingCard):
         self.viewLayout.setContentsMargins(10, 0, 10, 0)
         if task.get('config') is None or task.get('config') == {}:
             task['config'] = baseTask.defaultConfig
-            baseTask.config = baseTask.defaultConfig
-            self.config = baseTask.defaultConfig
             Task.updateTask(task)
         else:
-            self.config = task.get('config')
+            task['config'] = baseTask.defaultConfig | task.get('config')
+            Task.updateTask(task)
+        self.config = task.get('config')
         self.configType = baseTask.configType
         self.configDesc = baseTask.configDesc
         baseTask.config = self.config

@@ -9,6 +9,8 @@ class TaskDemo(BaseTask):
             "姓名": "张三",
             "年龄": 18,
             "性别": "男",
+            "选择文件测试": "",
+            "选择文件夹测试": ""
         }  # 默认配置 属性：值
         self.configDesc = {
             "年龄": "年龄按照周岁计算",
@@ -21,7 +23,15 @@ class TaskDemo(BaseTask):
                         "男",
                         "女"
                     ]
-                }
+                },
+            "选择文件测试": {
+                "type": "fileSelect",
+                "filter": "All Files (*);;excel(*.xlsx)"
+            },
+            "选择文件夹测试": {
+                "type": "folderSelect",
+            }
+
         }  # 配置类型 属性：{'type': "dropDown", 'options': ['Forward', 'Backward']}
 
     def run(self):

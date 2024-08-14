@@ -14,6 +14,9 @@ class TaskCard(ConfigCard):
         if task.get('config') is None or task.get('config') == {}:
             task['config'] = baseTask.defaultConfig
             Task.updateTask(task)
+        else:
+            task['config'] = baseTask.defaultConfig | task.get('config')
+            Task.updateTask(task)
         baseTask.config = task.get('config')
         baseTask.taskId = task.get("taskId")
         taskButton = TaskButtons(self, task, baseTask)
