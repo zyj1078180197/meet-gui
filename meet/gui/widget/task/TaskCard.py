@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QWidget, QHBoxLayout
-from qfluentwidgets import PushButton, FluentIcon
+from qfluentwidgets import PushButton, FluentIcon, MessageBox
 
 from meet.gui.plugin.Communicate import communicate
 from meet.util.MessageTips import showSuccess
@@ -19,6 +19,7 @@ class TaskCard(ConfigCard):
             Task.updateTask(task)
         baseTask.config = task.get('config')
         baseTask.taskId = task.get("taskId")
+        baseTask.configPath = task.get("configPath")
         taskButton = TaskButtons(self, task, baseTask)
         self.clicked.connect(lambda: TaskButtons.editClicked(task, baseTask))
         self.addWidget(taskButton)
@@ -57,11 +58,25 @@ class TaskButtons(QWidget):
         self.pauseButton.clicked.connect(lambda: self.pauseClicked(baseTask))
         self.pauseButton.hide()
         self.deleteButton = PushButton(FluentIcon.DELETE, "删除", self)
+        self.deleteButton.clicked.connect(lambda: self.deleteClicked(baseTask, parent))
         self.layout.addWidget(self.startButton)
         self.layout.addWidget(self.stopButton)
         self.layout.addWidget(self.pauseButton)
         self.layout.addWidget(self.deleteButton)
         communicate.taskStatusChange.connect(self.taskStatusChanged)
+
+    @staticmethod
+    def deleteClicked(baseTask, parent):
+        from meet.config.GlobalGui import globalGui
+        m = MessageBox("消息", "确认删除?", globalGui.meet.window)
+        m.yesButton.setText("确定")
+        m.cancelButton.setText("取消")
+        if m.exec():
+            if Task.deleteTask(baseTask):
+                parent.close()
+                parent.deleteLater()
+        else:
+            print('取消')
 
     def startClicked(self, baseTask):
         from meet.task.BaseTask import BaseTask
@@ -77,7 +92,7 @@ class TaskButtons(QWidget):
         self.pauseButton.setIcon(FluentIcon.PAUSE)
         self.deleteButton.hide()
         self.startButton.hide()
-        showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已开始")
+        showSuccess(baseTask.className + "-" + str(baseTask.taskId) + "任务已开始")
 
     def stopClicked(self, baseTask):
         from meet.task.BaseTask import BaseTask
@@ -94,12 +109,12 @@ class TaskButtons(QWidget):
             baseTask.status = BaseTask.StatusEnum.PAUSED
             self.pauseButton.setIcon(FluentIcon.PLAY)
             self.pauseButton.setText("继续")
-            showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已暂停")
+            showSuccess(baseTask.className + "-" + str(baseTask.taskId) + "任务已暂停")
         else:
             baseTask.status = BaseTask.StatusEnum.RUNNING
             self.pauseButton.setIcon(FluentIcon.PAUSE)
             self.pauseButton.setText("暂停")
-            showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已继续")
+            showSuccess(baseTask.className + "-" + str(baseTask.taskId) + "任务已继续")
         pass
 
     @staticmethod
@@ -129,4 +144,4 @@ class TaskButtons(QWidget):
                 self.stopButton.hide()
                 self.pauseButton.hide()
                 self.deleteButton.show()
-                showSuccess(baseTask.taskName + "-" + str(baseTask.taskId) + "任务已停止")
+                showSuccess(baseTask.className + "-" + str(baseTask.taskId) + "任务已停止")

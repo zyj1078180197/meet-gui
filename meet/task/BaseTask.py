@@ -13,7 +13,8 @@ class BaseTask:
 
     def __init__(self):
         self.type = BaseTask.TaskTypeEnum.FIXED
-        self.taskName = None  # 任务名称
+        self.configPath = None  # 配置路径
+        self.className = None  # 任务类名称
         self.taskId = None
         self.executeNumber = None
         self.defaultExecuteNumber = 1  # 任务执行次数

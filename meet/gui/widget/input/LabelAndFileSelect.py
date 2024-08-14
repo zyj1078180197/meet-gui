@@ -1,3 +1,4 @@
+from PySide6.QtGui import QPalette
 from PySide6.QtWidgets import QLabel, QFileDialog
 from qfluentwidgets import PushButton, FluentIcon
 
@@ -10,7 +11,7 @@ class LabelAndFileSelect(ConfigLabelAndWidget):
         self.task = task
         self.key = key
         self.theType = theType
-        self.button = PushButton(FluentIcon.FOLDER, '请选择文件', self)
+        self.button = PushButton(FluentIcon.DOCUMENT, '请选择文件', self)
         self.button.clicked.connect(self.selectFile)
         self.text = QLabel(text="", parent=self)
         self.updateValue()

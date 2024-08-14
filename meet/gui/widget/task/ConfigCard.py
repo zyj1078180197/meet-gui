@@ -61,6 +61,7 @@ class ConfigExpandCard(ExpandSettingCard):
         self.configDesc = baseTask.configDesc
         baseTask.config = self.config
         baseTask.taskId = task.get("taskId")
+        baseTask.configPath = task.get("configPath")
         for k, v in self.config.items():
             widget = configWidget(task, self.configType, self.configDesc, self.config, k, v)
             self.configWidgets.append(widget)

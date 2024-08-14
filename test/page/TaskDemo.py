@@ -4,7 +4,7 @@ from meet.task.BaseTask import BaseTask
 class TaskDemo(BaseTask):
     def __init__(self):
         super().__init__()
-        self.taskName = "TaskDemo"
+        self.className = "TaskDemo"
         self.defaultConfig = {
             "姓名": "张三",
             "年龄": 18,

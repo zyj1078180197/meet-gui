@@ -4,7 +4,7 @@ from meet.task.BaseTask import BaseTask
 class TriggerDemo(BaseTask):
     def __init__(self):
         super().__init__()
-        self.taskName = "TriggerDemo"
+        self.className = "TriggerDemo"
         self.type = BaseTask.TaskTypeEnum.TRIGGER
         pass
 
