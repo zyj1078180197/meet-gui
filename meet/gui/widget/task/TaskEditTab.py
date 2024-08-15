@@ -18,7 +18,7 @@ class TaskEditTab(Tab):
         self.defaultConfig = baseTask.defaultConfig
         self.vBoxLayout.setSpacing(0)
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        self.vBoxLayout.setContentsMargins(10, 10, 10, 10)
+        self.vBoxLayout.setContentsMargins(20, 10, 20, 10)
         if task.get('config') is None or task.get('config') == {}:
             task['config'] = baseTask.defaultConfig
             Task.updateTask(task)
@@ -32,7 +32,7 @@ class TaskEditTab(Tab):
         baseTask.taskId = task.get("taskId")
         baseTask.configPath = task.get("configPath")
         for k, v in self.config.items():
-            widget = configWidget(task, self.configType, self.configDesc, self.config, k, v)
+            widget = configWidget(self.configType, self.configDesc, self.config, k, v)
             self.configWidgets.append(widget)
             self.addWidget(widget=widget)
         # 添加操作按钮

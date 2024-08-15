@@ -1,4 +1,5 @@
-from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLabel, QSizePolicy, QSpacerItem
+from PySide6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QSizePolicy, QSpacerItem
+from qfluentwidgets import BodyLabel, CaptionLabel
 
 
 class LabelAndWidget(QWidget):
@@ -27,13 +28,14 @@ class LabelAndWidget(QWidget):
         # 将垂直布局添加到主布局中
         self.layout.addLayout(self.titleLayout)
         # 创建并设置标题标签
-        self.title = QLabel(title)
+        self.title = BodyLabel(title, self)
         self.title.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         # 将标题标签添加到垂直布局中
         self.titleLayout.addWidget(self.title)
         # 如果存在内容参数，则创建并添加内容标签
         if content:
-            self.contentLabel = QLabel(content)
+            self.contentLabel = CaptionLabel(content,self)
+            self.contentLabel.setTextColor("#606060", "#d2d2d2")
             self.contentLabel.setObjectName('contentLabel')
             self.titleLayout.addWidget(self.contentLabel)
         # 添加一个扩展的空格项到主布局，用于调整布局内的空间

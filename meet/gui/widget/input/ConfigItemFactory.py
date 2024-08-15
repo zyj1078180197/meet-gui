@@ -8,7 +8,7 @@ from meet.gui.widget.input.LabelAndSwitchButton import LabelAndSwitchButton
 from meet.gui.widget.input.ModifyListItem import ModifyListItem
 
 
-def configWidget(task, configType, configDesc, config, key, value):
+def configWidget(configType, configDesc, config, key, value):
     theType = configType.get(key) if configType is not None else None
     if theType:
         if theType['type'] == 'dropDown':

@@ -61,7 +61,7 @@ class ConfigExpandCard(ExpandSettingCard):
         baseTask.taskId = task.get("taskId")
         baseTask.configPath = task.get("configPath")
         for k, v in self.config.items():
-            widget = configWidget(task, self.configType, self.configDesc, self.config, k, v)
+            widget = configWidget(self.configType, self.configDesc, self.config, k, v)
             self.configWidgets.append(widget)
             self.viewLayout.addWidget(widget)
             self._adjustViewSize()
