@@ -6,9 +6,8 @@ from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 
 
 class LabelAndFileSelect(ConfigLabelAndWidget):
-    def __init__(self, task, configDesc, config, key: str, theType):
+    def __init__(self, configDesc, config, key: str, theType):
         super().__init__(configDesc, config, key)
-        self.task = task
         self.key = key
         self.theType = theType
         self.button = PushButton(FluentIcon.DOCUMENT, '请选择文件', self)
@@ -22,7 +21,7 @@ class LabelAndFileSelect(ConfigLabelAndWidget):
         self.text.setText(self.config.get(self.key))
 
     def valueChanged(self, value):
-        self.updateConfig(self.task, value)
+        self.updateConfig(value)
 
     def selectFile(self):
         filePath = QFileDialog.getOpenFileName(self, '请选择文件', self.config.get(self.key), self.theType['filter'])

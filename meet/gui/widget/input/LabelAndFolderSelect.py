@@ -5,9 +5,8 @@ from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 
 
 class LabelAndFolderSelect(ConfigLabelAndWidget):
-    def __init__(self, task, configDesc, config, key: str):
+    def __init__(self, configDesc, config, key: str):
         super().__init__(configDesc, config, key)
-        self.task = task
         self.key = key
         self.button = PushButton(FluentIcon.FOLDER, '请选择文件夹', self)
         self.button.clicked.connect(self.selectFolder)
@@ -20,7 +19,7 @@ class LabelAndFolderSelect(ConfigLabelAndWidget):
         self.text.setText(self.config.get(self.key))
 
     def valueChanged(self, value):
-        self.updateConfig(self.task, value)
+        self.updateConfig(value)
 
     def selectFolder(self):
         folderPath = QFileDialog.getExistingDirectory(self, '请选择文件夹', self.config.get(self.key))

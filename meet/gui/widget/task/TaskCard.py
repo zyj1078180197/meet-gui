@@ -1,8 +1,7 @@
 from PySide6.QtWidgets import QWidget, QHBoxLayout
-from qfluentwidgets import PushButton, FluentIcon, MessageBox
+from qfluentwidgets import PushButton, FluentIcon, MessageBox, RoundMenu, Action
 
 from meet.gui.plugin.Communicate import communicate
-from meet.gui.widget.OperationButton import OperationButton
 from meet.gui.widget.task.ConfigCard import ConfigCard, ConfigExpandCard
 from meet.task.TaskExecutor import TaskExecutor
 from meet.util.MessageTips import showSuccess
@@ -37,12 +36,13 @@ class TaskExpandCard(ConfigExpandCard):
 
 class TaskButtons(QWidget):
     def __init__(self, parent, task, baseTask):
+        self.menu = None
         self.baseTask = baseTask
         super().__init__(parent=parent)
         self.layout = QHBoxLayout(self)
-        self.layout.setSpacing(18)  # Set the spacing between widgets
-        self.operationButton = OperationButton(FluentIcon.EDIT, "操作", self)
-        self.operationButton.clicked.connect(lambda: self.copyClicked(task, parent))
+        self.layout.setSpacing(18)
+        self.operationButton = PushButton(FluentIcon.APPLICATION, "操作", self)
+        self.operationButton.clicked.connect(lambda: self.operationMenuShow(task, parent))
         self.layout.addWidget(self.operationButton)
 
         self.startButton = PushButton(FluentIcon.PLAY, "开始", self)
@@ -55,13 +55,25 @@ class TaskButtons(QWidget):
         self.pauseButton = PushButton(FluentIcon.PAUSE, "暂停", self)
         self.pauseButton.clicked.connect(lambda: self.pauseClicked(baseTask))
         self.pauseButton.hide()
-        self.deleteButton = PushButton(FluentIcon.DELETE, "删除", self)
-        self.deleteButton.clicked.connect(lambda: self.deleteClicked(baseTask, parent))
         self.layout.addWidget(self.startButton)
         self.layout.addWidget(self.stopButton)
         self.layout.addWidget(self.pauseButton)
-        self.layout.addWidget(self.deleteButton)
         communicate.taskStatusChange.connect(self.taskStatusChanged)
+
+    def operationMenuShow(self, task, parent):
+        baseTask = self.baseTask
+        self.menu = RoundMenu(self.operationButton)
+        # 逐个添加动作，Action 继承自 QAction，接受 FluentIconBase 类型的图标
+        self.menu.addAction(Action(FluentIcon.COPY, '复制', triggered=lambda: self.copyClicked(task, parent)))
+        self.menu.addAction(Action(FluentIcon.EDIT, '编辑', triggered=lambda: print("编辑成功")))
+        self.menu.addAction(Action(FluentIcon.DELETE, '删除', triggered=lambda: self.deleteClicked(baseTask, parent)))
+        self.menu.addAction(Action(FluentIcon.CLOSE, '取消'))
+        point = self.operationButton.mapToGlobal(self.operationButton.rect().bottomRight())
+        point.setX(point.x() - 20)
+        point.setY(point.y() - self.menu.height() / 2 - 20)
+        self.menu.setContentsMargins(10, 10, 10, 10)
+        self.menu.closedSignal.connect(lambda: self.menu.deleteLater())
+        self.menu.exec(point)
 
     @staticmethod
     def copyClicked(task, parent):
@@ -102,8 +114,8 @@ class TaskButtons(QWidget):
         self.pauseButton.show()
         self.pauseButton.setText("暂停")
         self.pauseButton.setIcon(FluentIcon.PAUSE)
-        self.deleteButton.hide()
         self.startButton.hide()
+        self.operationButton.hide()
         showSuccess(baseTask.className + "-" + str(baseTask.taskId) + "任务已开始")
 
     def stopClicked(self, baseTask):
@@ -112,7 +124,7 @@ class TaskButtons(QWidget):
         self.startButton.show()
         self.stopButton.hide()
         self.pauseButton.hide()
-        self.deleteButton.show()
+        self.operationButton.show()
         pass
 
     def pauseClicked(self, baseTask):
@@ -150,5 +162,5 @@ class TaskButtons(QWidget):
                 self.startButton.show()
                 self.stopButton.hide()
                 self.pauseButton.hide()
-                self.deleteButton.show()
+                self.operationButton.show()
                 showSuccess(baseTask.className + "-" + str(baseTask.taskId) + "任务已停止")

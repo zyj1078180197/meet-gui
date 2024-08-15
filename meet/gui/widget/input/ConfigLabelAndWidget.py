@@ -27,7 +27,7 @@ class ConfigLabelAndWidget(LabelAndWidget):
             desc = configDesc.get(key)
         super().__init__(key, desc)
 
-    def updateConfig(self, task, value):
+    def updateConfig(self, value):
         """
         更新配置方法。
 
@@ -38,4 +38,3 @@ class ConfigLabelAndWidget(LabelAndWidget):
         """
         from meet.util.Task import Task
         self.config[self.key] = value
-        Task.updateTask(task)

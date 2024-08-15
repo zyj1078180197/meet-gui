@@ -42,6 +42,7 @@ class ConfigExpandCard(ExpandSettingCard):
         super().__init__(FluentIcon.INFO, task.get('title') + str(task.get("taskId")), task.get('description'),
                          parent=parent)
         self.card.expandButton.hide()
+        self.task = task
         self.viewLayout.setSpacing(0)
         self.configWidgets = []
         self.defaultConfig = baseTask.defaultConfig
@@ -78,7 +79,7 @@ class ConfigExpandCard(ExpandSettingCard):
             widget.updateValue()
 
     def saveConfigValue(self):
-        pass
+        Task.updateTask(self.task)
 
 
 class EditButtons(QWidget):

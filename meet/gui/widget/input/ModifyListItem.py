@@ -8,9 +8,8 @@ from meet.gui.widget.input.ModifyListDialog import ModifyListDialog
 
 class ModifyListItem(ConfigLabelAndWidget):
 
-    def __init__(self, task, configDesc, config, key: str):
+    def __init__(self, configDesc, config, key: str):
         super().__init__(configDesc, config, key)
-        self.task = task
         self.switchButton = PushButton("修改", parent=self)
         self.switchButton.setFixedWidth(100)
         self.switchButton.clicked.connect(self.clicked)
@@ -36,5 +35,5 @@ class ModifyListItem(ConfigLabelAndWidget):
         dialog.exec()
 
     def listModified(self, theList):
-        self.updateConfig(self.task, theList)
+        self.updateConfig(theList)
         self.updateValue()

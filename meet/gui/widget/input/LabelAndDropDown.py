@@ -5,9 +5,8 @@ from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 
 class LabelAndDropDown(ConfigLabelAndWidget):
 
-    def __init__(self, task, configDesc, options, config, key: str):
+    def __init__(self, configDesc, options, config, key: str):
         super().__init__(configDesc, config, key)
-        self.task = task
         self.key = key
         self.dict = {}
         self.options = []
@@ -23,7 +22,7 @@ class LabelAndDropDown(ConfigLabelAndWidget):
 
     def textChanged(self, text):
         option = self.dict.get(text)
-        self.updateConfig(self.task, option)
+        self.updateConfig(option)
 
     def updateValue(self):
         self.comboBox.setText(self.config.get(self.key))

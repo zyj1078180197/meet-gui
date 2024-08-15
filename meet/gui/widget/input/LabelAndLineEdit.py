@@ -5,9 +5,8 @@ from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 
 class LabelAndLineEdit(ConfigLabelAndWidget):
 
-    def __init__(self, task, configDesc, config, key: str):
+    def __init__(self, configDesc, config, key: str):
         super().__init__(configDesc, config, key)
-        self.task = task
         self.key = key
         self.lineEdit = LineEdit(self)
         self.lineEdit.setFixedWidth(300)
@@ -19,4 +18,4 @@ class LabelAndLineEdit(ConfigLabelAndWidget):
         self.lineEdit.setText(self.config.get(self.key))
 
     def valueChanged(self, value):
-        self.updateConfig(self.task, value)
+        self.updateConfig(value)

@@ -14,6 +14,7 @@ class TaskEditTab(Tab):
         title = StrongBodyLabel(task.get("title") + ':' + str(task.get("taskId")), self)
         self.addWidget(title)
         self.configWidgets = []
+        self.task = task
         self.defaultConfig = baseTask.defaultConfig
         self.vBoxLayout.setSpacing(0)
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -43,7 +44,7 @@ class TaskEditTab(Tab):
             widget.updateValue()
 
     def saveConfigValue(self):
-        pass
+        Task.updateTask(self.task)
 
 
 class EditButtons(QWidget):
