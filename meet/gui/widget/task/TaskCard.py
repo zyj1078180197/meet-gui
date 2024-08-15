@@ -41,17 +41,9 @@ class TaskButtons(QWidget):
         super().__init__(parent=parent)
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(18)  # Set the spacing between widgets
-        self.copyButton = OperationButton(FluentIcon.COPY, "复制", self)
-        self.copyButton.clicked.connect(lambda: self.copyClicked(task, parent))
-        self.layout.addWidget(self.copyButton)
-        if isinstance(parent, TaskCard):
-            self.editButton = PushButton(FluentIcon.EDIT, "编辑", self)
-            self.editButton.clicked.connect(lambda: self.editClicked(task, baseTask))
-            self.layout.addWidget(self.editButton)
-        if isinstance(parent, TaskExpandCard):
-            self.resetConfig = PushButton(FluentIcon.CANCEL, "重置", self)
-            self.resetConfig.clicked.connect(lambda: self.resetConfigClicked(parent))
-            self.layout.addWidget(self.resetConfig)
+        self.operationButton = OperationButton(FluentIcon.EDIT, "操作", self)
+        self.operationButton.clicked.connect(lambda: self.copyClicked(task, parent))
+        self.layout.addWidget(self.operationButton)
 
         self.startButton = PushButton(FluentIcon.PLAY, "开始", self)
         self.startButton.clicked.connect(lambda: self.startClicked(baseTask))
@@ -147,11 +139,6 @@ class TaskButtons(QWidget):
             page = TaskEditTab(task, baseTask)
             page.setObjectName("编辑任务:" + str(task.get("taskId")))
         globalGui.meet.openEditPage(page, "编辑任务:" + str(task.get("taskId")))
-
-    @staticmethod
-    def resetConfigClicked(parent: TaskExpandCard = None):
-        parent.resetConfigValue()
-        showSuccess("重置成功")
 
     def taskStatusChanged(self, baseTask):
         """

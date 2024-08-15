@@ -24,6 +24,8 @@ class Meet:
         self.config = Config(config)
         # 创建APP
         self.app = QApplication(sys.argv)
+        if sys.platform == 'win32' and sys.getwindowsversion().build >= 22000:
+            self.app.setStyle("fusion")
         globalGui.app = self.app
         globalGui.meet = self
         # 初始化设置主题

@@ -24,13 +24,15 @@ class TaskDemo(BaseTask):
                         "女"
                     ]
                 },
-            "选择文件测试": {
-                "type": "fileSelect",
-                "filter": "All Files (*);;excel(*.xlsx)"
-            },
-            "选择文件夹测试": {
-                "type": "folderSelect",
-            }
+            "选择文件测试":
+                {
+                    "type": "fileSelect",
+                    "filter": "All Files (*);;excel(*.xlsx)"
+                },
+            "选择文件夹测试":
+                {
+                    "type": "folderSelect",
+                }
 
         }  # 配置类型 属性：{'type': "dropDown", 'options': ['Forward', 'Backward']}
 

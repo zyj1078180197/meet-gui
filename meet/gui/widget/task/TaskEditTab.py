@@ -42,6 +42,9 @@ class TaskEditTab(Tab):
         for widget in self.configWidgets:
             widget.updateValue()
 
+    def saveConfigValue(self):
+        pass
+
 
 class EditButtons(QWidget):
     def __init__(self, parent):
@@ -58,11 +61,12 @@ class EditButtons(QWidget):
         self.layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
 
     @staticmethod
-    def saveClicked(parent):
+    def saveClicked(parent: TaskEditTab = None):
         from meet.config.GlobalGui import globalGui
         from meet.gui.widget.TitleBar import TitleBar
         # 返回上一个页面
         globalGui.meet.onBack()
+        parent.saveConfigValue()
         showSuccess("保存成功")
         globalGui.meet.removeEditPage(parent.objectName())
         del TitleBar.tabBarDict[parent.objectName()]
