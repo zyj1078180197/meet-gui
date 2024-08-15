@@ -244,7 +244,7 @@ class MainWindow(MSFluentWindow):
             self.removeEditPage(objectName)
         del TitleBar.tabBarDict[objectName]
         # 根据索引关闭标签
-        self.tabBar.removeTab(index)
+        self.tabBar.removeTabByKey(objectName)
 
     def onTabChanged(self):
         """

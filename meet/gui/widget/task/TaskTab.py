@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QWidget, QHBoxLayout, QSpacerItem, QSizePolicy
-from qfluentwidgets import PushButton, FluentIcon
+from qfluentwidgets import PushButton, FluentIcon, SearchLineEdit
 
 from meet.gui.widget.Tab import Tab
 
@@ -21,7 +21,10 @@ class TaskButtons(QWidget):
         self.addButton = PushButton(FluentIcon.ADD, "添加", self)
         self.resetConfig = PushButton(FluentIcon.CLEAR_SELECTION, "重置", self)
         self.refreshButton = PushButton(FluentIcon.SYNC, "刷新", self)
+        self.searchButton = SearchLineEdit(self)
+        self.searchButton.setPlaceholderText("搜索任务")
         self.layout.addWidget(self.addButton)
         self.layout.addWidget(self.resetConfig)
         self.layout.addWidget(self.refreshButton)
         self.layout.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        self.layout.addWidget(self.searchButton)
