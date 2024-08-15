@@ -62,6 +62,9 @@ class TaskButtons(QWidget):
 
     def operationMenuShow(self, task, parent):
         baseTask = self.baseTask
+        if self.menu is not None:
+            self.menu.close()
+            self.menu.deleteLater()
         self.menu = RoundMenu(self.operationButton)
         # 逐个添加动作，Action 继承自 QAction，接受 FluentIconBase 类型的图标
         self.menu.addAction(Action(FluentIcon.COPY, '复制', triggered=lambda: self.copyClicked(task, parent)))
@@ -72,7 +75,6 @@ class TaskButtons(QWidget):
         point.setX(point.x() - 20)
         point.setY(point.y() - self.menu.height() / 2 - 20)
         self.menu.setContentsMargins(10, 10, 10, 10)
-        self.menu.closedSignal.connect(lambda: self.menu.deleteLater())
         self.menu.exec(point)
 
     @staticmethod
