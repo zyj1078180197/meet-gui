@@ -26,7 +26,7 @@ config = {
             "description": "任务测试类",
             "configPath": "config",
             "iconPath": "resource\\shoko.png",
-            "showStyle": "Expand",  # Normal Expand 展示风格
+            "showStyle": "Normal",  # Normal Expand 展示风格
         },
         {
             "moduleName": TaskDemoTest01.__module__,

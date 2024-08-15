@@ -27,7 +27,7 @@ class Tab(ScrollArea):
         # 设置布局对齐方式为顶部对齐
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
         # 设置布局内容边距
-        self.vBoxLayout.setContentsMargins(20, 20, 20, 20)
+        self.vBoxLayout.setContentsMargins(20, 10, 20, 10)
         self.view.setObjectName('view')
         self.setStyleSheet("QScrollArea{background: transparent; border: none}")
 
@@ -39,6 +39,17 @@ class Tab(ScrollArea):
     def addWidget(self, widget, stretch=0, align=Qt.AlignmentFlag.AlignTop):
         self.vBoxLayout.addWidget(widget, stretch, align)
         return widget
+
+    def addWidgetFirst(self, widget, stretch=0, align=Qt.AlignmentFlag.AlignTop):
+        self.vBoxLayout.insertWidget(0, widget, stretch, align)
+        return widget
+
+    def insertWidget(self, widget, position=0, stretch=0, align=Qt.AlignmentFlag.AlignTop):
+        self.vBoxLayout.insertWidget(position, widget, stretch, align)
+        return widget
+
+    def getWidgetIndex(self, widget):
+        return self.vBoxLayout.indexOf(widget)
 
     def addLayout(self, layout, stretch=0):
         self.vBoxLayout.addLayout(layout, stretch)

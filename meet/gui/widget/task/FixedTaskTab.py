@@ -1,12 +1,12 @@
 from enum import Enum
 
-from meet.gui.widget.Tab import Tab
 from meet.gui.widget.task.TaskCard import TaskCard, TaskExpandCard
+from meet.gui.widget.task.TaskTab import TaskTab
 from meet.task.TaskExecutor import TaskExecutor
 from meet.util.Class import getClassByName
 
 
-class FixedTaskTab(Tab):
+class FixedTaskTab(TaskTab):
     class ShowStyle(Enum):
         NORMAL = 'Normal'
         EXPAND = 'Expand'

@@ -2,15 +2,17 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout
 from qfluentwidgets import PushButton, FluentIcon, MessageBox
 
 from meet.gui.plugin.Communicate import communicate
-from meet.util.MessageTips import showSuccess
+from meet.gui.widget.OperationButton import OperationButton
 from meet.gui.widget.task.ConfigCard import ConfigCard, ConfigExpandCard
 from meet.task.TaskExecutor import TaskExecutor
+from meet.util.MessageTips import showSuccess
 from meet.util.Task import Task
 
 
 class TaskCard(ConfigCard):
     def __init__(self, task, baseTask, parent=None):
         super().__init__(task, parent=parent)
+        self.parentTab = parent
         if task.get('config') is None or task.get('config') == {}:
             task['config'] = baseTask.defaultConfig
             Task.updateTask(task)
@@ -28,6 +30,7 @@ class TaskCard(ConfigCard):
 class TaskExpandCard(ConfigExpandCard):
     def __init__(self, task, baseTask, parent=None):
         super().__init__(task, baseTask, parent=parent)
+        self.parentTab = parent
         task = TaskButtons(self, task, baseTask)
         self.addWidget(task)
 
@@ -38,6 +41,9 @@ class TaskButtons(QWidget):
         super().__init__(parent=parent)
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(18)  # Set the spacing between widgets
+        self.copyButton = OperationButton(FluentIcon.COPY, "复制", self)
+        self.copyButton.clicked.connect(lambda: self.copyClicked(task, parent))
+        self.layout.addWidget(self.copyButton)
         if isinstance(parent, TaskCard):
             self.editButton = PushButton(FluentIcon.EDIT, "编辑", self)
             self.editButton.clicked.connect(lambda: self.editClicked(task, baseTask))
@@ -66,6 +72,20 @@ class TaskButtons(QWidget):
         communicate.taskStatusChange.connect(self.taskStatusChanged)
 
     @staticmethod
+    def copyClicked(task, parent):
+        taskCopy = Task.addTasks(task)
+        from meet.util.Class import getClassByName
+        baseTask = getClassByName(taskCopy.get("moduleName"), taskCopy.get("className"))()
+        from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
+        if taskCopy.get("showStyle") == FixedTaskTab.ShowStyle.EXPAND.value:
+            taskExpandCard = TaskExpandCard(taskCopy, baseTask, parent.parentTab)
+            parent.parentTab.insertWidget(taskExpandCard, parent.parentTab.getWidgetIndex(parent) + 1)
+        else:
+            taskCard = TaskCard(taskCopy, baseTask, parent.parentTab)
+            parent.parentTab.insertWidget(taskCard, parent.parentTab.getWidgetIndex(parent) + 1)
+        showSuccess("复制成功")
+
+    @staticmethod
     def deleteClicked(baseTask, parent):
         from meet.config.GlobalGui import globalGui
         m = MessageBox("消息", "确认删除?", globalGui.meet.window)
@@ -75,8 +95,8 @@ class TaskButtons(QWidget):
             if Task.deleteTask(baseTask):
                 parent.close()
                 parent.deleteLater()
-        else:
-            print('取消')
+        m.close()
+        m.deleteLater()
 
     def startClicked(self, baseTask):
         from meet.task.BaseTask import BaseTask

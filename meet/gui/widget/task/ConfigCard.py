@@ -17,9 +17,9 @@ class ConfigCard(CardWidget):
         self.vBoxLayout = QVBoxLayout(self)
 
         self.setFixedHeight(73)
-        self.iconWidget.setFixedSize(20, 20)
+        self.iconWidget.setFixedSize(16, 16)
 
-        self.hBoxLayout.setContentsMargins(20, 11, 11, 11)
+        self.hBoxLayout.setContentsMargins(16, 11, 11, 11)
         self.hBoxLayout.setSpacing(15)
         self.hBoxLayout.addWidget(self.iconWidget)
 

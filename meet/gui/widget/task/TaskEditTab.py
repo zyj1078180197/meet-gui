@@ -20,20 +20,22 @@ class TaskEditTab(Tab):
         self.vBoxLayout.setContentsMargins(10, 10, 10, 10)
         if task.get('config') is None or task.get('config') == {}:
             task['config'] = baseTask.defaultConfig
-            self.config = baseTask.defaultConfig
             Task.updateTask(task)
         else:
             self.config = task.get('config')
-        baseTask.config = self.config
+            Task.updateTask(task)
+        self.config = task.get('config')
         self.configType = baseTask.configType
         self.configDesc = baseTask.configDesc
-
+        baseTask.config = self.config
+        baseTask.taskId = task.get("taskId")
+        baseTask.configPath = task.get("configPath")
         for k, v in self.config.items():
             widget = configWidget(task, self.configType, self.configDesc, self.config, k, v)
             self.configWidgets.append(widget)
             self.addWidget(widget=widget)
         # 添加操作按钮
-        self.addWidget(OperationButton(self))
+        self.addWidget(EditButtons(self))
 
     def resetConfigValue(self):
         self.config.update(self.defaultConfig)
@@ -41,7 +43,7 @@ class TaskEditTab(Tab):
             widget.updateValue()
 
 
-class OperationButton(QWidget):
+class EditButtons(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
         self.layout = QHBoxLayout(self)
