@@ -1,9 +1,8 @@
-from PySide6.QtWidgets import QLabel
-from qfluentwidgets import PushButton
+from qfluentwidgets import PushButton, CaptionLabel
 
-from meet.gui.widget.input.UpdateConfigWidgetItem import valueToString
 from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 from meet.gui.widget.input.ModifyListDialog import ModifyListDialog
+from meet.gui.widget.input.UpdateConfigWidgetItem import valueToString
 
 
 class ModifyListItem(ConfigLabelAndWidget):
@@ -13,7 +12,7 @@ class ModifyListItem(ConfigLabelAndWidget):
         self.switchButton = PushButton("修改", parent=self)
         self.switchButton.setFixedWidth(100)
         self.switchButton.clicked.connect(self.clicked)
-        self.listText = QLabel("")
+        self.listText = CaptionLabel("", self)
         self.updateValue()
         self.addWidget(self.listText)
         self.addWidget(self.switchButton)

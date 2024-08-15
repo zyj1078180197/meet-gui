@@ -1,5 +1,5 @@
-from PySide6.QtWidgets import QLabel, QFileDialog
-from qfluentwidgets import PushButton, FluentIcon
+from PySide6.QtWidgets import QFileDialog
+from qfluentwidgets import PushButton, FluentIcon, CaptionLabel
 
 from meet.gui.widget.input.ConfigLabelAndWidget import ConfigLabelAndWidget
 
@@ -10,7 +10,7 @@ class LabelAndFolderSelect(ConfigLabelAndWidget):
         self.key = key
         self.button = PushButton(FluentIcon.FOLDER, '请选择文件夹', self)
         self.button.clicked.connect(self.selectFolder)
-        self.text = QLabel(text="", parent=self)
+        self.text = CaptionLabel(text="", parent=self)
         self.updateValue()
         self.addWidget(self.text)
         self.addWidget(self.button)
