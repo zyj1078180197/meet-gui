@@ -1,7 +1,5 @@
 from PySide6.QtWidgets import QApplication
 
-from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
-
 
 class GlobalGui:
     def __init__(self):

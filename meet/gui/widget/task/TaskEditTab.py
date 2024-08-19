@@ -53,11 +53,14 @@ class EditButtons(QWidget):
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(20)
         self.resetConfig = PushButton(FluentIcon.CANCEL, "重置", self)
+        self.closeButton = PushButton(FluentIcon.CLOSE, "关闭", self)
         self.saveButton = PushButton(FluentIcon.SAVE, "保存", self)
         self.saveButton.clicked.connect(lambda: self.saveClicked(parent))
         self.resetConfig.clicked.connect(lambda: self.resetConfigClicked(parent))
+        self.closeButton.clicked.connect(lambda: self.backClicked(parent))
         self.layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
         self.layout.addWidget(self.resetConfig)
+        self.layout.addWidget(self.closeButton)
         self.layout.addWidget(self.saveButton)
         self.layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
 
@@ -76,3 +79,12 @@ class EditButtons(QWidget):
     def resetConfigClicked(parent: TaskEditTab = None):
         parent.resetConfigValue()
         showSuccess("重置成功")
+
+    @staticmethod
+    def backClicked(parent: TaskEditTab = None):
+        from meet.config.GlobalGui import globalGui
+        from meet.gui.widget.TitleBar import TitleBar
+        # 返回上一个页面
+        globalGui.meet.onBack()
+        globalGui.meet.removeEditPage(parent.objectName())
+        del TitleBar.tabBarDict[parent.objectName()]

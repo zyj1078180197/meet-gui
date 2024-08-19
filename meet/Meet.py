@@ -91,7 +91,7 @@ class Meet:
         desktop = QApplication.screens()[0].availableGeometry()
         wi, he = desktop.width(), desktop.height()
         self.window.move(wi // 2 - self.window.width() // 2, he // 2 - self.window.height() // 2)
-        appIcon = getPathRelativeToExe(self.config.get("appIcon", "resource\\shoko.png"))
+        appIcon = getPathRelativeToExe(self.config.get("appIcon", "resource\\logo.png"))
         self.window.setWindowIcon(QIcon(appIcon))
         self.window.setWindowTitle(f"{self.config.get('appName', 'meet-gui')} V{self.config.get('appVersion', 1.0)}")
 

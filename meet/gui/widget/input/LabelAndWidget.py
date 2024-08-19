@@ -34,7 +34,7 @@ class LabelAndWidget(QWidget):
         self.titleLayout.addWidget(self.title)
         # 如果存在内容参数，则创建并添加内容标签
         if content:
-            self.contentLabel = CaptionLabel(content,self)
+            self.contentLabel = CaptionLabel(content, self)
             self.contentLabel.setTextColor("#606060", "#d2d2d2")
             self.contentLabel.setObjectName('contentLabel')
             self.titleLayout.addWidget(self.contentLabel)

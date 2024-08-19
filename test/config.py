@@ -10,7 +10,7 @@ from test.page.TriggerDemo import TriggerDemo
 config = {
     "appName": "Meet-2333",  # 应用名
     "appVersion": 1.0,  # 应用版本
-    "appIcon": "resource\\shoko.png",  # 应用图标
+    "appIcon": "resource\\logo.png",  # 应用图标
     "appConfigPath": "config\\config.json",
     "homePageShow": False,  # 首页是否展示
     "taskPageShow": True,  # 任务页面是否展示
@@ -25,7 +25,7 @@ config = {
             "title": "任务测试",
             "description": "任务测试类",
             "configPath": "config",
-            "iconPath": "resource\\shoko.png",
+            "iconPath": "resource\\logo.png",
             "showStyle": "Normal",  # Normal Expand 展示风格
         },
         {
@@ -34,7 +34,7 @@ config = {
             "title": "任务测试",
             "description": "任务测试类",
             "configPath": "config",
-            "iconPath": "resource\\shoko.png",
+            "iconPath": "resource\\logo.png",
             "showStyle": "Normal"
         },
         {
@@ -43,7 +43,7 @@ config = {
             "title": "任务测试",
             "description": "任务测试类",
             "configPath": "config",
-            "iconPath": "resource\\shoko.png",
+            "iconPath": "resource\\logo.png",
             "showStyle": "Expand"
         },
     ],
@@ -54,7 +54,7 @@ config = {
             "title": "触发测试",
             "description": "触发测试类",
             "configPath": "config",
-            "iconPath": "resource\\shoko.png",
+            "iconPath": "resource\\logo.png",
             "showStyle": "Expand"
         }
     ],

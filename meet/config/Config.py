@@ -15,7 +15,7 @@ class Config(dict):
             config = {
                 "appName": "Meet-2333",  # 应用名
                 "appVersion": 1.0,  # 应用版本
-                "appIcon": "resource\\shoko.png",  # 应用图标
+                "appIcon": "resource\\logo.png",  # 应用图标
                 "appConfigPath": "config\\config.json",
                 "homePageShow": True,  # 首页是否展示
                 "taskPageShow": True,  # 任务页面是否展示

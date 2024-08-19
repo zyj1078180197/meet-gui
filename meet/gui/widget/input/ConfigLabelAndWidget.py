@@ -36,5 +36,4 @@ class ConfigLabelAndWidget(LabelAndWidget):
 
         该方法用于更新配置字典中对应配置项的值。
         """
-        from meet.util.Task import Task
         self.config[self.key] = value

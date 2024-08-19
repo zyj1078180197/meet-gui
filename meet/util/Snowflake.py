@@ -36,7 +36,8 @@ class Snowflake:
         self.sequence = sequence
         self.lastTimestamp = -1
 
-    def _tilNextMillis(self, lastTimestamp):
+    @staticmethod
+    def _tilNextMillis(lastTimestamp):
         timestamp = int(time.time() * 1000)
         while timestamp <= lastTimestamp:
             timestamp = int(time.time() * 1000)
