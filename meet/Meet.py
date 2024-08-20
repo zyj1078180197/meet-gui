@@ -39,6 +39,10 @@ class Meet:
         self.doInit(self.config)
         # 创建窗口
         self.window = MainWindow()
+        # 调试窗口
+        # from meet.gui.widget.overlay.OverlayWindow import OverlayWindow
+        # self.overlayWindow = OverlayWindow()
+        # self.overlayWindow.updateOverlay(True, 0, 0, 1920, 1080, 1)
         self.showWindow()
         # 展示窗口
         self.window.show()
