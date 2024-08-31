@@ -152,6 +152,7 @@ class MainWindow(MSFluentWindow):
             self.debugInfoArea.show()
         else:
             self.debugInfoArea.hide()
+            self.debugInfoArea.log_text_edit.clear()
         # if self.isDebug:
         #     self.isDebug = False
         #     # self.overlayWindow.updateOverlay(True, 0, 0, 1920, 1080, 1)

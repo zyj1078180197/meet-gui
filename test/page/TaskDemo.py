@@ -42,5 +42,5 @@ class TaskDemo(BaseTask):
     def run(self):
         while not self.stopEvent.is_set():
             print(self.config.__str__())
-            Log.info("测试任务0001正在执行中")
+            Log.info("#测试任务#c0001#正在执行中#")
             sleep(1)

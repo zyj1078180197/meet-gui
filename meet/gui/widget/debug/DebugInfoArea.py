@@ -1,5 +1,4 @@
 from datetime import datetime
-from fileinput import close
 
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QTextCharFormat, QColor, QIcon
@@ -8,9 +7,9 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QTextEdit, QHBoxLayout, QPus
 from meet.gui.plugin.Communicate import communicate
 
 log_levels = {
-    'INFO': Qt.GlobalColor.darkGreen,
-    'WARN': Qt.GlobalColor.darkYellow,
-    'ERROR': Qt.GlobalColor.darkRed,
+    'INF': Qt.GlobalColor.green,
+    'WAR': Qt.GlobalColor.yellow,
+    'ERR': Qt.GlobalColor.red,
 }
 
 
@@ -34,41 +33,36 @@ class DebugInfoArea(QWidget):
         # 设置窗口标志，使窗口无边框、始终置顶、作为工具窗口，并支持透明输入
         self.setWindowFlags(
             Qt.WindowType.FramelessWindowHint |
-            Qt.WindowType.WindowStaysOnTopHint)
+            Qt.WindowType.WindowStaysOnTopHint
+            | Qt.WindowType.Tool
+            | Qt.WindowType.WindowTransparentForInput
+        )
         # 创建一个中心小部件和布局
         layout = QVBoxLayout(self)
 
         # 创建一个文本编辑区，用于显示日志
         self.log_text_edit = QTextEdit()
         self.log_text_edit.setReadOnly(True)
+        # 隐藏滚动条
+        self.log_text_edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         # 设置透明背景
         self.log_text_edit.setStyleSheet("background-color: rgba(0, 0, 0, 25);")
         layout.addWidget(self.log_text_edit)
-
-        self.hLayout = QHBoxLayout(self)
-        closeButton = QPushButton("关闭")
-        closeButton.clicked.connect(self.hide)
-        clearButton = QPushButton("清空")
-        clearButton.clicked.connect(self.log_text_edit.clear)
-        # self.hLayout.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-        self.hLayout.addWidget(closeButton)
-        self.hLayout.addWidget(clearButton)
-        # self.hLayout.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding))
-
-        layout.addLayout(self.hLayout)
-
-        self.setGeometry(0, 680, 400, 400)
+        self.setGeometry(20, 780, 400, 300)
         communicate.logMsg.connect(self.addLog)
 
     @Slot()
     def addLog(self, level, message):
         # 日志级别和对应的颜色
-        # 设置日志颜色
-        color = log_levels.get(level, Qt.GlobalColor.black)
-        self.setLogColor(color)
+        color_level = log_levels.get(level, Qt.GlobalColor.black)
+        color_time = Qt.GlobalColor.darkGray
+        color_content = Qt.GlobalColor.gray
 
         # 在文本编辑区中添加日志
-        self.log_text_edit.append(f"[{level}] {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} {message}")
+        timestamp = datetime.now().strftime('%H:%M:%S')
+        log_message = f"[{timestamp}] [{level}] {message}"
+        self.insertColoredText(log_message, color_level, color_time, color_content)
+
         # 文本超过1000行时
         if self.log_text_edit.document().lineCount() > 1000:
             self.log_text_edit.clear()
@@ -76,10 +70,67 @@ class DebugInfoArea(QWidget):
         # 确保滚动条在最新消息的位置
         self.scrollToBottom()
 
-    def setLogColor(self, color):
-        text_format = QTextCharFormat()
-        text_format.setForeground(QColor(color))
-        self.log_text_edit.setCurrentCharFormat(text_format)
+    def insertColoredText(self, text, color_level, color_time, color_content):
+        cursor = self.log_text_edit.textCursor()
+        format_level = QTextCharFormat()
+        format_level.setForeground(QColor(color_level))
+
+        format_time = QTextCharFormat()
+        format_time.setForeground(QColor(color_time))
+
+        format_content = QTextCharFormat()
+        format_content.setForeground(QColor(color_content))
+
+        parts = text.split()
+        cursor.beginEditBlock()
+        cursor.insertText(parts[0], format_time)  # 日志级别
+        cursor.insertText('  ', format_content)
+        cursor.insertText(parts[1], format_level)  # 时间戳
+        cursor.insertText('  ', format_content)
+        for part in parts[2:].__str__().split("#"):
+            if part == "[\'" or part == "\']":
+                continue
+            formatContent = QTextCharFormat()
+            #第一个字符判断
+            if part[0] =="r":
+                formatContent.setForeground(QColor(Qt.GlobalColor.red))
+                cursor.insertText(part[1:], formatContent)
+                cursor.insertText(' ', format_content)
+                continue
+            if part[0] =="g":
+                formatContent.setForeground(QColor(Qt.GlobalColor.green))
+                cursor.insertText(part[1:], formatContent)
+                cursor.insertText(' ', format_content)
+                continue
+            if part[0] =="y":
+                formatContent.setForeground(QColor(Qt.GlobalColor.yellow))
+                cursor.insertText(part[1:], formatContent)
+                cursor.insertText(' ', format_content)
+                continue
+            if part[0] =="b":
+                formatContent.setForeground(QColor(Qt.GlobalColor.blue))
+                cursor.insertText(part[1:], formatContent)
+                cursor.insertText(' ', format_content)
+                continue
+            if part[0] =="w":
+                formatContent.setForeground(QColor(Qt.GlobalColor.white))
+                cursor.insertText(part[1:], formatContent)
+                cursor.insertText(' ', format_content)
+                continue
+            if part[0] =="m":
+                formatContent.setForeground(QColor(Qt.GlobalColor.magenta))
+                cursor.insertText(part[1:], formatContent)
+                cursor.insertText(' ', format_content)
+                continue
+            if part[0] =="c":
+                formatContent.setForeground(QColor(Qt.GlobalColor.cyan))
+                cursor.insertText(part[1:], formatContent)
+                cursor.insertText(' ', format_content)
+                continue
+            cursor.insertText(part, format_content)
+            cursor.insertText(' ', format_content)
+        cursor.endEditBlock()
+        self.log_text_edit.append("")
 
     def scrollToBottom(self):
         # 获取垂直滚动条
