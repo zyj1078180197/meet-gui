@@ -11,19 +11,6 @@ class Config(dict):
     """
 
     def __init__(self, config=None):
-        if config is None:
-            config = {
-                "appName": "Meet-2333",  # 应用名
-                "appVersion": 1.0,  # 应用版本
-                "appIcon": "resource\\logo.png",  # 应用图标
-                "appConfigPath": "config\\config.json",
-                "homePageShow": True,  # 首页是否展示
-                "taskPageShow": True,  # 任务页面是否展示
-                "triggerPageShow": True,  # 触发页面是否展示
-                "settingPageShow": True,  # 设置页面是否展示
-                "theme": 'Auto',  # 主题(Light Dark Auto)
-                "maxWorkers": 10  # 线程池最大线程数
-            }
         config = Config.loadConfig(config)
         super().__init__(config)
         Config.saveConfig(config)

@@ -10,8 +10,8 @@ from meet.gui.plugin.BrowserHistory import browserHistory
 from meet.gui.plugin.Communicate import communicate
 from meet.gui.widget.TitleBar import TitleBar
 from meet.gui.widget.WidgetBase import WidgetBase
+from meet.gui.widget.debug.DebugInfoArea import DebugInfoArea
 from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
-from meet.gui.widget.task.TriggerTaskTab import TriggerTaskTab
 from meet.task.TaskExecutor import TaskExecutor
 from meet.util.Theme import themeToggleHandle
 
@@ -19,7 +19,14 @@ from meet.util.Theme import themeToggleHandle
 class MainWindow(MSFluentWindow):
     def __init__(self):
         # 初始化Mica主题启用标志为False，表示默认情况下未启用Mica主题
+        self.overlayWindow = None
         self.isMicaEnabled = False
+        # 调试窗口
+        # from meet.gui.widget.overlay.OverlayWindow import OverlayWindow
+        self.isDebug = False
+        # self.overlayWindow = OverlayWindow()
+        self.debugInfoArea = DebugInfoArea()
+        self.showDebug()
         super().__init__()
         # 导航页面
         self.navigationPageDict = {}
@@ -50,7 +57,12 @@ class MainWindow(MSFluentWindow):
         m.yesButton.setText("确定")
         m.cancelButton.setText("取消")
         if m.exec():
+            self.debugInfoArea.close()
+            # self.overlayWindow.close()
             event.accept()
+            for baseTask in FixedTaskTab.baseTaskList:
+                if baseTask.stopEvent is not None:
+                    baseTask.stopEvent.set()
             TaskExecutor.shutdown(wait=False)
             TaskExecutor.closeAndExit()
         else:
@@ -91,7 +103,7 @@ class MainWindow(MSFluentWindow):
             # 添加一个不可选中的导航项
             self.navigationInterface.addItem(
                 routeKey='触发',
-                icon=FluentIcon.SYNC,
+                icon=FluentIcon.ROBOT,
                 text='触发',
                 onClick=lambda: self.openNavigationPage("触发"),
                 selectable=False,
@@ -104,6 +116,15 @@ class MainWindow(MSFluentWindow):
             icon=FluentIcon.CONSTRACT,
             text='主题',
             onClick=themeToggleHandle,
+            selectable=False,
+            position=NavigationItemPosition.BOTTOM,
+        )
+        # 添加一个不可选中的导航项
+        self.navigationInterface.addItem(
+            routeKey='调试',
+            icon=FluentIcon.VIEW,
+            text='调试',
+            onClick=lambda: self.showDebug(),
             selectable=False,
             position=NavigationItemPosition.BOTTOM,
         )
@@ -125,6 +146,20 @@ class MainWindow(MSFluentWindow):
         self.tabBar.tabCloseRequested.connect(self.onTabRemoved)
         # 设置标签栏的当前标签页的切换事件
         self.tabBar.currentChanged.connect(self.onTabChanged)
+
+    def showDebug(self):
+        if self.debugInfoArea.isHidden():
+            self.debugInfoArea.show()
+        else:
+            self.debugInfoArea.hide()
+        # if self.isDebug:
+        #     self.isDebug = False
+        #     # self.overlayWindow.updateOverlay(True, 0, 0, 1920, 1080, 1)
+        #     self.debugInfoArea.show()
+        # else:
+        #     self.isDebug = True
+        #     # self.overlayWindow.updateOverlay(False, 0, 0, 1920, 1080, 1)
+        #     self.debugInfoArea.hide()
 
     def addNavigation(self, navigationName, icon, position, page):
         """
@@ -162,7 +197,7 @@ class MainWindow(MSFluentWindow):
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         elif objectName == "触发":
             if self.navigationPageDict.get(objectName) is None:
-                triggerInterface = TriggerTaskTab(self)
+                triggerInterface = WidgetBase(objectName, self)
                 self.mainPage.addWidget(triggerInterface)
                 self.navigationPageDict[objectName] = triggerInterface
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))

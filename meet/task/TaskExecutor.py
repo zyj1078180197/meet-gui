@@ -1,5 +1,4 @@
 from concurrent.futures import ThreadPoolExecutor
-from time import sleep
 
 from meet.task.BaseTask import BaseTask
 from meet.util.Task import Task
@@ -13,52 +12,20 @@ class TaskExecutor:
     threadPool: ThreadPoolExecutor = None
     # 退出标志
     isExit = False
-    fixedTaskList = []
-    triggerTaskList = []
+    taskList = []
 
-    def __init__(self, fixedTaskList, triggerTaskList, maxWorkers):
+    def __init__(self, taskList, maxWorkers):
         TaskExecutor.threadPool = ThreadPoolExecutor(max_workers=maxWorkers)
-        TaskExecutor.fixedTaskList = Task.taskHandle(fixedTaskList)
-        TaskExecutor.triggerTaskList = Task.taskHandle(triggerTaskList)
+        TaskExecutor.taskList = Task.taskHandle(taskList)
 
     @classmethod
-    def fixedTaskRun(cls, task):
+    def taskRun(cls, task):
         """
         任务运行
         :param task:
         :return:
         """
-        while task.executeNumber > 0 and task.status != BaseTask.StatusEnum.STOPPED:
-            # 程序退出或任务停止时结束线程
-            if cls.isExit or task.status == BaseTask.StatusEnum.STOPPED:
-                break
-            if task.status == BaseTask.StatusEnum.PAUSED:
-                sleep(task.interval)
-                continue
-            task.run()
-            task.executeNumber -= 1
-            sleep(task.interval)
-        from meet.gui.plugin.Communicate import communicate
-        task.status = BaseTask.StatusEnum.STOPPED
-        communicate.taskStatusChange.emit(task)
-
-    @classmethod
-    def triggerTaskRun(cls, task):
-        """
-        触发器运行
-        :param task:
-        :return:
-        """
-        while task.status != BaseTask.StatusEnum.STOPPED:
-            # 程序退出或触发停止时结束线程
-            if cls.isExit or task.status == BaseTask.StatusEnum.STOPPED:
-                break
-            # 暂停处理
-            if task.status == BaseTask.StatusEnum.PAUSED or task.trigger() is False:
-                sleep(task.interval)
-                continue
-            task.run()
-            sleep(task.interval)
+        task.run()
         from meet.gui.plugin.Communicate import communicate
         task.status = BaseTask.StatusEnum.STOPPED
         communicate.taskStatusChange.emit(task)

@@ -14,17 +14,3 @@ class TaskTab(Tab):
 class TaskButtons(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
-        self.layout = QHBoxLayout(self)
-        # 设置布局内容边距
-        self.layout.setContentsMargins(0, 0, 0, 0)
-        self.layout.setSpacing(10)
-        self.addButton = PushButton(FluentIcon.ADD, "添加", self)
-        self.resetConfig = PushButton(FluentIcon.CLEAR_SELECTION, "重置", self)
-        self.refreshButton = PushButton(FluentIcon.SYNC, "刷新", self)
-        self.searchButton = SearchLineEdit(self)
-        self.searchButton.setPlaceholderText("搜索任务")
-        self.layout.addWidget(self.addButton)
-        self.layout.addWidget(self.resetConfig)
-        self.layout.addWidget(self.refreshButton)
-        self.layout.addSpacerItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
-        self.layout.addWidget(self.searchButton)

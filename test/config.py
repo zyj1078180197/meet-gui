@@ -5,7 +5,6 @@ from meet.util.Path import getPathRelativeToExe
 from test.page.TaskDemo import TaskDemo
 from test.page.TaskDemoTest01 import TaskDemoTest01
 from test.page.TaskDemoTest02 import TaskDemoTest02
-from test.page.TriggerDemo import TriggerDemo
 
 config = {
     "appName": "Meet-2333",  # 应用名
@@ -18,45 +17,34 @@ config = {
     "settingPageShow": False,  # 设置页面是否展示
     "theme": 'Auto',  # 主题(Light Dark Auto)
     "maxWorkers": 10,  # 线程池最大线程数
-    "fixedTaskList": [  # 固定任务列表
+    "taskList": [  # 任务列表
         {
             "moduleName": TaskDemo.__module__,
             "className": TaskDemo.__name__,
-            "title": "任务测试",
+            "title": "任务测试01",
             "description": "任务测试类",
             "configPath": "config",
             "iconPath": "resource\\logo.png",
-            "showStyle": "Normal",  # Normal Expand 展示风格
+            "showStyle": "Expand",  # Normal Expand 展示风格
         },
         {
             "moduleName": TaskDemoTest01.__module__,
             "className": TaskDemoTest01.__name__,
-            "title": "任务测试",
+            "title": "任务测试02",
+            "description": "任务测试类",
+            "configPath": "config",
+            "iconPath": "resource\\logo.png",
+            "showStyle": "Expand"
+        },
+        {
+            "moduleName": TaskDemoTest02.__module__,
+            "className": TaskDemoTest02.__name__,
+            "title": "任务测试03",
             "description": "任务测试类",
             "configPath": "config",
             "iconPath": "resource\\logo.png",
             "showStyle": "Normal"
         },
-        {
-            "moduleName": TaskDemoTest02.__module__,
-            "className": TaskDemoTest02.__name__,
-            "title": "任务测试",
-            "description": "任务测试类",
-            "configPath": "config",
-            "iconPath": "resource\\logo.png",
-            "showStyle": "Expand"
-        },
-    ],
-    "triggerTaskList": [  # 触发任务列表
-        {
-            "moduleName": TriggerDemo.__module__,
-            "className": TriggerDemo.__name__,
-            "title": "触发测试",
-            "description": "触发测试类",
-            "configPath": "config",
-            "iconPath": "resource\\logo.png",
-            "showStyle": "Expand"
-        }
     ],
 }
 # 确保配置文件所在的目录存在

@@ -8,6 +8,7 @@ class FrameWidget(QWidget):
     def __init__(self):
         super(FrameWidget, self).__init__()
         # 初始化鼠标位置为 (0, 0)
+        self.layout = None
         self._mousePosition = QPoint(0, 0)
         # 设置部件跟踪鼠标移动
         self.setMouseTracking(True)
@@ -18,8 +19,8 @@ class FrameWidget(QWidget):
         # 启动定时器，每秒更新一次
         self.timer.start(1000)  # 更新间隔为 1 秒
         # 设置字体大小
-        self.mouse_font = QFont()
-        self.mouse_font.setPointSize(10)  # 调整字体大小
+        self.mouseFont = QFont()
+        self.mouseFont.setPointSize(10)  # 调整字体大小
         # 获取主屏幕的设备像素比
         screen = QGuiApplication.primaryScreen()
         self.scaling = screen.devicePixelRatio()
@@ -71,7 +72,7 @@ class FrameWidget(QWidget):
         # 构造显示文本
         text = f"({x}, {y}, {x_percent:.2f}, {y_percent:.2f})"
         # 设置字体
-        painter.setFont(self.mouse_font)
+        painter.setFont(self.mouseFont)
 
         # 设置画笔颜色为红色
         painter.setPen(QPen(QColor(255, 0, 0, 255), 1))

@@ -1,4 +1,7 @@
+from time import sleep
+
 from meet.task.BaseTask import BaseTask
+from meet.util.Debug import Log
 
 
 class TaskDemoTest02(BaseTask):
@@ -15,8 +18,7 @@ class TaskDemoTest02(BaseTask):
         }  # 配置描述 属性：描述
 
     def run(self):
-        print("TaskDemoTest02 running")
-        print(self.config.__str__())
-
-    def trigger(self):
-        return True
+        while not self.stopEvent.is_set():
+            print(self.config.__str__())
+            Log.info("测试任务0003正在执行中")
+            sleep(1)

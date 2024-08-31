@@ -12,6 +12,7 @@ class Communicate(QObject):
     themeChange = Signal()
     # 任务状态改变
     taskStatusChange = Signal(BaseTask)
+    logMsg = Signal(str, str)
 
 
 communicate = Communicate()

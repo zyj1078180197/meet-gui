@@ -1,4 +1,7 @@
+from time import sleep
+
 from meet.task.BaseTask import BaseTask
+from meet.util.Debug import Log
 
 
 class TaskDemoTest01(BaseTask):
@@ -25,9 +28,9 @@ class TaskDemoTest01(BaseTask):
                 }
         }  # 配置类型 属性：{'type': "dropDown", 'options': ['Forward', 'Backward']}
 
-    def run(self):
-        print("TaskDemoTest01 running")
-        print(self.config.__str__())
 
-    def trigger(self):
-        return True
+    def run(self):
+        while not self.stopEvent.is_set():
+            print(self.config.__str__())
+            Log.info("测试任务0002正在执行中")
+            sleep(1)

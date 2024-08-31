@@ -11,13 +11,13 @@ class ConfigCard(CardWidget):
     def __init__(self, task, parent=None):
         super().__init__(parent=parent)
         self.iconWidget = IconWidget(FluentIcon.INFO, parent=self)
-        self.titleLabel = BodyLabel(task.get('title') + str(task.get("taskId")), self)
+        self.titleLabel = BodyLabel(task.get('title'), self)
         self.contentLabel = CaptionLabel(task.get('description'), self)
         self.hBoxLayout = QHBoxLayout(self)
         self.vBoxLayout = QVBoxLayout(self)
         self.setFixedHeight(73)
         self.iconWidget.setFixedSize(16, 16)
-        self.hBoxLayout.setContentsMargins(16, 11, 28, 11)
+        self.hBoxLayout.setContentsMargins(16, 11, 58, 11)
         self.hBoxLayout.setSpacing(16)
         self.hBoxLayout.addWidget(self.iconWidget)
         self.vBoxLayout.setContentsMargins(0, 0, 0, 0)
@@ -39,9 +39,9 @@ class ConfigCard(CardWidget):
 
 class ConfigExpandCard(ExpandSettingCard):
     def __init__(self, task, baseTask, parent=None):
-        super().__init__(FluentIcon.INFO, task.get('title') + str(task.get("taskId")), task.get('description'),
+        super().__init__(FluentIcon.INFO, task.get('title'), task.get('description'),
                          parent=parent)
-        self.card.expandButton.hide()
+        # self.card.expandButton.hide()
         self.task = task
         self.viewLayout.setSpacing(0)
         self.configWidgets = []
@@ -57,6 +57,7 @@ class ConfigExpandCard(ExpandSettingCard):
         self.config = task.get('config')
         self.configType = baseTask.configType
         self.configDesc = baseTask.configDesc
+        baseTask.title = task.get("title")
         baseTask.config = self.config
         baseTask.taskId = task.get("taskId")
         baseTask.configPath = task.get("configPath")
