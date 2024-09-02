@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
 
-from meet.task.BaseTask import BaseTask
+from meet.executor.task.BaseTask import BaseTask
+from meet.util.Class import getClassByName
 from meet.util.Task import Task
 
 
@@ -10,13 +11,30 @@ class TaskExecutor:
     """
     # 线程池
     threadPool: ThreadPoolExecutor = None
-    # 退出标志
-    isExit = False
     taskList = []
+    baseTaskDict = {}
 
-    def __init__(self, taskList, maxWorkers):
-        TaskExecutor.threadPool = ThreadPoolExecutor(max_workers=maxWorkers)
+    def __init__(self, taskList, taskMaxWorkers):
+        TaskExecutor.threadPool = ThreadPoolExecutor(max_workers=taskMaxWorkers)
         TaskExecutor.taskList = Task.taskHandle(taskList)
+        TaskExecutor.initTask()
+
+    @staticmethod
+    def initTask():
+        for taskList in TaskExecutor.taskList:
+            for task in taskList:
+                baseTask = getClassByName(task.get("moduleName"), task.get("className"))()
+                if task.get('config') is None or task.get('config') == {}:
+                    task['config'] = baseTask.defaultConfig
+                    Task.updateTask(task)
+                else:
+                    task['config'] = baseTask.defaultConfig | task.get('config')
+                    Task.updateTask(task)
+                baseTask.config = task.get('config')
+                baseTask.taskId = task.get("taskId")
+                baseTask.title = task.get("title")
+                baseTask.configPath = task.get("configPath")
+                TaskExecutor.baseTaskDict[task.get("taskId")] = baseTask
 
     @classmethod
     def taskRun(cls, task):
@@ -27,7 +45,7 @@ class TaskExecutor:
         """
         task.run()
         from meet.gui.plugin.Communicate import communicate
-        task.status = BaseTask.StatusEnum.STOPPED
+        task.status = BaseTask.StatusEnum.STOPPED.value
         communicate.taskStatusChange.emit(task)
 
     @classmethod
@@ -55,4 +73,3 @@ class TaskExecutor:
         关闭全局线程池并结束所有正在执行的线程
         """
         cls.threadPool.shutdown(wait=False)
-        cls.isExit = True

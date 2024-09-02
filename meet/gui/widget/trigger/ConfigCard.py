@@ -4,15 +4,16 @@ from qfluentwidgets import IconWidget, BodyLabel, CaptionLabel, CardWidget, Flue
 
 from meet.gui.widget.input.ConfigItemFactory import configWidget
 from meet.util.MessageTips import showSuccess
-from meet.util.Task import Task
+from meet.util.Trigger import Trigger
 
 
 class ConfigCard(CardWidget):
-    def __init__(self, task, parent=None):
+    def __init__(self, trigger, parent=None):
         super().__init__(parent=parent)
+        self.trigger = trigger
         self.iconWidget = IconWidget(FluentIcon.INFO, parent=self)
-        self.titleLabel = BodyLabel(task.get('title'), self)
-        self.contentLabel = CaptionLabel(task.get('description'), self)
+        self.titleLabel = BodyLabel(trigger.get('title'), self)
+        self.contentLabel = CaptionLabel(trigger.get('description'), self)
         self.hBoxLayout = QHBoxLayout(self)
         self.vBoxLayout = QVBoxLayout(self)
         self.setFixedHeight(73)
@@ -36,29 +37,52 @@ class ConfigCard(CardWidget):
     def addWidget(self, widget):
         self.hBoxLayout.addWidget(widget)
 
+    def saveConfigValue(self):
+        Trigger.updateTrigger(self.trigger)
+
 
 class ConfigExpandCard(ExpandSettingCard):
-    def __init__(self, task, baseTask, parent=None):
-        super().__init__(FluentIcon.INFO, task.get('title'), task.get('description'),
+    def __init__(self, trigger, baseTrigger, parent=None):
+        super().__init__(FluentIcon.INFO, trigger.get('title'), trigger.get('description'),
                          parent=parent)
         # self.card.expandButton.hide()
-        self.task = task
+        self.trigger = trigger
         self.viewLayout.setSpacing(0)
         self.configWidgets = []
-        self.defaultConfig = baseTask.defaultConfig
+        self.defaultConfig = baseTrigger.defaultConfig
         self.viewLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.viewLayout.setContentsMargins(10, 0, 10, 0)
-        self.config = baseTask.config
-        self.configType = baseTask.configType
-        self.configDesc = baseTask.configDesc
+        self.config = baseTrigger.config
+        self.configType = baseTrigger.configType
+        self.configDesc = baseTrigger.configDesc
         for k, v in self.config.items():
             widget = configWidget(self.configType, self.configDesc, self.config, k, v)
             self.configWidgets.append(widget)
             self.viewLayout.addWidget(widget)
             self._adjustViewSize()
+        #  触发类型
+        from meet.gui.widget.trigger.TriggerConfig import ConfigMode, ConfigCron, ConfigInterval
+        self.configMode =ConfigMode(self,baseTrigger,trigger)
+        self.viewLayout.addWidget(self.configMode)
+        self.cron = ConfigCron(self,baseTrigger,trigger)
+        self.viewLayout.addWidget(self.cron)
+        self.interval = ConfigInterval(self,baseTrigger,trigger)
+        self.viewLayout.addWidget(self.interval)
+        from meet.executor.trigger.BaseTrigger import BaseTrigger
+        if baseTrigger.triggerMode == BaseTrigger.TriggerModeEnum.CRON.value:
+            self.cronMode()
+        else:
+            self.intervalMode()
         # 添加操作按钮
         self.viewLayout.addWidget(EditButtons(self))
         self._adjustViewSize()
+
+    def cronMode(self):
+        self.cron.show()
+        self.interval.hide()
+    def intervalMode(self):
+        self.cron.hide()
+        self.interval.show()
 
     def wheelEvent(self, event):
         # 忽略滚轮事件，让父组件处理
@@ -70,7 +94,7 @@ class ConfigExpandCard(ExpandSettingCard):
             widget.updateValue()
 
     def saveConfigValue(self):
-        Task.updateTask(self.task)
+        Trigger.updateTrigger(self.trigger)
 
 
 class EditButtons(QWidget):

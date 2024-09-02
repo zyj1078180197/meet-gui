@@ -1,13 +1,12 @@
 from time import sleep
 
-from meet.task.BaseTask import BaseTask
+from meet.executor.task.BaseTask import BaseTask
 from meet.util.Debug import Log
 
 
 class TaskDemo(BaseTask):
     def __init__(self):
         super().__init__()
-        self.className = "TaskDemo"
         self.defaultConfig = {
             "姓名": "张三",
             "年龄": 18,
@@ -42,5 +41,5 @@ class TaskDemo(BaseTask):
     def run(self):
         while not self.stopEvent.is_set():
             print(self.config.__str__())
-            Log.info("#测试任务#c0001#正在执行中#")
+            Log.info("测试任务#c0001#正在执行中")
             sleep(1)

@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject, Signal
 
-from meet.task.BaseTask import BaseTask
+from meet.executor.task.BaseTask import BaseTask
 
 
 class Communicate(QObject):

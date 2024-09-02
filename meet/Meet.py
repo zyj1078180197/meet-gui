@@ -8,7 +8,9 @@ from qfluentwidgets import setTheme, Theme
 from meet.config.Config import Config
 from meet.config.GlobalGui import globalGui
 from meet.gui.MainWindow import MainWindow
-from meet.task.TaskExecutor import TaskExecutor
+from meet.executor.task.TaskExecutor import TaskExecutor
+from meet.executor.trigger.TriggerExecutor import TriggerExecutor
+from meet.util.Debug import Log
 from meet.util.Path import getPathRelativeToExe
 
 
@@ -19,6 +21,7 @@ class Meet:
         初始化APP,初始化APP配置
         :param config:
         """
+        self.triggerExecutor = None
         self.taskExecutor = None
         self.window = None
         self.config = Config(config)
@@ -60,8 +63,11 @@ class Meet:
     def doInit(self, config=None):
         # 初始化任务和触发器执行器
         self.taskExecutor = TaskExecutor(taskList=config.get("taskList", []),
-                                         maxWorkers=10
+                                         taskMaxWorkers=config.get("taskMaxWorkers", 10)
                                          )
+        self.triggerExecutor = TriggerExecutor(triggerList=config.get("triggerList", []),
+                                              triggerMaxWorkers=config.get("triggerMaxWorkers", 10)
+                                              )
 
     def sizeRelativeToScreen(self, width, height):
         """

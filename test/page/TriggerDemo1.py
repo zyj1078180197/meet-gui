@@ -1,10 +1,8 @@
-from time import sleep
-
-from meet.executor.task.BaseTask import BaseTask
+from meet.executor.trigger.BaseTrigger import BaseTrigger
 from meet.util.Debug import Log
 
 
-class TaskDemoTest02(BaseTask):
+class TriggerDemo1(BaseTrigger):
     def __init__(self):
         super().__init__()
         self.defaultConfig = {
@@ -17,7 +15,6 @@ class TaskDemoTest02(BaseTask):
         }  # 配置描述 属性：描述
 
     def run(self):
-        while not self.stopEvent.is_set():
-            print(self.config.__str__())
-            Log.info("测试任务0003正在执行中")
-            sleep(1)
+        print(self.config.__str__())
+        Log.info("TriggerDemo1 running")
+        pass

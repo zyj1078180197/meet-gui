@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QTextEdit, QHBoxLayout, QPus
 from meet.gui.plugin.Communicate import communicate
 
 log_levels = {
-    'INF': Qt.GlobalColor.green,
+    'INF': Qt.GlobalColor.white,
     'WAR': Qt.GlobalColor.yellow,
     'ERR': Qt.GlobalColor.red,
 }
@@ -54,9 +54,9 @@ class DebugInfoArea(QWidget):
     @Slot()
     def addLog(self, level, message):
         # 日志级别和对应的颜色
-        color_level = log_levels.get(level, Qt.GlobalColor.black)
-        color_time = Qt.GlobalColor.darkGray
-        color_content = Qt.GlobalColor.gray
+        color_level = log_levels.get(level, Qt.GlobalColor.gray)
+        color_time = Qt.GlobalColor.gray
+        color_content = Qt.GlobalColor.white
 
         # 在文本编辑区中添加日志
         timestamp = datetime.now().strftime('%H:%M:%S')
@@ -87,8 +87,8 @@ class DebugInfoArea(QWidget):
         cursor.insertText('  ', format_content)
         cursor.insertText(parts[1], format_level)  # 时间戳
         cursor.insertText('  ', format_content)
-        for part in parts[2:].__str__().split("#"):
-            if part == "[\'" or part == "\']":
+        for part in ''.join(parts[2:]).split("#"):
+            if part == "":
                 continue
             formatContent = QTextCharFormat()
             #第一个字符判断

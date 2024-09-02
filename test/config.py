@@ -2,9 +2,12 @@ import json
 import os
 
 from meet.util.Path import getPathRelativeToExe
+from test.page.TaskDemoTest03 import TaskDemoTest03
 from test.page.TaskDemo import TaskDemo
 from test.page.TaskDemoTest01 import TaskDemoTest01
 from test.page.TaskDemoTest02 import TaskDemoTest02
+from test.page.TriggerDemo1 import TriggerDemo1
+from test.page.TriggerDemo2 import TriggerDemo2
 
 config = {
     "appName": "Meet-2333",  # 应用名
@@ -16,7 +19,8 @@ config = {
     "triggerPageShow": True,  # 触发页面是否展示
     "settingPageShow": False,  # 设置页面是否展示
     "theme": 'Auto',  # 主题(Light Dark Auto)
-    "maxWorkers": 10,  # 线程池最大线程数
+    "taskMaxWorkers": 10,  # 线程池最大线程数
+    "triggerMaxWorkers": 10,  # 线程池最大线程数
     "taskList": [  # 任务列表
         {
             "moduleName": TaskDemo.__module__,
@@ -43,9 +47,46 @@ config = {
             "description": "任务测试类",
             "configPath": "config",
             "iconPath": "resource\\logo.png",
-            "showStyle": "Normal"
+            "showStyle": "Expand"
+        },
+        {
+            "moduleName": TaskDemoTest03.__module__,
+            "className": TaskDemoTest03.__name__,
+            "title": "任务测试04",
+            "description": "任务测试类",
+            "configPath": "config",
+            "iconPath": "resource\\logo.png",
+            "showStyle": "Expand"
         },
     ],
+    "triggerList": [
+        {
+            "moduleName": TriggerDemo1.__module__,
+            "className": TriggerDemo1.__name__,
+            "title": "触发测试01",
+            "status":"Running",
+            "triggerMode":"Cron",
+            "cron":'*/1 * * * * *',
+            "interval": 5,
+            "description": "触发测试类",
+            "configPath": "config",
+            "iconPath": "resource\\logo.png",
+            "showStyle": "Expand"
+        },
+{
+            "moduleName": TriggerDemo2.__module__,
+            "className": TriggerDemo2.__name__,
+            "title": "触发测试02",
+            "status":"Running",
+            "triggerMode":"Cron",
+            "cron":'*/1 * * * * *',
+            "interval": 5,
+            "description": "触发测试类",
+            "configPath": "config",
+            "iconPath": "resource\\logo.png",
+            "showStyle": "Expand"
+        },
+    ]
 }
 # 确保配置文件所在的目录存在
 directory = os.path.dirname(getPathRelativeToExe(config.get("appConfigPath", "config\\config.json")))
@@ -58,8 +99,8 @@ try:
               encoding='utf-8') as file:
         # 使用json.load()直接从文件对象读取并解析JSON
         data = json.load(file)
-        # 合并字典
-        config = config | data
+        # 以配置文件为主的配置，写在下面，其余都是以本页面配置为准
+        config['theme'] = data.get('theme', 'Auto')
 except Exception:
     with open(directory + "\\config.json", 'w',
               encoding='utf-8') as file:

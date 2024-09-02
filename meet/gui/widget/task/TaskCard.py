@@ -5,7 +5,7 @@ from qfluentwidgets import PushButton, FluentIcon
 
 from meet.gui.plugin.Communicate import communicate
 from meet.gui.widget.task.ConfigCard import ConfigCard, ConfigExpandCard
-from meet.task.TaskExecutor import TaskExecutor
+from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.util.MessageTips import showSuccess
 from meet.util.Task import Task
 
@@ -14,16 +14,6 @@ class TaskCard(ConfigCard):
     def __init__(self, task, baseTask, parent=None):
         super().__init__(task, parent=parent)
         self.parentTab = parent
-        if task.get('config') is None or task.get('config') == {}:
-            task['config'] = baseTask.defaultConfig
-            Task.updateTask(task)
-        else:
-            task['config'] = baseTask.defaultConfig | task.get('config')
-            Task.updateTask(task)
-        baseTask.config = task.get('config')
-        baseTask.taskId = task.get("taskId")
-        baseTask.title = task.get("title")
-        baseTask.configPath = task.get("configPath")
         taskButton = TaskButtons(self, task, baseTask)
         self.clicked.connect(lambda: TaskButtons.editClicked(task, baseTask))
         self.addWidget(taskButton)
@@ -33,8 +23,8 @@ class TaskExpandCard(ConfigExpandCard):
     def __init__(self, task, baseTask, parent=None):
         super().__init__(task, baseTask, parent=parent)
         self.parentTab = parent
-        task = TaskButtons(self, task, baseTask)
-        self.addWidget(task)
+        taskButton = TaskButtons(self, task, baseTask)
+        self.addWidget(taskButton)
 
 
 class TaskButtons(QWidget):
@@ -60,8 +50,8 @@ class TaskButtons(QWidget):
         communicate.taskStatusChange.connect(self.taskStatusChanged)
 
     def startClicked(self, baseTask):
-        from meet.task.BaseTask import BaseTask
-        baseTask.status = BaseTask.StatusEnum.RUNNING
+        from meet.executor.task.BaseTask import BaseTask
+        baseTask.status = BaseTask.StatusEnum.RUNNING.value
         baseTask.stopEvent = threading.Event()
         TaskExecutor.submitTask(TaskExecutor.taskRun, baseTask)
         self.stopButton.show()
@@ -69,8 +59,8 @@ class TaskButtons(QWidget):
         showSuccess(baseTask.title + "任务已开始")
 
     def stopClicked(self, baseTask):
-        from meet.task.BaseTask import BaseTask
-        baseTask.status = BaseTask.StatusEnum.STOPPED
+        from meet.executor.task.BaseTask import BaseTask
+        baseTask.status = BaseTask.StatusEnum.STOPPED.value
         self.startButton.show()
         self.stopButton.hide()
         baseTask.stopEvent.set()
@@ -80,6 +70,8 @@ class TaskButtons(QWidget):
     def editClicked(task, baseTask):
         from meet.config.GlobalGui import globalGui
         from meet.gui.widget.task.TaskEditTab import TaskEditTab
+        if task.get("config") is None or task.get("config") == {}:
+            return
         # 添加新的页面，用于处理配置的改变
         page = globalGui.meet.window.editPageDict.get("编辑任务:" + str(task.get("taskId")))
         if page is None:
@@ -91,8 +83,8 @@ class TaskButtons(QWidget):
         """
         任务结束 按钮的变化
         """
-        from meet.task.BaseTask import BaseTask
+        from meet.executor.task.BaseTask import BaseTask
         if baseTask.taskId == self.baseTask.taskId:
-            if baseTask.status == BaseTask.StatusEnum.STOPPED:
+            if baseTask.status == BaseTask.StatusEnum.STOPPED.value:
                 self.startButton.show()
                 self.stopButton.hide()

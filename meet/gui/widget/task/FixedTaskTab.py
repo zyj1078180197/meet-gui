@@ -2,7 +2,7 @@ from enum import Enum
 
 from meet.gui.widget.task.TaskCard import TaskCard, TaskExpandCard
 from meet.gui.widget.task.TaskTab import TaskTab
-from meet.task.TaskExecutor import TaskExecutor
+from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.util.Class import getClassByName
 
 
@@ -17,7 +17,7 @@ class FixedTaskTab(TaskTab):
         super().__init__(parent)
         for taskList in TaskExecutor.taskList:
             for task in taskList:
-                baseTask = getClassByName(task.get("moduleName"), task.get("className"))()
+                baseTask = TaskExecutor.baseTaskDict.get(task.get("taskId"))
                 FixedTaskTab.baseTaskList.append(baseTask)
                 if task.get("showStyle") == FixedTaskTab.ShowStyle.EXPAND.value:
                     taskExpandCard = TaskExpandCard(task, baseTask, self)

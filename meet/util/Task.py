@@ -1,7 +1,4 @@
 import json
-from copy import deepcopy
-
-from meet.util.MessageTips import showError, showSuccess
 from meet.util.Path import getPathRelativeToExe
 from meet.util.Snowflake import snowflake
 
@@ -72,30 +69,3 @@ class Task:
                 taskFile[i] = taskFile[i] | task
         Task.saveConfig(taskPath, taskFile)
 
-    @staticmethod
-    def deleteTask(baseTask):
-        taskPath = getPathRelativeToExe(baseTask.configPath) + "//" + baseTask.className + ".json"
-        # 读取任务配置
-        taskConfig = Task.loadConfig(taskPath)
-        if taskConfig is None or len(taskConfig) == 0:
-            showError("任务不存在，删除失败")
-            return False
-        if len(taskConfig) == 1:
-            showError("此类任务最后一个任务，不可以删除奥")
-            return False
-        for i in range(len(taskConfig) - 1, -1, -1):
-            if taskConfig[i].get("taskId") == baseTask.taskId:
-                taskConfig.pop(i)
-        Task.saveConfig(taskPath, taskConfig)
-        showSuccess("任务删除成功")
-        return True
-
-    @staticmethod
-    def addTasks(task):
-        taskCopy = deepcopy(task)
-        taskPath = getPathRelativeToExe(taskCopy.get("configPath")) + "//" + taskCopy.get("className") + ".json"
-        taskFile = Task.loadConfig(taskPath)
-        taskCopy["taskId"] = snowflake.generate()
-        taskFile.append(taskCopy)
-        Task.saveConfig(taskPath, taskFile)
-        return taskCopy

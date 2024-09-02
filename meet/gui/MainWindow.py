@@ -8,11 +8,12 @@ from meet.config.Config import Config
 from meet.config.GlobalGui import globalGui
 from meet.gui.plugin.BrowserHistory import browserHistory
 from meet.gui.plugin.Communicate import communicate
-from meet.gui.widget.TitleBar import TitleBar
-from meet.gui.widget.WidgetBase import WidgetBase
+from meet.gui.widget.common.TitleBar import TitleBar
+from meet.gui.widget.common.WidgetBase import WidgetBase
 from meet.gui.widget.debug.DebugInfoArea import DebugInfoArea
 from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
-from meet.task.TaskExecutor import TaskExecutor
+from meet.gui.widget.trigger.RealTimeTriggerTab import RealTimeTriggerTab
+from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.util.Theme import themeToggleHandle
 
 
@@ -63,6 +64,8 @@ class MainWindow(MSFluentWindow):
             for baseTask in FixedTaskTab.baseTaskList:
                 if baseTask.stopEvent is not None:
                     baseTask.stopEvent.set()
+            from meet.executor.trigger.TriggerExecutor import TriggerExecutor
+            TriggerExecutor.stop()
             TaskExecutor.shutdown(wait=False)
             TaskExecutor.closeAndExit()
         else:
@@ -198,7 +201,7 @@ class MainWindow(MSFluentWindow):
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
         elif objectName == "触发":
             if self.navigationPageDict.get(objectName) is None:
-                triggerInterface = WidgetBase(objectName, self)
+                triggerInterface = RealTimeTriggerTab(self)
                 self.mainPage.addWidget(triggerInterface)
                 self.navigationPageDict[objectName] = triggerInterface
             self.mainPage.setCurrentWidget(self.findChild(QWidget, objectName))
