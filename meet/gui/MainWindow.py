@@ -1,11 +1,10 @@
-import sys
-
-from PySide6.QtWidgets import QApplication, QWidget, QStackedWidget
+from PySide6.QtWidgets import QWidget, QStackedWidget
 from qfluentwidgets import MSFluentWindow, FluentIcon, TabBar, \
     NavigationItemPosition, InfoBar, InfoBarPosition, MessageBox
 
 from meet.config.Config import Config
 from meet.config.GlobalGui import globalGui
+from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.gui.plugin.BrowserHistory import browserHistory
 from meet.gui.plugin.Communicate import communicate
 from meet.gui.widget.common.TitleBar import TitleBar
@@ -13,7 +12,6 @@ from meet.gui.widget.common.WidgetBase import WidgetBase
 from meet.gui.widget.debug.DebugInfoArea import DebugInfoArea
 from meet.gui.widget.task.FixedTaskTab import FixedTaskTab
 from meet.gui.widget.trigger.RealTimeTriggerTab import RealTimeTriggerTab
-from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.util.Theme import themeToggleHandle
 
 
@@ -155,7 +153,7 @@ class MainWindow(MSFluentWindow):
             self.debugInfoArea.show()
         else:
             self.debugInfoArea.hide()
-            self.debugInfoArea.log_text_edit.clear()
+            self.debugInfoArea.logTextEdit.clear()
         # if self.isDebug:
         #     self.isDebug = False
         #     # self.overlayWindow.updateOverlay(True, 0, 0, 1920, 1080, 1)
@@ -377,10 +375,3 @@ class MainWindow(MSFluentWindow):
         self.mainPage.setCurrentWidget(page)
         # 设置当前标签
         self.tabBar.setCurrentTab(objectName)
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    w = MainWindow()
-    w.show()
-    app.exec()

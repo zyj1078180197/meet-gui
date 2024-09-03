@@ -10,7 +10,6 @@ from meet.config.GlobalGui import globalGui
 from meet.gui.MainWindow import MainWindow
 from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.executor.trigger.TriggerExecutor import TriggerExecutor
-from meet.util.Debug import Log
 from meet.util.Path import getPathRelativeToExe
 
 

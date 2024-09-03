@@ -1,7 +1,7 @@
-import win32api
 from PySide6.QtCore import QPoint, QTimer
 from PySide6.QtGui import QPainter, QColor, QPen, QFont, QGuiApplication
 from PySide6.QtWidgets import QWidget
+from win32api import GetCursorPos
 
 
 class FrameWidget(QWidget):
@@ -31,7 +31,7 @@ class FrameWidget(QWidget):
             if not self.isVisible():
                 return
             # 获取鼠标当前位置
-            x, y = win32api.GetCursorPos()
+            x, y = GetCursorPos()
             # 将全局坐标转换为相对于本部件的坐标
             relative = self.mapFromGlobal(QPoint(x / self.scaling, y / self.scaling))
             # 如果鼠标位置有变化，则更新
