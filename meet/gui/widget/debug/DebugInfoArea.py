@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QTextCharFormat, QColor, QIcon
+from PySide6.QtGui import QTextCharFormat, QColor, QIcon, QFont
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QTextEdit
 
 from meet.gui.plugin.Communicate import communicate
@@ -48,7 +48,12 @@ class DebugInfoArea(QWidget):
         # 设置透明背景
         self.logTextEdit.setStyleSheet("background-color: rgba(0, 0, 0, 25);")
         layout.addWidget(self.logTextEdit)
-        self.setGeometry(20, 780, 400, 300)
+        # 获取屏幕的尺寸
+        from qfluentwidgets.common import screen
+        screenWidth, screenHeight = screen.getCurrentScreen().size().width(), screen.getCurrentScreen().size().height()
+        width = screenWidth * 0.25
+        height = screenHeight * 0.25
+        self.setGeometry(0 + screenHeight * 0.02, screenHeight - height, width, height)
         communicate.logMsg.connect(self.addLog)
 
     @Slot()
@@ -60,7 +65,7 @@ class DebugInfoArea(QWidget):
 
         # 在文本编辑区中添加日志
         timestamp = datetime.now().strftime('%H:%M:%S')
-        logMessage = f"[{timestamp}] [{level}] {message}"
+        logMessage = f"[{timestamp}] {level} {message}"
         self.insertColoredText(logMessage, colorLevel, colorTime, colorContent)
 
         # 文本超过1000行时
@@ -72,57 +77,69 @@ class DebugInfoArea(QWidget):
 
     def insertColoredText(self, text, colorLevel, colorTime, colorContent):
         cursor = self.logTextEdit.textCursor()
+        # 设置字体间距
+        font = QFont()
+        font.setFamily("宋体")  # 示例字体
+        font.setStyleStrategy(QFont.StyleStrategy.PreferAntialias)
+        font.setFixedPitch(True)
+        font.setPointSize(10)
+        # 设置字体间距为1.1倍
+        font.setLetterSpacing(QFont.SpacingType.PercentageSpacing, 110)
         formatLevel = QTextCharFormat()
         formatLevel.setForeground(QColor(colorLevel))
+        formatLevel.setFont(font)
 
         formatTime = QTextCharFormat()
         formatTime.setForeground(QColor(colorTime))
+        formatTime.setFont(font)
 
         formatContent = QTextCharFormat()
         formatContent.setForeground(QColor(colorContent))
+        formatContent.setFont(font)
 
         parts = text.split()
         cursor.beginEditBlock()
         cursor.insertText(parts[0], formatTime)  # 日志级别
-        cursor.insertText('  ', formatContent)
+        cursor.insertText(' ', formatContent)
         cursor.insertText(parts[1], formatLevel)  # 时间戳
-        cursor.insertText('  ', formatContent)
+        cursor.insertText(' ', formatContent)
         for part in ''.join(parts[2:]).split("#"):
             if part == "":
                 continue
             formatContentPart = QTextCharFormat()
-            #第一个字符判断
-            if part[0] =="r":
+            formatContentPart.setFont(font)
+            # 第一个字符判断
+            if part[0] == "r":
                 formatContentPart.setForeground(QColor(Qt.GlobalColor.red))
                 cursor.insertText(part[1:], formatContentPart)
                 cursor.insertText(' ', formatContent)
                 continue
-            if part[0] =="g":
+            if part[0] == "g":
                 formatContentPart.setForeground(QColor(Qt.GlobalColor.green))
                 cursor.insertText(part[1:], formatContentPart)
                 cursor.insertText(' ', formatContent)
                 continue
-            if part[0] =="y":
+            if part[0] == "y":
                 formatContentPart.setForeground(QColor(Qt.GlobalColor.yellow))
                 cursor.insertText(part[1:], formatContentPart)
                 cursor.insertText(' ', formatContent)
                 continue
-            if part[0] =="b":
+            if part[0] == "b":
                 formatContentPart.setForeground(QColor(Qt.GlobalColor.blue))
                 cursor.insertText(part[1:], formatContentPart)
                 cursor.insertText(' ', formatContent)
                 continue
-            if part[0] =="w":
+            if part[0] == "w":
                 formatContentPart.setForeground(QColor(Qt.GlobalColor.white))
                 cursor.insertText(part[1:], formatContentPart)
                 cursor.insertText(' ', formatContent)
                 continue
-            if part[0] =="m":
+            if part[0] == "m":
                 formatContentPart.setForeground(QColor(Qt.GlobalColor.magenta))
                 cursor.insertText(part[1:], formatContentPart)
                 cursor.insertText(' ', formatContent)
                 continue
-            if part[0] =="c":
+            if part[0] == "c":
                 formatContentPart.setForeground(QColor(Qt.GlobalColor.cyan))
                 cursor.insertText(part[1:], formatContentPart)
                 cursor.insertText(' ', formatContent)
