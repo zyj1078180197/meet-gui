@@ -3,11 +3,10 @@ import threading
 from PySide6.QtWidgets import QWidget, QHBoxLayout
 from qfluentwidgets import PushButton, FluentIcon
 
+from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.gui.plugin.Communicate import communicate
 from meet.gui.widget.task.ConfigCard import ConfigCard, ConfigExpandCard
-from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.util.MessageTips import showSuccess
-from meet.util.Task import Task
 
 
 class TaskCard(ConfigCard):
@@ -37,7 +36,7 @@ class TaskButtons(QWidget):
         self.layout = QHBoxLayout(self)
         self.layout.setSpacing(18)
 
-        self.startButton = PushButton(FluentIcon.PLAY, "开始", self)
+        self.startButton = PushButton(FluentIcon.PLAY, "启动", self)
         self.startButton.clicked.connect(lambda: self.startClicked(baseTask))
         self.startButton.show()
 
@@ -56,7 +55,7 @@ class TaskButtons(QWidget):
         TaskExecutor.submitTask(TaskExecutor.taskRun, baseTask)
         self.stopButton.show()
         self.startButton.hide()
-        showSuccess(baseTask.title + "任务已开始")
+        showSuccess("")
 
     def stopClicked(self, baseTask):
         from meet.executor.task.BaseTask import BaseTask

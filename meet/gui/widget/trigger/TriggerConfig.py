@@ -104,12 +104,12 @@ class ConfigInterval(QWidget):
         self.titleLayout.addWidget(self.contentLabel)
         # 添加一个扩展的空格项到主布局，用于调整布局内的空间
         self.layout.addItem(QSpacerItem(0, 0, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
-        self.lineEdit = DoubleSpinBox(self)
-        self.lineEdit.setFixedWidth(300)
-        self.lineEdit.setValue(baseTrigger.interval)
-        self.lineEdit.valueChanged.connect(self.textChange)
-        self.layout.addWidget(self.lineEdit)
+        self.doubleEdit = DoubleSpinBox(self)
+        self.doubleEdit.setFixedWidth(300)
+        self.doubleEdit.setValue(baseTrigger.interval)
+        self.doubleEdit.valueChanged.connect(self.valueChange)
+        self.layout.addWidget(self.doubleEdit)
 
-    def textChange(self, text):
+    def valueChange(self, text):
         self.baseTrigger.interval = text
         self.trigger["interval"] = self.baseTrigger.interval

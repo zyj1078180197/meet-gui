@@ -61,14 +61,14 @@ class TriggerButtons(QWidget):
         from meet.executor.trigger.BaseTrigger import BaseTrigger
         baseTrigger.status = BaseTrigger.StatusEnum.RUNNING.value
         baseTrigger.job = TriggerExecutor.addJob(baseTrigger)
-        showSuccess(baseTrigger.title + "任务已开始")
+        showSuccess(baseTrigger.title + "启动")
 
     @staticmethod
     def stopClicked(baseTrigger):
         from meet.executor.trigger.BaseTrigger import BaseTrigger
         baseTrigger.status = BaseTrigger.StatusEnum.STOPPED.value
         baseTrigger.job.remove()
-        pass
+        showSuccess(baseTrigger.title + "关闭")
 
     @staticmethod
     def editClicked(trigger, baseTrigger):

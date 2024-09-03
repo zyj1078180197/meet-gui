@@ -64,27 +64,27 @@ config = {
             "moduleName": TriggerDemo1.__module__,
             "className": TriggerDemo1.__name__,
             "title": "触发测试01",
-            "status":"Running",
-            "triggerMode":"Cron",
-            "cron":'*/1 * * * * *',
+            "status": "Running",
+            "triggerMode": "Cron",
+            "cron": '*/1 * * * * *',
             "interval": 5,
             "description": "触发测试类",
             "configPath": "config",
             "iconPath": "resource\\logo.png",
             "showStyle": "Expand"
         },
-{
+        {
             "moduleName": TriggerDemo2.__module__,
             "className": TriggerDemo2.__name__,
             "title": "触发测试02",
-            "status":"Running",
-            "triggerMode":"Cron",
-            "cron":'*/1 * * * * *',
+            "status": "Running",
+            "triggerMode": "Cron",
+            "cron": '*/1 * * * * *',
             "interval": 5,
             "description": "触发测试类",
             "configPath": "config",
             "iconPath": "resource\\logo.png",
-    "showStyle": "Normal"
+            "showStyle": "Normal"
         },
     ]
 }
