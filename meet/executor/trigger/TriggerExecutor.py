@@ -1,6 +1,5 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from meet.executor.task.TaskExecutor import TaskExecutor
 from meet.executor.trigger.BaseTrigger import BaseTrigger
 from meet.util.Class import getClassByName
 from meet.util.Trigger import Trigger
