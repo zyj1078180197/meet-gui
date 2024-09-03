@@ -2,10 +2,10 @@ import json
 import os
 
 from meet.util.Path import getPathRelativeToExe
-from test.page.TaskDemoTest03 import TaskDemoTest03
 from test.page.TaskDemo import TaskDemo
 from test.page.TaskDemoTest01 import TaskDemoTest01
 from test.page.TaskDemoTest02 import TaskDemoTest02
+from test.page.TaskDemoTest03 import TaskDemoTest03
 from test.page.TriggerDemo1 import TriggerDemo1
 from test.page.TriggerDemo2 import TriggerDemo2
 
@@ -56,7 +56,7 @@ config = {
             "description": "任务测试类",
             "configPath": "config",
             "iconPath": "resource\\logo.png",
-            "showStyle": "Expand"
+            "showStyle": "Normal"
         },
     ],
     "triggerList": [
@@ -84,7 +84,7 @@ config = {
             "description": "触发测试类",
             "configPath": "config",
             "iconPath": "resource\\logo.png",
-            "showStyle": "Expand"
+    "showStyle": "Normal"
         },
     ]
 }

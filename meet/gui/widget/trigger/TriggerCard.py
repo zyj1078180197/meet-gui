@@ -2,8 +2,8 @@ from PySide6.QtWidgets import QWidget, QHBoxLayout
 from qfluentwidgets import SwitchButton
 
 from meet.executor.trigger.BaseTrigger import BaseTrigger
-from meet.gui.widget.trigger.ConfigCard import ConfigCard, ConfigExpandCard
 from meet.executor.trigger.TriggerExecutor import TriggerExecutor
+from meet.gui.widget.trigger.ConfigCard import ConfigCard, ConfigExpandCard
 from meet.util.MessageTips import showSuccess
 
 
@@ -75,8 +75,8 @@ class TriggerButtons(QWidget):
         from meet.config.GlobalGui import globalGui
         from meet.gui.widget.trigger.TriggerEditTab import TriggerEditTab
         # 添加新的页面，用于处理配置的改变
-        page = globalGui.meet.window.editPageDict.get("编辑任务:" + str(trigger.get("triggerId")))
+        page = globalGui.meet.window.editPageDict.get("编辑触发:" + str(trigger.get("triggerId")))
         if page is None:
             page = TriggerEditTab(trigger, baseTrigger)
-            page.setObjectName("编辑任务:" + str(trigger.get("triggerId")))
-        globalGui.meet.openEditPage(page, "编辑任务:" + str(trigger.get("triggerId")))
+            page.setObjectName("编辑触发:" + str(trigger.get("triggerId")))
+        globalGui.meet.openEditPage(page, "编辑触发:" + str(trigger.get("triggerId")))
