@@ -55,7 +55,7 @@ class TaskButtons(QWidget):
         TaskExecutor.submitTask(TaskExecutor.taskRun, baseTask)
         self.stopButton.show()
         self.startButton.hide()
-        showSuccess("")
+        showSuccess(self.baseTask.title + "启动")
 
     def stopClicked(self, baseTask):
         from meet.executor.task.BaseTask import BaseTask
@@ -63,7 +63,6 @@ class TaskButtons(QWidget):
         self.startButton.show()
         self.stopButton.hide()
         baseTask.stopEvent.set()
-        pass
 
     @staticmethod
     def editClicked(task, baseTask):
@@ -87,3 +86,4 @@ class TaskButtons(QWidget):
             if baseTask.status == BaseTask.StatusEnum.STOPPED.value:
                 self.startButton.show()
                 self.stopButton.hide()
+                showSuccess(self.baseTask.title + "停止")

@@ -1,29 +1,29 @@
-from qfluentwidgets import InfoBar
+from meet.gui.plugin.Communicate import communicate
 
 
-def showSuccess(content: str):
+def showSuccess(title="", content=""):
     """
     显示成功信息
+    :param title:
     :param content:
     :return:
     """
-    from meet.config.GlobalGui import globalGui
-    InfoBar.success("成功", content, duration=1000, parent=globalGui.meet.window)
+    communicate.infoBar.emit(title, content, "success")
 
 
-def showError(content: str):
+def showError(title="", content=""):
     """
     显示错误信息
+    :param title:
     :param content:
     """
-    from meet.config.GlobalGui import globalGui
-    InfoBar.error("失败", content, duration=1000, parent=globalGui.meet.window)
+    communicate.infoBar.emit(title, content, "error")
 
 
-def showWarning(content: str):
+def showWarning(title="", content=""):
     """
     显示警告信息
+    :param title:
     :param content
     """
-    from meet.config.GlobalGui import globalGui
-    InfoBar.warning("警告", content, duration=1000, parent=globalGui.meet.window)
+    communicate.infoBar.emit(title, content, "warning")

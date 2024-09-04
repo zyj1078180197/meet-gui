@@ -45,8 +45,17 @@ class MainWindow(MSFluentWindow):
         # 后退按钮按下信号
         titleBar.backButton.clicked.connect(self.onBackClick)
         config = Config.loadConfig(globalGui.config)
+        communicate.infoBar.connect(self.showInfoBar)
         # 初始化导航组件
         self.initNavigation(config)
+
+    def showInfoBar(self, title, content, t):
+        if t == "error":
+            InfoBar.error(title, content, duration=1000, parent=self)
+        if t == "success":
+            InfoBar.success(title, content, duration=1000, parent=self)
+        if t == "warning":
+            InfoBar.warning(title, content, duration=1000, parent=self)
 
     def closeEvent(self, event):
         """
